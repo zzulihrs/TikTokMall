@@ -2,7 +2,7 @@
   <router-link :to="`/products/${product.id}`" class="product-link">
     <el-card class="product-card">
       <el-image
-        :src="product.image"
+        :src="product?.picture"
         fit="cover"
         class="product-image"
       />
@@ -11,8 +11,8 @@
         <p class="product-description">{{ product.description }}</p>
         <div class="product-footer">
           <span class="product-price">${{ product.price.toFixed(2) }}</span>
-          <el-button 
-            type="primary" 
+          <el-button
+            type="primary"
             size="small"
             @click.prevent="addToCart"
           >

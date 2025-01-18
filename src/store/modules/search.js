@@ -27,7 +27,7 @@ const actions = {
           q: query
         }
       })
-      commit('SET_SEARCH_RESULTS', response.data)
+      commit('SET_SEARCH_RESULTS', response?.data?.items || [])
       commit('SET_ERROR', null)
     } catch (error) {
       commit('SET_ERROR', error.response?.data?.message || error.message)
