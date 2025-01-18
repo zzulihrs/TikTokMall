@@ -91,6 +91,11 @@ if (!router) {
 }
 const searchQuery = ref('')
 
+onMounted(() => { // 最开始执行的，先获取数据
+  console.log('组件已挂载');
+  store.dispatch('search/searchProducts', "")
+});
+
 const handleSearch = async () => {
   const query = searchQuery.value.trim()
   if (true) { // 空白也可以搜索
