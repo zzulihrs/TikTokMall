@@ -93,7 +93,7 @@ const searchQuery = ref('')
 
 const handleSearch = async () => {
   const query = searchQuery.value.trim()
-  if (query) {
+  if (true) { // 空白也可以搜索
     try {
       await store.dispatch('search/searchProducts', query)
       router.push({ path: '/search', query: { q: query } })

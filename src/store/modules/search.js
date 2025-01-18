@@ -22,7 +22,7 @@ const actions = {
   async searchProducts({ commit }, query) {
     commit('SET_LOADING', true)
     try {
-      const response = await axios.get('http://localhost:8080/api/search', {
+      const response = await axios.get('http://localhost:8080/search', {
         params: {
           q: query
         }

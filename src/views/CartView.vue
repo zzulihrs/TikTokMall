@@ -48,22 +48,43 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import { ElMessage } from 'element-plus'
 
 const router = useRouter()
 const store = useStore()
 
 const cartItems = computed(() => store.getters['cart/items'])
 const totalAmount = computed(() => store.getters['cart/totalAmount'])
+const loading = computed(() => store.getters['cart/loading'])
+const error = computed(() => store.getters['cart/error'])
 
-const removeItem = (item) => {
-  store.dispatch('cart/removeItem', item.id)
+onMounted(async () => {
+  try {
+    await store.dispatch('cart/fetchCart')
+  } catch (err) {
+    ElMessage.error('获取购物车数据失败：' + err.message)
+  }
+})
+
+const removeItem = async (item) => {
+  try {
+    await store.dispatch('cart/removeItem', item.id)
+    ElMessage.success('删除成功')
+  } catch (err) {
+    ElMessage.error('删除失败：' + err.message)
+  }
 }
 
-const clearCart = () => {
-  store.dispatch('cart/clearCart')
+const clearCart = async () => {
+  try {
+    await store.dispatch('cart/clearCart')
+    ElMessage.success('购物车已清空')
+  } catch (err) {
+    ElMessage.error('清空购物车失败：' + err.message)
+  }
 }
 
 const goToPayment = () => {
