@@ -5,7 +5,7 @@
         <el-col :span="4">
           <div class="logo">电商商城</div>
         </el-col>
-        
+
         <el-col :span="12">
           <el-row align="middle">
             <el-col :span="6">
@@ -21,6 +21,7 @@
                   <el-menu-item index="2-2">服装服饰</el-menu-item>
                   <el-menu-item index="2-3">家居用品</el-menu-item>
                   <el-menu-item index="2-4">图书音像</el-menu-item>
+                  <el-menu-item index="2-5">食品饮料</el-menu-item>
                 </el-submenu>
               </el-menu>
             </el-col>
@@ -44,11 +45,7 @@
             <el-menu mode="horizontal" :ellipsis="false">
               <el-menu-item v-if="!isAuthenticated" index="3" @click="goToLogin">登录</el-menu-item>
               <el-submenu v-else index="4">
-                <template #title>
-                  <el-avatar :size="32" :src="userAvatar" />
-                </template>
-                <el-menu-item index="4-1">我的订单</el-menu-item>
-                <el-menu-item index="4-2" @click="handleLogout">退出登录</el-menu-item>
+                <UserDropdown></UserDropdown>
               </el-submenu>
               <el-menu-item index="6" @click="goToCart">
                 <el-badge :value="cartCount" :max="99">
@@ -67,7 +64,7 @@
 
     <el-footer>
       <div class="footer-content">
-        © 2024 电商商城. 版权所有.
+        © 字节跳动青训营后端项目.
       </div>
     </el-footer>
   </el-container>
@@ -77,6 +74,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import UserDropdown from './UserDropdown.vue'
 
 // Verify router availability
 onMounted(() => {
@@ -85,6 +83,7 @@ onMounted(() => {
   }
 })
 import { ShoppingCart, Search } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 
 const router = useRouter()
 if (!router) {
@@ -92,19 +91,32 @@ if (!router) {
 }
 const searchQuery = ref('')
 
-const handleSearch = () => {
-  if (searchQuery.value.trim()) {
-    router.push({ path: '/search', query: { q: searchQuery.value } })
+const handleSearch = async () => {
+  const query = searchQuery.value.trim()
+  if (query) {
+    try {
+      await store.dispatch('search/searchProducts', query)
+      router.push({ path: '/search', query: { q: query } })
+    } catch (error) {
+      ElMessage.error('搜索失败：' + error.message)
+    }
   }
 }
 const store = useStore()
+
+// Temporary test user login
+store.dispatch('auth/login', {
+  username: 'testuser',
+  avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
+  token: 'test-token'
+})
 
 const activeIndex = ref('1')
 const userAvatar = ref('')
 const userName = ref('Guest')
 const cartCount = ref(0)
 
-const isAuthenticated = computed(() => store.getters.isAuthenticated)
+const isAuthenticated = computed(() => store.getters['auth/isAuthenticated'])
 
 const handleSelect = (index) => {
   switch (index) {
@@ -123,6 +135,12 @@ const handleSelect = (index) => {
     case '2-4':
       router.push('/category/books')
       break
+    case '2-5':
+      router.push('/category/food')
+      break
+    case '4-1':
+      router.push('/orders')
+      break
   }
 }
 
@@ -135,7 +153,7 @@ const goToRegister = () => {
 }
 
 const handleLogout = () => {
-  store.dispatch('logout')
+  store.dispatch('auth/logout')
   router.push('/login')
 }
 
@@ -166,6 +184,47 @@ const goToCart = () => {
 
 .username {
   margin-left: 8px;
+}
+
+.el-menu--horizontal .el-submenu > .el-submenu__title {
+  display: flex;
+  align-items: center;
+}
+
+.el-menu--horizontal .el-menu-item {
+  display: flex;
+  align-items: center;
+  height: 60px;
+}
+
+.el-menu--horizontal .el-menu-item .el-icon {
+  margin-right: 8px;
+}
+
+.el-submenu__title {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+.el-submenu .el-menu-item {
+  min-width: 120px;
+  padding-left: 40px !important;
+}
+
+.el-submenu .el-menu-item:hover {
+  background-color: #f5f7fa;
+}
+
+.el-submenu .el-menu-item {
+  min-width: 120px;
+}
+
+.el-menu--horizontal .el-submenu .el-submenu__title {
+  height: 60px;
+  line-height: 60px;
 }
 
 .footer-content {

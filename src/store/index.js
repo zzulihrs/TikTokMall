@@ -1,8 +1,12 @@
 import { createStore } from 'vuex'
+import auth from './modules/auth'
 import cart from './modules/cart'
+import search from './modules/search'
 
 export default createStore({
   modules: {
-    cart
+    auth,
+    cart,
+    search
   }
 })

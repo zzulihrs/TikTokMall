@@ -45,7 +45,10 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 import { ElMessage } from 'element-plus'
+
+const store = useStore()
 
 const router = useRouter()
 
@@ -65,15 +68,23 @@ const rules = ref({
 
 const loading = ref(false)
 
-const handleLogin = () => {
-  loading.value = true
-  // TODO: Implement login API call
-  setTimeout(() => {
-    loading.value = false
-    ElMessage.success('登录成功')
-    router.push('/')
-  }, 1000)
-}
+  const handleLogin = () => {
+    loading.value = true
+    // TODO: Implement login API call
+    setTimeout(() => {
+      const userData = {
+        username: form.value.username,
+        avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
+        token: 'token123'
+      }
+
+      store.dispatch('auth/login', userData)
+      loading.value = false
+
+      ElMessage.success('登录成功')
+      router.push('/')
+    }, 1000)
+  }
 
 const goToRegister = () => {
   router.push('/register')
