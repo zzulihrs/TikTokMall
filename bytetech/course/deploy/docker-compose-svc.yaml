@@ -1,0 +1,71 @@
+version: '3'
+networks:
+  course_default:
+    external: true
+services:
+  frontend:
+    container_name: frontend
+    image: frontend:v1.0.0
+    env_file:
+      - .env.example
+    ports:
+      - "8080:8080"
+    networks:
+      - course_default
+  
+  cart:
+    container_name: cart
+    image: cart:v1.0.0
+    env_file:
+      - .env.example
+    networks:
+      - course_default
+  
+  checkout:
+    container_name: checkout
+    image: checkout:v1.0.0
+    env_file:
+      - .env.example
+    networks:
+      - course_default
+      
+  email:
+    container_name: email
+    image: email:v1.0.0
+    env_file:
+      - .env.example
+    networks:
+      - course_default
+      
+  order:
+    container_name: order
+    image: order:v1.0.0
+    env_file:
+      - .env.example
+    networks:
+      - course_default
+      
+  payment:
+    container_name: payment
+    image: payment:v1.0.0
+    env_file:
+      - .env.example
+    networks:
+      - course_default
+      
+  product:
+    container_name: product
+    image: product:v1.0.0
+    env_file:
+      - .env.example
+    networks:
+      - course_default
+      
+  user:
+    container_name: user
+    image: user:v1.0.0
+    env_file:
+      - .env.example
+    networks:
+      - course_default
+      

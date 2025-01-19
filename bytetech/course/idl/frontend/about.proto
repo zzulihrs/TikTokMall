@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package frontend.about;
+
+import "api.proto";
+import "frontend/common.proto";
+
+option go_package = "/frontend/about";
+
+service AboutService {
+  rpc About(common.Empty) returns (common.Empty) {
+    option (api.get) = "/about";
+  }
+}
