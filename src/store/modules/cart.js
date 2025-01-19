@@ -11,11 +11,14 @@ export default {
 
   getters: {
     items: (state) => state.items,
-    totalAmount: (state) => {
-      return state.items.reduce((total, item) => {
-        return total + (item.price * item.quantity)
-      }, 0)
-    },
+  totalAmount: (state) => {
+    return state.items.reduce((total, item) => {
+      return total + (item.price * item.quantity)
+    }, 0)
+  },
+  totalQuantity: (state) => {
+    return state.items.reduce((total, item) => total + item.quantity, 0)
+  },
     loading: (state) => state.loading,
     error: (state) => state.error
   },
@@ -30,6 +33,12 @@ export default {
         existing.quantity += item.quantity
       } else {
         state.items.push(item)
+      }
+    },
+    UPDATE_QUANTITY(state, { id, quantity }) {
+      const item = state.items.find(i => i.id === id)
+      if (item) {
+        item.quantity = quantity
       }
     },
     REMOVE_ITEM(state, id) {
@@ -88,6 +97,18 @@ export default {
         commit('SET_LOADING', true)
         commit('CLEAR_CART')
         await axios.delete('http://localhost:8080/api/cart')
+        commit('SET_ERROR', null)
+      } catch (error) {
+        commit('SET_ERROR', error.message)
+      } finally {
+        commit('SET_LOADING', false)
+      }
+    },
+    async updateQuantity({ commit }, { id, quantity }) {
+      try {
+        commit('SET_LOADING', true)
+        commit('UPDATE_QUANTITY', { id, quantity })
+        await axios.put(`http://localhost:8080/api/cart/${id}`, { quantity })
         commit('SET_ERROR', null)
       } catch (error) {
         commit('SET_ERROR', error.message)

@@ -10,19 +10,20 @@
             <el-table-column prop="price" label="价格" width="120" />
             <el-table-column prop="quantity" label="数量" width="120">
               <template #default="{ row }">
-                <el-input-number 
-                  v-model="row.quantity" 
-                  :min="1" 
-                  :max="10" 
+                <el-input-number
+                  v-model="row.quantity"
+                  :min="1"
+                  :max="99"
                   size="small"
+                  @change="updateQuantity(row)"
                 />
               </template>
             </el-table-column>
             <el-table-column label="操作" width="120">
               <template #default="{ row }">
-                <el-button 
-                  type="danger" 
-                  size="small" 
+                <el-button
+                  type="danger"
+                  size="small"
                   @click="removeItem(row)"
                 >
                   删除
@@ -33,8 +34,8 @@
 
           <div class="cart-actions">
             <el-button type="danger" @click="clearCart">清空购物车</el-button>
-            <el-button 
-              type="primary" 
+            <el-button
+              type="primary"
               :disabled="cartItems.length === 0"
               @click="goToPayment"
             >
@@ -89,6 +90,18 @@ const clearCart = async () => {
 
 const goToPayment = () => {
   router.push('/payment')
+}
+
+const updateQuantity = async (item) => {
+  try {
+    await store.dispatch('cart/updateQuantity', {
+      id: item.id,
+      quantity: item.quantity
+    })
+    ElMessage.success('数量更新成功')
+  } catch (err) {
+    ElMessage.error('数量更新失败：' + err.message)
+  }
 }
 </script>
 

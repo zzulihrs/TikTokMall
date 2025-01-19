@@ -119,7 +119,7 @@ store.dispatch('auth/login', {
 const activeIndex = ref('1')
 const userAvatar = ref('')
 const userName = ref('Guest')
-const cartCount = ref(0)
+const cartCount = computed(() => store.getters['cart/totalQuantity'])
 
 const isAuthenticated = computed(() => store.getters['auth/isAuthenticated'])
 
