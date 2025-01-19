@@ -4,18 +4,18 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-image
-            :src="product.image"
+            :src="product?.picture"
             fit="contain"
             class="product-main-image"
           />
         </el-col>
         <el-col :span="12">
           <div class="product-details">
-            <h1 class="product-title">{{ product.name }}</h1>
-            <p class="product-price">${{ product.price.toFixed(2) }}</p>
+            <h1 class="product-title">{{ product?.name }}</h1>
+            <p class="product-price">${{ product?.price.toFixed(2) }}</p>
             <el-divider />
-            <p class="product-description">{{ product.description }}</p>
-            
+            <p class="product-description">{{ product?.description }}</p>
+
             <div class="product-actions">
               <el-input-number
                 v-model="quantity"
@@ -42,16 +42,45 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import axios from "axios";
 
 const route = useRoute()
 const product = ref({
   id: route.params.id,
-  name: 'Product Name',
-  description: 'Product description goes here',
-  price: 99.99,
-  image: 'https://via.placeholder.com/600'
+  name: '',
+  description: '',
+  price: 0,
+  image: ''
 })
 const quantity = ref(1)
+const loading = ref(true)
+
+const fetchProduct = async () => {
+  try {
+    console.log('fetchProduct');
+    axios.defaults.baseURL = '/api';
+
+    const response = await axios.get(`/product?id=${route.params.id}`)
+
+    axios.defaults.baseURL = '/';
+
+    console.log(response);
+
+    if (!response?.status) {
+      throw new Error('Failed to fetch product')
+    }
+    const data = response?.data?.item
+    product.value = {
+      ...data,
+      price: parseFloat(data?.price)
+    }
+  } catch (error) {
+    ElMessage.error('Failed to load product details')
+    console.error(error)
+  } finally {
+    loading.value = false
+  }
+}
 
 const addToCart = () => {
   ElMessage.success('Added to cart')
@@ -59,8 +88,7 @@ const addToCart = () => {
 }
 
 onMounted(() => {
-  // Fetch product details from API
-  // using productId from route.params.id
+  fetchProduct()
 })
 </script>
 
