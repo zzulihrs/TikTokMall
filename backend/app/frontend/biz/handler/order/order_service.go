@@ -28,5 +28,6 @@ func OrderList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	c.HTML(consts.StatusOK, "order", utils.WarpResponse(ctx, c, resp))
+	// c.HTML(consts.StatusOK, "order", utils.WarpResponse(ctx, c, resp))
+	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
 }

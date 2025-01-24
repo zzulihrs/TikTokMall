@@ -1,4 +1,4 @@
-# tiktokmall
+# TikTokMall
 
-mall-backend: 后端
-mall-frontend: 前端
+backend: 后端
+frontend: 前端

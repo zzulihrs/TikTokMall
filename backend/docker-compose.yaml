@@ -34,15 +34,15 @@ services:
       - "4222:4222"
       - "8222:8222"
   # 监控指标 metrics
-  # prometheus:
-  #   container_name: prometheus
-  #   image: "prom/prometheus:3.0.0"
-  #   volumes:
-  #     - ./deploy/config/prometheus.yml:/etc/prometheus/prometheus.yml
-  #   command:
-  #     - "--config.file=/etc/prometheus/prometheus.yml"
-  #   ports:
-  #     - "9090:9090"
+  prometheus:
+    container_name: prometheus
+    image: "prom/prometheus:3.0.0"
+    volumes:
+      - ./deploy/config/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    ports:
+      - "9090:9090"
   # tracing 与 log
   grafana:
     container_name: grafana

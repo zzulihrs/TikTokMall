@@ -1,6 +1,5 @@
-# tiktokmall
+# TikTokMall
 
-## 环境准备
 * go: 1.23.1
 * protoc: 3.6.1
 ```bash
@@ -25,11 +24,15 @@ docker pull docker.io/bitnami/etcd:3.5
 docker pull grafana/loki:2.9.2
 docker pull grafana/promtail:2.9.2
 ```
-
+SVC
 ``` bash
-cd github.com/tiktokmall/backend
+# backend 目录下
+# 下载依赖
 go work sync
-# 启动服务
+# 启动 mysql、redis 等中间件
 docker compose up -d
+# 启动所有服务
 bash start_service.sh
+# 关闭所有服务
+bash kill_service.sh
 ```
