@@ -95,9 +95,9 @@ k8s-load-all-images:
 	kind load docker-image --name gomall-dev mysql:8
 	kind load docker-image --name gomall-dev redis:7.2.4-alpine
 	kind load docker-image --name gomall-dev consul:1.15.4
-	kind load docker-image --name gomall-dev jaegertracing/all-in-one:latest
-	kind load docker-image --name gomall-dev prom/prometheus:latest
-	kind load docker-image --name gomall-dev grafana/grafana:latest
+	kind load docker-image --name gomall-dev jaegertracing/all-in-one:1.64.0
+	kind load docker-image --name gomall-dev prom/prometheus:3.0.0
+	kind load docker-image --name gomall-dev grafana/grafana:11.4.0
 	kind load docker-image --name gomall-dev grafana/loki:2.9.2
 	kind load docker-image --name gomall-dev nats:2.10.24-alpine
 	kind load docker-image --name gomall-dev frontend:v1.0.0
