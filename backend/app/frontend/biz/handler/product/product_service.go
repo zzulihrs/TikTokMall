@@ -2,7 +2,6 @@ package product
 
 import (
 	"context"
-	"log"
 
 	"github.com/tiktokmall/backend/app/frontend/biz/service"
 	"github.com/tiktokmall/backend/app/frontend/biz/utils"
@@ -18,16 +17,11 @@ func GetProduct(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req product.ProductReq
 	err = c.BindAndValidate(&req)
-	log.Printf("product, args: %#v\n", req)
 	if err != nil {
 		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
-
-	log.Printf("GetProduct\n")
-
 	resp, err := service.NewGetProductService(ctx, c).Run(&req)
-	log.Printf("GetProduct, Resp: %v, err: %v\n", resp, err)
 	if err != nil {
 		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return

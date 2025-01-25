@@ -5,6 +5,7 @@ if [ ! -d "log" ]; then
     # 如果不存在，则创建 log 文件夹
     mkdir log
 fi
+make run-server svc=frontend 2>&1 > log/frontend.log &
 make run-server svc=cart 2>&1 > log/cart.log &
 make run-server svc=checkout 2>&1 > log/checkout.log &
 make run-server svc=email 2>&1 > log/email.log &
