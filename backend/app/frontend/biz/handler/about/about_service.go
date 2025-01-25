@@ -28,6 +28,6 @@ func About(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	c.HTML(consts.StatusOK, "about", utils.WarpResponse(ctx, c, resp))
-	// c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
+	// c.HTML(consts.StatusOK, "about", utils.WarpResponse(ctx, c, resp))
+	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
 }
