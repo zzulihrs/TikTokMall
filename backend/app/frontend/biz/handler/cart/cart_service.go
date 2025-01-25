@@ -21,15 +21,15 @@ func AddCartItem(ctx context.Context, c *app.RequestContext) {
 	var req cart.AddCartReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		// c.HTML(consts.StatusOK, "cart", utils.WarpResponse(ctx, c, hertzUtils.H{"warning": err}))
-		c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, hertzUtils.H{"warning": err}))
+		c.HTML(consts.StatusOK, "cart", utils.WarpResponse(ctx, c, hertzUtils.H{"warning": err}))
+		// c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, hertzUtils.H{"warning": err}))
 		return
 	}
 
 	_, err = service.NewAddCartItemService(ctx, c).Run(&req)
 	if err != nil {
-		// c.HTML(consts.StatusOK, "cart", utils.WarpResponse(ctx, c, hertzUtils.H{"warning": err}))
-		c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, hertzUtils.H{"warning": err}))
+		c.HTML(consts.StatusOK, "cart", utils.WarpResponse(ctx, c, hertzUtils.H{"warning": err}))
+		// c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, hertzUtils.H{"warning": err}))
 		return
 	}
 	c.Redirect(consts.StatusFound, []byte("/cart"))
@@ -42,16 +42,16 @@ func GetCart(ctx context.Context, c *app.RequestContext) {
 	var req common.Empty
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		// c.HTML(consts.StatusOK, "cart", utils.WarpResponse(ctx, c, map[string]any{"warning": err}))
-		c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, map[string]any{"warning": err}))
+		c.HTML(consts.StatusOK, "cart", utils.WarpResponse(ctx, c, map[string]any{"warning": err}))
+		// c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, map[string]any{"warning": err}))
 		return
 	}
 	resp, err := service.NewGetCartService(ctx, c).Run(&req)
 	if err != nil {
-		// c.HTML(consts.StatusOK, "cart", utils.WarpResponse(ctx, c, map[string]any{"warning": err}))
-		c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, map[string]any{"warning": err}))
+		c.HTML(consts.StatusOK, "cart", utils.WarpResponse(ctx, c, map[string]any{"warning": err}))
+		// c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, map[string]any{"warning": err}))
 		return
 	}
-	// c.HTML(consts.StatusOK, "cart", utils.WarpResponse(ctx, c, resp))
-	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
+	c.HTML(consts.StatusOK, "cart", utils.WarpResponse(ctx, c, resp))
+	// c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
 }

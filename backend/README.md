@@ -17,7 +17,7 @@ docker pull consul:1.15.4
 docker pull mysql:8
 docker pull redis:7.2.4-alpine
 docker pull nats:2.10.24-alpine
-docker pull prom/prometheus:3.0.0
+docker pull prom/prometheus:v3.0.0
 docker pull grafana/grafana:11.4.0
 docker pull jaegertracing/all-in-one:1.64.0
 docker pull docker.io/bitnami/etcd:3.5
@@ -31,8 +31,23 @@ SVC
 go work sync
 # 启动 mysql、redis 等中间件
 docker compose up -d
-# 启动所有服务
+# 启动所有服务, 输出在 log/${svc}.log 中
 bash start_service.sh
 # 关闭所有服务
 bash kill_service.sh
 ```
+
+Docker Start
+```bash
+# backend 目录下
+# build images
+make build-all v=v1.0.0
+# 启动 mysql、redis 等中间件
+docker compose up -d
+# start service
+docker compose -f deploy/docker-compose-svc.yaml up -d
+# clean service
+docker compose -f deploy/docker-compose-svc.yaml down
+```
+
+Kubernetes

@@ -1,6 +1,6 @@
 version: '3'
 networks:
-  course_default:
+  tiktokmall:
     external: true
 services:
   frontend:
@@ -11,7 +11,7 @@ services:
     ports:
       - "8080:8080"
     networks:
-      - course_default
+      - tiktokmall
   
   cart:
     container_name: cart
@@ -19,7 +19,7 @@ services:
     env_file:
       - .env.example
     networks:
-      - course_default
+      - tiktokmall
   
   checkout:
     container_name: checkout
@@ -27,7 +27,7 @@ services:
     env_file:
       - .env.example
     networks:
-      - course_default
+      - tiktokmall
       
   email:
     container_name: email
@@ -35,7 +35,7 @@ services:
     env_file:
       - .env.example
     networks:
-      - course_default
+      - tiktokmall
       
   order:
     container_name: order
@@ -43,7 +43,7 @@ services:
     env_file:
       - .env.example
     networks:
-      - course_default
+      - tiktokmall
       
   payment:
     container_name: payment
@@ -51,7 +51,7 @@ services:
     env_file:
       - .env.example
     networks:
-      - course_default
+      - tiktokmall
       
   product:
     container_name: product
@@ -59,7 +59,7 @@ services:
     env_file:
       - .env.example
     networks:
-      - course_default
+      - tiktokmall
       
   user:
     container_name: user
@@ -67,5 +67,5 @@ services:
     env_file:
       - .env.example
     networks:
-      - course_default
+      - tiktokmall
       

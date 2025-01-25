@@ -74,20 +74,20 @@ build-all: # make build-all v=v1.0.0
 
 .PHONY: start-docker-frontend
 start-docker-frontend: # make start-docker-frontend v=v1.0.0
-	docker run -d --name frontend --network course_default --env-file=deploy/.env.example -p 8080:8080 frontend:${v}
+	docker run -d --name frontend --network tiktokmall --env-file=deploy/.env.example -p 8080:8080 frontend:${v}
 .PHONY: start-docker-svc
 start-docker-svc: # make start-docker-svc svc=user v=v1.0.0
-	docker run -d --name ${svc} --network course_default --env-file=deploy/.env.example ${svc}:${v}
+	docker run -d --name ${svc} --network tiktokmall --env-file=deploy/.env.example ${svc}:${v}
 .PHONY: start-docker-all
 start-docker-all: # make start-docker-all v=v1.0.0
-	docker run -d --name frontend --network course_default --env-file=deploy/.env.example -p 8080:8080 frontend:${v}
-	docker run -d --name cart --network course_default --env-file=deploy/.env.example cart:${v}
-	docker run -d --name checkout --network course_default --env-file=deploy/.env.example checkout:${v}
-	docker run -d --name email --network course_default --env-file=deploy/.env.example email:${v}
-	docker run -d --name order --network course_default --env-file=deploy/.env.example order:${v}
-	docker run -d --name payment --network course_default --env-file=deploy/.env.example payment:${v}
-	docker run -d --name product --network course_default --env-file=deploy/.env.example product:${v}
-	docker run -d --name user --network course_default --env-file=deploy/.env.example user:${v}
+	docker run -d --name frontend --network tiktokmall --env-file=deploy/.env.example -p 8080:8080 frontend:${v}
+	docker run -d --name cart --network tiktokmall --env-file=deploy/.env.example cart:${v}
+	docker run -d --name checkout --network tiktokmall --env-file=deploy/.env.example checkout:${v}
+	docker run -d --name email --network tiktokmall --env-file=deploy/.env.example email:${v}
+	docker run -d --name order --network tiktokmall --env-file=deploy/.env.example order:${v}
+	docker run -d --name payment --network tiktokmall --env-file=deploy/.env.example payment:${v}
+	docker run -d --name product --network tiktokmall --env-file=deploy/.env.example product:${v}
+	docker run -d --name user --network tiktokmall --env-file=deploy/.env.example user:${v}
 
 
 ####################################### k8s #############################
@@ -101,7 +101,7 @@ k8s-load-all-images:
 	kind load docker-image --name gomall-dev redis:7.2.4-alpine
 	kind load docker-image --name gomall-dev consul:1.15.4
 	kind load docker-image --name gomall-dev jaegertracing/all-in-one:1.64.0
-	kind load docker-image --name gomall-dev prom/prometheus:3.0.0
+	kind load docker-image --name gomall-dev prom/prometheus:v3.0.0
 	kind load docker-image --name gomall-dev grafana/grafana:11.4.0
 	kind load docker-image --name gomall-dev grafana/loki:2.9.2
 	kind load docker-image --name gomall-dev nats:2.10.24-alpine

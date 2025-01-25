@@ -1,4 +1,7 @@
 version: '3'
+networks:
+  default:
+    name: tiktokmall
 services:
   consul:
     container_name: consul
@@ -36,7 +39,7 @@ services:
   # 监控指标 metrics
   prometheus:
     container_name: prometheus
-    image: "prom/prometheus:3.0.0"
+    image: "prom/prometheus:v3.0.0"
     volumes:
       - ./deploy/config/prometheus.yml:/etc/prometheus/prometheus.yml
     command:
@@ -84,4 +87,3 @@ services:
       - ./deploy/config/promtail.yml:/etc/promtail/config.yml
       - ./app/frontend/log:/logs/frontend
     command: -config.file=/etc/promtail/config.yml
-      
