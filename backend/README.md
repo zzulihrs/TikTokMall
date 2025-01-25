@@ -49,5 +49,3 @@ docker compose -f deploy/docker-compose-svc.yaml up -d
 # clean service
 docker compose -f deploy/docker-compose-svc.yaml down
 ```
-
-Kubernetes
