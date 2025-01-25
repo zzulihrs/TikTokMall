@@ -24,6 +24,7 @@ func (s *GetProductService) Run(req *product.GetProductReq) (resp *product.GetPr
 	if req.Id == 0 {
 		return nil, kerrors.NewGRPCBizStatusError(2004001, "product id is required")
 	}
+	// TODO:
 	pq := model.NewCachedProductQuery(model.NewProductQuery(s.ctx, mysql.DB), redis.RedisClient, "shop")
 	p, err := pq.GetById(int(req.Id))
 	if err != nil {

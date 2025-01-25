@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"log"
 
 	product "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/product"
 	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
@@ -23,6 +24,8 @@ func NewGetProductService(Context context.Context, RequestContext *app.RequestCo
 }
 
 func (h *GetProductService) Run(req *product.ProductReq) (resp map[string]any, err error) {
+
+	log.Printf("getproductsvc, run. req.id: %v", req.Id)
 	p, err := rpc.ProductClient.GetProduct(h.Context, &rpcproduct.GetProductReq{Id: req.Id})
 	if err != nil {
 		return nil, err
