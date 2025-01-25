@@ -3,7 +3,6 @@ tmp/
 .vscode/
 log/
 .DS_Store/
-frontend/*
 *.log
 *.exe
 *.so
