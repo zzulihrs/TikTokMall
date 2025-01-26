@@ -109,12 +109,6 @@ const handleSearch = async () => {
 }
 const store = useStore()
 
-// Temporary test user login
-store.dispatch('auth/login', {
-  username: 'testuser',
-  avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-  token: 'test-token'
-})
 
 const activeIndex = ref('1')
 const userAvatar = ref('')
