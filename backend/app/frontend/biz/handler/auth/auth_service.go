@@ -25,11 +25,14 @@ func Login(ctx context.Context, c *app.RequestContext) {
 
 	redirect, err := service.NewLoginService(ctx, c).Run(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusAccepted, "账号不存在/账号密码不匹配")
+		//utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
 
-	c.Redirect(consts.StatusOK, []byte(redirect))
+	c.JSON(consts.StatusOK, redirect)
+
+	//c.Redirect(consts.StatusOK, []byte(redirect))
 
 	// utils.SendSuccessResponse(ctx, c, consts.StatusOK, "done!")
 }
@@ -52,7 +55,9 @@ func Register(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	c.Redirect(consts.StatusOK, []byte("/"))
+	c.JSON(consts.StatusOK, "/login")
+
+	//c.Redirect(consts.StatusOK, []byte("/"))
 	// utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
 }
 
@@ -73,6 +78,9 @@ func Logout(ctx context.Context, c *app.RequestContext) {
 		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
-	c.Redirect(consts.StatusOK, []byte("/"))
+
+	c.JSON(consts.StatusOK, "/")
+
+	//c.Redirect(consts.StatusOK, []byte("/"))
 	// utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
 }
