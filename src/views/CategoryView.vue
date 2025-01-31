@@ -8,11 +8,11 @@
             <el-breadcrumb-item>{{ categoryName }}</el-breadcrumb-item>
           </el-breadcrumb>
         </el-col>
-        
+
         <el-col :span="24">
           <el-row :gutter="20">
-            <el-col 
-              v-for="product in products" 
+            <el-col
+              v-for="product in products"
               :key="product.id"
               :xs="24" :sm="12" :md="8" :lg="6"
             >
@@ -53,14 +53,14 @@ const mockProducts = [
   {
     id: 1,
     name: '智能手机',
-    price: 2999,
+    Price: 2999,
     image: 'https://via.placeholder.com/300',
     description: '最新款智能手机'
   },
   {
     id: 2,
     name: '笔记本电脑',
-    price: 5999,
+    Price: 5999,
     image: 'https://via.placeholder.com/300',
     description: '高性能笔记本电脑'
   }

@@ -104,7 +104,7 @@ diff --git a/src/views/ProductView.vue b/src/views/ProductView.vue
 @@ -42,16 +42,45 @@
 +import axios from "axios";
  
- const quantity = ref(1)
+ const Qty = ref(1)
 +const loading = ref(true)
 +
 建立函数，获取商品信息

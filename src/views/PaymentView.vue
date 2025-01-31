@@ -12,11 +12,11 @@
           <h3>订单详情</h3>
           <el-table :data="cartItems" stripe>
             <el-table-column prop="name" label="商品名称" />
-            <el-table-column prop="price" label="单价" />
-            <el-table-column prop="quantity" label="数量" />
+            <el-table-column prop="Price" label="单价" />
+            <el-table-column prop="Qty" label="数量" />
             <el-table-column label="小计">
               <template #default="{row}">
-                {{ (row.price * row.quantity).toFixed(2) }}
+                {{ (row.Price * row.Qty).toFixed(2) }}
               </template>
             </el-table-column>
           </el-table>
@@ -24,7 +24,7 @@
           <el-divider />
 
           <div class="total-amount">
-            总计: ¥{{ totalAmount.toFixed(2) }}
+            总计: ¥{{ totalAmount?.toFixed(2) }}
           </div>
 
           <el-button type="primary" @click="nextStep">去支付</el-button>
@@ -190,7 +190,7 @@ const rules = reactive({
   ],
   cardNumber: [
     { required: true, message: '请输入卡号', trigger: 'blur' },
-    { 
+    {
       validator: (rule, value, callback) => {
         if (form.paymentMethod === 'card' && !value) {
           callback(new Error('请输入卡号'))

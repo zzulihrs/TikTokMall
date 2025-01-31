@@ -4,14 +4,15 @@
       <el-row>
         <el-col :span="24">
           <h2>购物车</h2>
-          <el-empty v-if="cartItems.length === 0" description="购物车为空" />
+          <el-empty v-if="cartItems?.length === 0" description="购物车为空" />
           <el-table v-else :data="cartItems" style="width: 100%">
-            <el-table-column prop="name" label="商品名称" />
-            <el-table-column prop="price" label="价格" width="120" />
-            <el-table-column prop="quantity" label="数量" width="120">
+            <el-table-column prop="Id" label="id" />
+            <el-table-column prop="Name" label="商品名称" />
+            <el-table-column prop="Price" label="价格" width="120" />
+            <el-table-column prop="Qty" label="数量" width="120">
               <template #default="{ row }">
                 <el-input-number
-                  v-model="row.quantity"
+                  v-model="row.Qty"
                   :min="1"
                   :max="99"
                   size="small"
@@ -36,7 +37,7 @@
             <el-button type="danger" @click="clearCart">清空购物车</el-button>
             <el-button
               type="primary"
-              :disabled="cartItems.length === 0"
+              :disabled="cartItems?.length === 0"
               @click="goToPayment"
             >
               去结算
@@ -93,10 +94,11 @@ const goToPayment = () => {
 }
 
 const updateQuantity = async (item) => {
+  console.warn(item);
   try {
     await store.dispatch('cart/updateQuantity', {
-      id: item.id,
-      quantity: item.quantity
+      Id: item.Id,
+      Qty: item.Qty
     })
     ElMessage.success('数量更新成功')
   } catch (err) {
