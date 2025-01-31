@@ -93,7 +93,9 @@ const addToCart = (event) => {
   event.stopPropagation()
   store.dispatch('cart/addItem', {
     product_id: Id,
-    product_num: Qty?.value,
+    product_num: Qty.value,
+    Id: Id,
+    Qty: Qty.value,
   })
   ElMessage.success('已加入购物车')
 }

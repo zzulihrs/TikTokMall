@@ -45,6 +45,8 @@ const addToCart = (event) => {
   store.dispatch('cart/addItem', {
     product_id: props?.product?.id,
     product_num: 1,
+    Qty: 1,
+    id: props?.product?.id,
   })
   ElMessage.success('已加入购物车')
 }
