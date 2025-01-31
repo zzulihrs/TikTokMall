@@ -46,7 +46,8 @@ func (h *GetCartService) Run(req *common.Empty) (resp map[string]any, err error)
 			"Name":        p.Name,
 			"Description": p.Description,
 			"Picture":     p.Picture,
-			"Price":       strconv.FormatFloat(float64(p.Price), 'f', 2, 64), "Qty": strconv.Itoa(int(item.Quantity))})
+			"Price":       strconv.FormatFloat(float64(p.Price), 'f', 2, 64),
+			"Qty":         int(item.Quantity)})
 		total += float32(item.Quantity) * p.Price
 	}
 
