@@ -2,16 +2,14 @@ package cart
 
 import (
 	"context"
-
+	"fmt"
+	"github.com/cloudwego/hertz/pkg/app"
+	hertzUtils "github.com/cloudwego/hertz/pkg/common/utils"
+	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/tiktokmall/backend/app/frontend/biz/service"
 	"github.com/tiktokmall/backend/app/frontend/biz/utils"
 	cart "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/cart"
 	common "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/common"
-
-	hertzUtils "github.com/cloudwego/hertz/pkg/common/utils"
-
-	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
 // AddCartItem .
@@ -20,6 +18,10 @@ func AddCartItem(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req cart.AddCartReq
 	err = c.BindAndValidate(&req)
+
+	// 打印解析后的数据（用于调试）
+	fmt.Println("Parsed Request Data:", req.ProductId, req.ProductNum)
+
 	if err != nil {
 		// c.HTML(consts.StatusOK, "cart", utils.WarpResponse(ctx, c, hertzUtils.H{"warning": err}))
 		c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, hertzUtils.H{"warning": err}))
@@ -28,11 +30,12 @@ func AddCartItem(ctx context.Context, c *app.RequestContext) {
 
 	_, err = service.NewAddCartItemService(ctx, c).Run(&req)
 	if err != nil {
-		// c.HTML(consts.StatusOK, "cart", utils.WarpResponse(ctx, c, hertzUtils.H{"warning": err}))
+		// c.HTML(constss.StatusOK, "cart", utils.WarpResponse(ctx, c, hertzUtils.H{"warning": err}))
 		c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, hertzUtils.H{"warning": err}))
 		return
 	}
-	c.Redirect(consts.StatusFound, []byte("/cart"))
+	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, hertzUtils.H{"message": "success"}))
+	//c.Redirect(consts.StatusFound, []byte("/cart"))
 }
 
 // GetCart .
