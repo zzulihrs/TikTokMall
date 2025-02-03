@@ -1,0 +1,8 @@
+tmp/
+.idea/
+.vscode/
+log/
+.DS_Store/
+*.log
+*.exe
+*.so

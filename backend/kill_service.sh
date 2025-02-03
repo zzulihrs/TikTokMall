@@ -1,0 +1,1 @@
+ps aux | grep "go" | grep -v grep | grep -v "go/bin" | awk '{print $2}' | xargs kill -9

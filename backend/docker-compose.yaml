@@ -1,0 +1,89 @@
+version: '3'
+networks:
+  default:
+    name: tiktokmall
+services:
+  consul:
+    container_name: consul
+    image: "consul:1.15.4"
+    ports:
+      - "8500:8500"
+  mysql:
+    container_name: mysql
+    image: "mysql:8"
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+    volumes:
+      - "./db/sql/ini:/docker-entrypoint-initdb.d"
+    ports:
+      - "3306:3306"
+    # 健康检查，避免服务连接 mysql 时，mysql 服务没有启动
+    healthcheck:
+      test: ["CMD", "mysqladmin", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}", "ping"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+  redis:
+    container_name: redis
+    image: "redis:7.2.4-alpine"
+    ports:
+      - "6379:6379"
+  # 消息队列
+  nats:
+    container_name: nats
+    image: "nats:2.10.24-alpine"
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+  # 监控指标 metrics
+  prometheus:
+    container_name: prometheus
+    image: "prom/prometheus:v3.0.0"
+    volumes:
+      - ./deploy/config/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    ports:
+      - "9090:9090"
+  # tracing 与 log
+  grafana:
+    container_name: grafana
+    image: "grafana/grafana:11.4.0"
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    ports:
+      - "3000:3000"
+  # Jaeger, 16686 查看 链路 数据
+  jaeger-all-in-one:
+    container_name: jaeger-all-in-one
+    image: "jaegertracing/all-in-one:1.64.0"
+    ports:
+      - "16686:16686"
+      - "4317:4317"
+      - "4318:4318"
+  etcd:
+    container_name: etcd
+    image: "docker.io/bitnami/etcd:3.5"
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+    ports:
+      - 2379:2379
+      - 2380:2380
+  loki:
+    container_name: loki
+    image: "grafana/loki:2.9.2"
+    volumes:
+      - ./deploy/config/loki.yml:/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+  promtail:
+    container_name: promtail
+    image: "grafana/promtail:2.9.2"
+    volumes:
+      - ./deploy/config/promtail.yml:/etc/promtail/config.yml
+      - ./app/frontend/log:/logs/frontend
+    command: -config.file=/etc/promtail/config.yml
