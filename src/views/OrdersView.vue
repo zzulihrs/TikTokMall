@@ -112,15 +112,22 @@ const viewDetail = (order) => {
 onMounted(async () => {
   try {
     const response = await axios.get('/api/order')
-    orders.value = response.data.orders.map(order => ({
-      orderNumber: order.OrderId,
-      createTime: order.CreatedDate,
-      totalAmount: order.Cost,
-      items: order.Items // 商品列表
-    }))
+    orders.value = response.data.orders
+      .map(order => ({
+        orderNumber: order?.OrderId,
+        createTime: order?.CreatedDate,
+        totalAmount: order?.Cost,
+        items: order?.Items // 商品列表
+      }))
+      // 按照下单时间降序排列
+      .sort((a, b) => {
+        const timeA = new Date(a.createTime).getTime()
+        const timeB = new Date(b.createTime).getTime()
+        return timeB - timeA // 降序排列
+      })
   } catch (error) {
     console.error('获取订单失败:', error)
-    ElMessage.error('获取订单失败') // 若需要Element Plus的提示组件
+    ElMessage.error('获取订单失败')
   } finally {
     loading.value = false
   }
