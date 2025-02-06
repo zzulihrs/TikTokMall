@@ -1,20 +1,15 @@
 <template>
   <el-container>
     <el-main>
-      <el-row :gutter="20">
+      <el-row>
         <el-col :span="24">
-          <el-breadcrumb separator="/">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>{{ categoryName }}</el-breadcrumb-item>
-          </el-breadcrumb>
-        </el-col>
-
-        <el-col :span="24">
-          <el-row :gutter="20">
+          <h2>{{ category }} 类别商品</h2>
+          <el-empty v-if="categoryItems?.length==0" description="暂无商品" />
+          <el-row v-else>
             <el-col
-              v-for="product in products"
-              :key="product.id"
-              :xs="24" :sm="12" :md="8" :lg="6"
+                v-for="product in categoryItems"
+                :key="product?.id"
+                :xs="24" :sm="12" :md="8" :lg="6"
             >
               <product-card :product="product" />
             </el-col>
@@ -26,49 +21,44 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import {ref, onMounted, watch} from 'vue'
 import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
+import axios from 'axios'
+import { ElMessage } from 'element-plus'
 import ProductCard from '@/components/ProductCard.vue'
 
+
 const route = useRoute()
-const products = ref([])
+const store = useStore()
+const category = ref('')
+const categoryItems = ref([])
 
-const categoryName = computed(() => {
-  switch (route.params.type) {
-    case 'electronics':
-      return '电子产品'
-    case 'clothing':
-      return '服装服饰'
-    case 'home':
-      return '家居用品'
-    case 'books':
-      return '图书音像'
-    default:
-      return '商品分类'
-  }
-})
+// Fetch category items
+const fetchCategoryItems = async () => {
+  try {
 
-// Mock data - replace with API call
-const mockProducts = [
-  {
-    id: 1,
-    name: '智能手机',
-    Price: 2999,
-    image: 'https://via.placeholder.com/300',
-    description: '最新款智能手机'
-  },
-  {
-    id: 2,
-    name: '笔记本电脑',
-    Price: 5999,
-    image: 'https://via.placeholder.com/300',
-    description: '高性能笔记本电脑'
+    // 获取到    /category/T-Shirt的T-Shirt
+
+    category.value = route?.params?.type // Get category from route params
+    //console.log(route?.params?.type);
+    const response = await axios.get(`/api/category/${category.value}`)
+    categoryItems.value = response?.data?.items || []
+  } catch (err) {
+    categoryItems.value = null
+    ElMessage.error('获取商品列表失败：' + err.message)
   }
-]
+}
+
+// vue3监听route?.params?.type
+watch(() => route.params.type, (newType, oldType) => {
+  console.log('路由参数 type 变化了', newType, oldType);
+  // 在这里执行相关操作，比如重新获取数据
+  fetchCategoryItems()
+});
 
 onMounted(() => {
-  // TODO: Fetch products by category from API
-  products.value = mockProducts
+  fetchCategoryItems()
 })
 </script>
 
