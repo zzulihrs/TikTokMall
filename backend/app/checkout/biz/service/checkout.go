@@ -97,11 +97,6 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 
 	orderId = orderResp.Order.OrderId
 
-	_, err = rpc.CartClient.EmptyCart(s.ctx, &cart.EmptyCartReq{UserId: req.GetUserId()})
-	if err != nil {
-		return nil, fmt.Errorf("empty cart failed: %v", err)
-	}
-
 	payReq := payment.ChargeReq{
 		Amount:  total,
 		UserId:  req.GetUserId(),
@@ -116,6 +111,10 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 	paymentResult, err := rpc.PaymentClient.Charge(s.ctx, &payReq)
 	if err != nil {
 		return nil, fmt.Errorf("charge failed: %v", err)
+	}
+	_, err = rpc.CartClient.EmptyCart(s.ctx, &cart.EmptyCartReq{UserId: req.GetUserId()})
+	if err != nil {
+		return nil, fmt.Errorf("empty cart failed: %v", err)
 	}
 
 	// 发送邮件通知
