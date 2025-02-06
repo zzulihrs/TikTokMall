@@ -8,13 +8,13 @@
         ref="registerForm"
         @submit.prevent="handleRegister"
       >
-        <el-form-item prop="username">
-          <el-input
-            v-model="form.username"
-            placeholder="用户名"
-            prefix-icon="el-icon-user"
-          />
-        </el-form-item>
+<!--        <el-form-item prop="username">-->
+<!--          <el-input-->
+<!--            v-model="form.username"-->
+<!--            placeholder="用户名"-->
+<!--            prefix-icon="el-icon-user"-->
+<!--          />-->
+<!--        </el-form-item>-->
         <el-form-item prop="email">
           <el-input
             v-model="form.email"
@@ -62,6 +62,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import axios from "axios";
 
 const router = useRouter()
 
@@ -81,9 +82,9 @@ const validatePassword = (rule, value, callback) => {
 }
 
 const rules = ref({
-  username: [
-    { required: true, message: '请输入用户名', trigger: 'blur' }
-  ],
+  // username: [
+  //   { required: true, message: '请输入用户名', trigger: 'blur' }
+  // ],
   email: [
     { required: true, message: '请输入邮箱', trigger: 'blur' },
     { type: 'email', message: '请输入正确的邮箱格式', trigger: 'blur' }
@@ -99,15 +100,43 @@ const rules = ref({
 
 const loading = ref(false)
 
-const handleRegister = () => {
-  loading.value = true
-  // TODO: Implement register API call
-  setTimeout(() => {
-    loading.value = false
-    ElMessage.success('注册成功')
-    router.push('/login')
-  }, 1000)
-}
+const handleRegister = async () => {
+  loading.value = true;
+
+  try {
+    const response = await axios.post('/api/auth/register', {
+      email: form.value.email,
+      password: form.value.password,
+      confirmPassword: form.value.confirmPassword
+    });
+
+    if(response?.status == 200) {
+      const userData = {
+        email: response.data.email,
+        password: form.value.password,
+        avatar: response?.data?.avatar || 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
+        token: response.data.token,
+      };
+
+      store.dispatch('auth/login', userData);
+      loading.value = false;
+
+      ElMessage.success('注册成功');
+      // 跳转login页面
+      router.push('/login');
+    } else {
+      loading.value = false;
+      ElMessage.error('注册失败: ', response);
+      console.error('Register failed:', response);
+    }
+
+  } catch (error) {
+    loading.value = false;
+    ElMessage.error('注册失败');
+    console.error('Register failed:', error);
+  }
+};
+
 
 const goToLogin = () => {
   router.push('/login')
