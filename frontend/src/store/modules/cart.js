@@ -60,7 +60,7 @@ export default {
       try {
         commit('SET_LOADING', true)
         const { data } = await axios.get('/api/cart')
-        commit('SET_ITEMS', data.items)
+        commit('SET_ITEMS', data?.items || [])
         commit('SET_ERROR', null)
       } catch (error) {
         commit('SET_ERROR', error.message)
@@ -96,7 +96,7 @@ export default {
       try {
         commit('SET_LOADING', true)
         commit('CLEAR_CART')
-        await axios.delete('http://localhost:8080/api/cart')
+        await axios.get(`/api/emptyCart`)
         commit('SET_ERROR', null)
       } catch (error) {
         commit('SET_ERROR', error.message)
