@@ -3,8 +3,8 @@
 package cart
 
 import (
-	cart "github.com/tiktokmall/backend/app/frontend/biz/handler/cart"
 	"github.com/cloudwego/hertz/pkg/app/server"
+	cart "github.com/tiktokmall/backend/app/frontend/biz/handler/cart"
 )
 
 /*
@@ -19,4 +19,5 @@ func Register(r *server.Hertz) {
 	root := r.Group("/", rootMw()...)
 	root.POST("/cart", append(_addcartitemMw(), cart.AddCartItem)...)
 	root.GET("/cart", append(_getcartMw(), cart.GetCart)...)
+	root.GET("/emptyCart", append(_emptycartMw(), cart.EmptyCart)...)
 }

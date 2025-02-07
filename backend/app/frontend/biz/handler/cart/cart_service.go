@@ -58,3 +58,25 @@ func GetCart(ctx context.Context, c *app.RequestContext) {
 	// c.HTML(consts.StatusOK, "cart", utils.WarpResponse(ctx, c, resp))
 	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
 }
+
+// EmptyCart .
+// @router /emptyCart [GET]
+func EmptyCart(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req common.Empty
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		return
+	}
+
+	resp, err := service.NewEmptyCartService(ctx, c).Run(&req)
+
+	if err != nil {
+		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		return
+	}
+
+	c.JSON(consts.StatusOK, resp)
+	//utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
+}
