@@ -7,6 +7,23 @@ test-echo:
 	curl http://127.0.0.1:8888/echo
 .PHONY: gen-demo-thrift, gen-demo-proto
 
+
+####################################### 启动所有docker和服务 #############################
+.PHONY: start
+start:
+	docker-compose up -d && bash start_service.sh
+
+####################################### 关闭所有服务 #############################
+.PHONY: kill
+kill:
+	bash kill_service.sh
+
+####################################### 重启所有服务 #############################
+.PHONY: restart
+restart:
+	make kill && make start
+
+
 .PHONY: gen-user
 gen-user: # --pass 跳过客户端的代码，客户端全部放到上面的 rpc_gen 目录下。
 	@cd rpc_gen && cwgo client  --type RPC --module github.com/tiktokmall/backend/rpc_gen --service user -I ../idl --idl ../idl/user.proto

@@ -1,7 +1,7 @@
 <template>
   <el-dropdown trigger="click" @command="handleCommand">
     <div class="user-avatar">
-      <el-avatar :size="57" :src="user.avatar || 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'"/>
+      <el-avatar :size="57" :src="user?.avatar"/>
     </div>
     <template #dropdown>
       <el-dropdown-menu>
@@ -28,7 +28,7 @@ import { ElMessage } from 'element-plus'
 const store = useStore()
 const router = useRouter()
 
-const user = computed(() => store.state.auth.user)
+const user = computed(() => store?.state?.auth?.user)
 
 const handleCommand = (command) => {
   if (command === 'logout') {

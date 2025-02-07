@@ -2,8 +2,8 @@ export default {
   namespaced: true,
 
   state: () => ({
-    user: null,
-    token: null
+    user: JSON.parse(localStorage.getItem('user') || 'null'),
+    token: localStorage.getItem('token') || null
   }),
 
   getters: {
@@ -14,32 +14,36 @@ export default {
   mutations: {
     SET_USER(state, user) {
       state.user = user
+      localStorage.setItem('user', JSON.stringify(user))
     },
     SET_TOKEN(state, token) {
       state.token = token
+      localStorage.setItem('token', token)
     },
     CLEAR_AUTH(state) {
       state.user = null
       state.token = null
+      localStorage.removeItem('user')
+      localStorage.removeItem('token')
     }
   },
 
   actions: {
     login({ commit }, userData) {
       commit('SET_USER', userData)
-      localStorage.setItem('user', JSON.stringify(userData))
-      localStorage.setItem('token', userData.token)// 假设token存储在userData中
-      // 修改state.token
       commit('SET_TOKEN', userData.token)
     },
     logout({ commit }) {
       commit('CLEAR_AUTH')
-      localStorage.removeItem('user')
     },
     initialize({ commit }) {
       const user = localStorage.getItem('user')
+      const token = localStorage.getItem('token')
       if (user) {
         commit('SET_USER', JSON.parse(user))
+      }
+      if (token) {
+        commit('SET_TOKEN', token)
       }
     }
   }

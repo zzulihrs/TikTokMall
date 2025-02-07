@@ -17,8 +17,8 @@
                 <el-menu-item index="1">首页</el-menu-item>
                 <el-submenu index="2">
                   <template #title>商品分类</template>
-                  <el-menu-item index="2-1">电子产品</el-menu-item>
-                  <el-menu-item index="2-2">服装服饰</el-menu-item>
+                  <el-menu-item index="2-1">T-Shirt</el-menu-item>
+                  <el-menu-item index="2-2">Sticker</el-menu-item>
                   <el-menu-item index="2-3">家居用品</el-menu-item>
                   <el-menu-item index="2-4">图书音像</el-menu-item>
                   <el-menu-item index="2-5">食品饮料</el-menu-item>
@@ -109,12 +109,6 @@ const handleSearch = async () => {
 }
 const store = useStore()
 
-// Temporary test user login
-store.dispatch('auth/login', {
-  username: 'testuser',
-  avatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-  token: 'test-token'
-})
 
 const activeIndex = ref('1')
 const userAvatar = ref('')
@@ -129,10 +123,10 @@ const handleSelect = (index) => {
       router.push('/')
       break
     case '2-1':
-      router.push('/category/electronics')
+      router.push('/category/T-Shirt')
       break
     case '2-2':
-      router.push('/category/clothing')
+      router.push('/category/Sticker')
       break
     case '2-3':
       router.push('/category/home')

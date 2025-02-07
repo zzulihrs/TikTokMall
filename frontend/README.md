@@ -80,7 +80,7 @@ c.JSON(consts.StatusOK, resp)
 
 ### 情况1: 不需要与其他页面有数据交互，只需要调用接口，对接字段
 
-参考：https://github.com/zzulihrs/tiktokmall/commit/ff6c8f8156bfa0b3833e2857cc9ac3a094f81307
+参考：https://github.com/zzulihrs/TikTokMall/commit/ff6c8f8156bfa0b3833e2857cc9ac3a094f81307
 ```vue
 Index: src/views/ProductView.vue
 IDEA additional info:
@@ -104,7 +104,7 @@ diff --git a/src/views/ProductView.vue b/src/views/ProductView.vue
 @@ -42,16 +42,45 @@
 +import axios from "axios";
  
- const quantity = ref(1)
+ const Qty = ref(1)
 +const loading = ref(true)
 +
 建立函数，获取商品信息

@@ -7,10 +7,10 @@
         class="product-image"
       />
       <div class="product-info">
-        <h3 class="product-name">{{ product.name }}</h3>
-        <p class="product-description">{{ product.description }}</p>
+        <h3 class="product-name">{{ product?.name }}</h3>
+        <p class="product-description">{{ product?.description }}</p>
         <div class="product-footer">
-          <span class="product-price">${{ product.price.toFixed(2) }}</span>
+          <span class="product-price">${{ product?.price.toFixed(2) }}</span>
           <el-button
             type="primary"
             size="small"
@@ -43,8 +43,10 @@ const addToCart = (event) => {
   event.preventDefault()
   event.stopPropagation()
   store.dispatch('cart/addItem', {
-    ...props.product,
-    quantity: 1
+    product_id: props?.product?.id,
+    product_num: 1,
+    Qty: 1,
+    id: props?.product?.id,
   })
   ElMessage.success('已加入购物车')
 }
