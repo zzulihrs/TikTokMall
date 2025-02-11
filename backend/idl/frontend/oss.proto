@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package frontend.oss;
+
+import "api.proto";
+option go_package = "/frontend/oss";
+
+// 定义Oss服务
+service OssService {
+    // 上传图片
+    rpc UploadImage (UploadFileRequest) returns (UploadResponse) {
+            option (api.post) = "/uploadImage";
+    }
+
+    // 上传视频
+    rpc UploadVideo (UploadFileRequest) returns (UploadResponse) {
+           option (api.post) = "/uploadVideo";
+    }
+}
+
+// 请求上传文件的结构（通过form-data传递文件,参数file）
+message UploadFileRequest {
+}
+
+// 响应上传结果的结构
+message UploadResponse {
+    string hashed_name = 1;   // 哈希文件名,防止重复
+    string url = 2;           // 完整访问URL
+}
+
