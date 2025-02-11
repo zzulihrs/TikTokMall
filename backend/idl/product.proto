@@ -17,12 +17,12 @@ message ListProductsReq {
 }
 
 message Product {
-    uint32 id = 1;
-    string name = 2;
-    string description = 3;
-    string picture = 4;
-    float price = 5;
-    repeated string categories = 6;
+    uint32 id = 1; // 商品ID
+    string name = 2; // 商品名称
+    string description = 3; // 商品描述
+    string picture = 4; // 商品图片地址
+    float price = 5; // 商品价格
+    repeated string categories = 6; // 商品分类
 }
 
 message ListProductsResp {
