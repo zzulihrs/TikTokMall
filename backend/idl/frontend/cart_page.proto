@@ -19,4 +19,7 @@ service CartService {
     rpc GetCart(common.Empty) returns (common.Empty) {
         option (api.get) = "/cart";
     }
+    rpc EmptyCart(common.Empty) returns (common.Empty) {
+        option (api.get) = "/emptyCart";
+    }
 }
