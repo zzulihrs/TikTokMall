@@ -2,9 +2,9 @@ package service
 
 import (
 	"context"
+	"github.com/tiktokmall/backend/app/cart/biz/model"
 
 	"github.com/tiktokmall/backend/app/cart/biz/dal/mysql"
-	"github.com/tiktokmall/backend/app/cart/biz/model"
 	"github.com/tiktokmall/backend/app/cart/infra/rpc"
 	cart "github.com/tiktokmall/backend/rpc_gen/kitex_gen/cart"
 	"github.com/tiktokmall/backend/rpc_gen/kitex_gen/product"
@@ -38,7 +38,7 @@ func (s *AddItemService) Run(req *cart.AddItemReq) (resp *cart.AddItemResp, err 
 		return nil, kerrors.NewBizStatusError(40004, "product not found")
 	}
 
-	err = model.AddCart(mysql.DB, s.ctx, &model.Cart{
+	err = model.AddCart(s.ctx, mysql.DB, &model.Cart{
 		UserId:    req.UserId,
 		ProductId: req.Item.ProductId,
 		Qty:       uint32(req.Item.Quantity),

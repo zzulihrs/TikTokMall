@@ -23,7 +23,7 @@ func (s *EmptyCartService) Run(req *cart.EmptyCartReq) (resp *cart.EmptyCartResp
 	if req.UserId == 0 {
 		return nil, kerrors.NewBizStatusError(40004, "user_id is required")
 	}
-	err = model.EmptyCart(mysql.DB, s.ctx, req.UserId)
+	err = model.EmptyCart(s.ctx, mysql.DB, req.UserId)
 	if err != nil {
 		return nil, kerrors.NewBizStatusError(50000, err.Error())
 	}

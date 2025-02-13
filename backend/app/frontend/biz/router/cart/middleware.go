@@ -27,3 +27,8 @@ func _emptycartMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _changeqtyMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

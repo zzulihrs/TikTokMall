@@ -39,6 +39,11 @@ gen-cart:
 	@cd rpc_gen && cwgo client  --type RPC --module github.com/tiktokmall/backend/rpc_gen --service cart -I ../idl --idl ../idl/cart.proto
 	@cd app/cart && cwgo server --type RPC --module github.com/tiktokmall/backend/app/cart --service cart --pass "-use github.com/tiktokmall/backend/rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/cart.proto
 
+.PHONY: gen-payment
+gen-payment:
+	@cd rpc_gen && cwgo client --type RPC --service payment --module github.com/tiktokmall/backend/rpc_gen --I ../idl --idl ../idl/payment.proto
+	@cd app/payment && cwgo server --type RPC --service payment --module github.com/tiktokmall/backend/app/payment --pass "-use github.com/tiktokmall/backend/rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/payment.proto
+
 .PHONY: gen-rpc
 gen-rpc: # gen-rpc svc=cart
 	@cd rpc_gen && cwgo client  --type RPC --module github.com/tiktokmall/backend/rpc_gen --service ${svc} -I ../idl --idl ../idl/${svc}.proto
