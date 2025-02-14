@@ -30,3 +30,10 @@ func (s *CartServiceImpl) EmptyCart(ctx context.Context, req *cart.EmptyCartReq)
 
 	return resp, err
 }
+
+// ChangeQty implements the CartServiceImpl interface.
+func (s *CartServiceImpl) ChangeQty(ctx context.Context, req *cart.ChangeQtyReq) (resp *cart.ChangeQtyResp, err error) {
+	resp, err = service.NewChangeQtyService(ctx).Run(req)
+
+	return resp, err
+}

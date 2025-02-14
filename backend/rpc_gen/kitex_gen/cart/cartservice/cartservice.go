@@ -36,6 +36,13 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"ChangeQty": kitex.NewMethodInfo(
+		changeQtyHandler,
+		newChangeQtyArgs,
+		newChangeQtyResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 }
 
 var (
@@ -561,6 +568,159 @@ func (p *EmptyCartResult) GetResult() interface{} {
 	return p.Success
 }
 
+func changeQtyHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(cart.ChangeQtyReq)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(cart.CartService).ChangeQty(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *ChangeQtyArgs:
+		success, err := handler.(cart.CartService).ChangeQty(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*ChangeQtyResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newChangeQtyArgs() interface{} {
+	return &ChangeQtyArgs{}
+}
+
+func newChangeQtyResult() interface{} {
+	return &ChangeQtyResult{}
+}
+
+type ChangeQtyArgs struct {
+	Req *cart.ChangeQtyReq
+}
+
+func (p *ChangeQtyArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetReq() {
+		p.Req = new(cart.ChangeQtyReq)
+	}
+	return p.Req.FastRead(buf, _type, number)
+}
+
+func (p *ChangeQtyArgs) FastWrite(buf []byte) (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.FastWrite(buf)
+}
+
+func (p *ChangeQtyArgs) Size() (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.Size()
+}
+
+func (p *ChangeQtyArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *ChangeQtyArgs) Unmarshal(in []byte) error {
+	msg := new(cart.ChangeQtyReq)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var ChangeQtyArgs_Req_DEFAULT *cart.ChangeQtyReq
+
+func (p *ChangeQtyArgs) GetReq() *cart.ChangeQtyReq {
+	if !p.IsSetReq() {
+		return ChangeQtyArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *ChangeQtyArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *ChangeQtyArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type ChangeQtyResult struct {
+	Success *cart.ChangeQtyResp
+}
+
+var ChangeQtyResult_Success_DEFAULT *cart.ChangeQtyResp
+
+func (p *ChangeQtyResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetSuccess() {
+		p.Success = new(cart.ChangeQtyResp)
+	}
+	return p.Success.FastRead(buf, _type, number)
+}
+
+func (p *ChangeQtyResult) FastWrite(buf []byte) (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.FastWrite(buf)
+}
+
+func (p *ChangeQtyResult) Size() (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.Size()
+}
+
+func (p *ChangeQtyResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *ChangeQtyResult) Unmarshal(in []byte) error {
+	msg := new(cart.ChangeQtyResp)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *ChangeQtyResult) GetSuccess() *cart.ChangeQtyResp {
+	if !p.IsSetSuccess() {
+		return ChangeQtyResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *ChangeQtyResult) SetSuccess(x interface{}) {
+	p.Success = x.(*cart.ChangeQtyResp)
+}
+
+func (p *ChangeQtyResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *ChangeQtyResult) GetResult() interface{} {
+	return p.Success
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -596,6 +756,16 @@ func (p *kClient) EmptyCart(ctx context.Context, Req *cart.EmptyCartReq) (r *car
 	_args.Req = Req
 	var _result EmptyCartResult
 	if err = p.c.Call(ctx, "EmptyCart", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) ChangeQty(ctx context.Context, Req *cart.ChangeQtyReq) (r *cart.ChangeQtyResp, err error) {
+	var _args ChangeQtyArgs
+	_args.Req = Req
+	var _result ChangeQtyResult
+	if err = p.c.Call(ctx, "ChangeQty", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

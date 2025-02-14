@@ -43,7 +43,7 @@ func (x *CartItem) fastReadField1(buf []byte, _type int8) (offset int, err error
 }
 
 func (x *CartItem) fastReadField2(buf []byte, _type int8) (offset int, err error) {
-	x.Quantity, offset, err = fastpb.ReadInt32(buf, _type)
+	x.Quantity, offset, err = fastpb.ReadUint32(buf, _type)
 	return offset, err
 }
 
@@ -233,6 +233,59 @@ SkipFieldError:
 	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
 }
 
+func (x *ChangeQtyReq) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+	switch number {
+	case 1:
+		offset, err = x.fastReadField1(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 2:
+		offset, err = x.fastReadField2(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	default:
+		offset, err = fastpb.Skip(buf, _type, number)
+		if err != nil {
+			goto SkipFieldError
+		}
+	}
+	return offset, nil
+SkipFieldError:
+	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+ReadFieldError:
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_ChangeQtyReq[number], err)
+}
+
+func (x *ChangeQtyReq) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	x.UserId, offset, err = fastpb.ReadUint32(buf, _type)
+	return offset, err
+}
+
+func (x *ChangeQtyReq) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	var v CartItem
+	offset, err = fastpb.ReadMessage(buf, _type, &v)
+	if err != nil {
+		return offset, err
+	}
+	x.Item = &v
+	return offset, nil
+}
+
+func (x *ChangeQtyResp) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+	switch number {
+	default:
+		offset, err = fastpb.Skip(buf, _type, number)
+		if err != nil {
+			goto SkipFieldError
+		}
+	}
+	return offset, nil
+SkipFieldError:
+	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+}
+
 func (x *CartItem) FastWrite(buf []byte) (offset int) {
 	if x == nil {
 		return offset
@@ -254,7 +307,7 @@ func (x *CartItem) fastWriteField2(buf []byte) (offset int) {
 	if x.Quantity == 0 {
 		return offset
 	}
-	offset += fastpb.WriteInt32(buf[offset:], 2, x.GetQuantity())
+	offset += fastpb.WriteUint32(buf[offset:], 2, x.GetQuantity())
 	return offset
 }
 
@@ -372,6 +425,38 @@ func (x *EmptyCartResp) FastWrite(buf []byte) (offset int) {
 	return offset
 }
 
+func (x *ChangeQtyReq) FastWrite(buf []byte) (offset int) {
+	if x == nil {
+		return offset
+	}
+	offset += x.fastWriteField1(buf[offset:])
+	offset += x.fastWriteField2(buf[offset:])
+	return offset
+}
+
+func (x *ChangeQtyReq) fastWriteField1(buf []byte) (offset int) {
+	if x.UserId == 0 {
+		return offset
+	}
+	offset += fastpb.WriteUint32(buf[offset:], 1, x.GetUserId())
+	return offset
+}
+
+func (x *ChangeQtyReq) fastWriteField2(buf []byte) (offset int) {
+	if x.Item == nil {
+		return offset
+	}
+	offset += fastpb.WriteMessage(buf[offset:], 2, x.GetItem())
+	return offset
+}
+
+func (x *ChangeQtyResp) FastWrite(buf []byte) (offset int) {
+	if x == nil {
+		return offset
+	}
+	return offset
+}
+
 func (x *CartItem) Size() (n int) {
 	if x == nil {
 		return n
@@ -393,7 +478,7 @@ func (x *CartItem) sizeField2() (n int) {
 	if x.Quantity == 0 {
 		return n
 	}
-	n += fastpb.SizeInt32(2, x.GetQuantity())
+	n += fastpb.SizeUint32(2, x.GetQuantity())
 	return n
 }
 
@@ -511,6 +596,38 @@ func (x *EmptyCartResp) Size() (n int) {
 	return n
 }
 
+func (x *ChangeQtyReq) Size() (n int) {
+	if x == nil {
+		return n
+	}
+	n += x.sizeField1()
+	n += x.sizeField2()
+	return n
+}
+
+func (x *ChangeQtyReq) sizeField1() (n int) {
+	if x.UserId == 0 {
+		return n
+	}
+	n += fastpb.SizeUint32(1, x.GetUserId())
+	return n
+}
+
+func (x *ChangeQtyReq) sizeField2() (n int) {
+	if x.Item == nil {
+		return n
+	}
+	n += fastpb.SizeMessage(2, x.GetItem())
+	return n
+}
+
+func (x *ChangeQtyResp) Size() (n int) {
+	if x == nil {
+		return n
+	}
+	return n
+}
+
 var fieldIDToName_CartItem = map[int32]string{
 	1: "ProductId",
 	2: "Quantity",
@@ -541,3 +658,10 @@ var fieldIDToName_EmptyCartReq = map[int32]string{
 }
 
 var fieldIDToName_EmptyCartResp = map[int32]string{}
+
+var fieldIDToName_ChangeQtyReq = map[int32]string{
+	1: "UserId",
+	2: "Item",
+}
+
+var fieldIDToName_ChangeQtyResp = map[int32]string{}

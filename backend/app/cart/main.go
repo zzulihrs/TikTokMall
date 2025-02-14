@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	consul "github.com/kitex-contrib/registry-consul"
 	"net"
 	"time"
 
@@ -47,6 +48,14 @@ func main() {
 }
 
 func kitexInit() (opts []server.Option) {
+	// 初始化consul注册组件
+	r, err := consul.NewConsulRegister(conf.GetConf().Registry.RegistryAddress[0])
+	if err != nil {
+		klog.Fatal(err)
+	}
+	// 将配置设置到服务启动参数中
+	opts = append(opts, server.WithRegistry(r))
+	
 	// address
 	addr, err := net.ResolveTCPAddr("tcp", conf.GetConf().Kitex.Address)
 	if err != nil {

@@ -23,7 +23,7 @@ func (s *GetCartService) Run(req *cart.GetCartReq) (resp *cart.GetCartResp, err 
 	if req.UserId == 0 {
 		return nil, kerrors.NewBizStatusError(40004, "user_id is required")
 	}
-	carts, err := model.GetCartByUserId(mysql.DB, s.ctx, req.UserId)
+	carts, err := model.GetCartByUserId(s.ctx, mysql.DB, req.UserId)
 	if err != nil {
 		return nil, kerrors.NewBizStatusError(50000, err.Error())
 	}
@@ -31,7 +31,7 @@ func (s *GetCartService) Run(req *cart.GetCartReq) (resp *cart.GetCartResp, err 
 	for i, v := range carts {
 		items[i] = &cart.CartItem{
 			ProductId: v.ProductId,
-			Quantity:  int32(v.Qty),
+			Quantity:  v.Qty,
 		}
 	}
 	return &cart.GetCartResp{

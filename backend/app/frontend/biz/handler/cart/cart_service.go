@@ -16,11 +16,11 @@ import (
 // @router /cart [POST]
 func AddCartItem(ctx context.Context, c *app.RequestContext) {
 	var err error
-	var req cart.AddCartReq
+	var req cart.AddCartItemReq
 	err = c.BindAndValidate(&req)
 
 	// 打印解析后的数据（用于调试）
-	fmt.Println("Parsed Request Data:", req.ProductId, req.ProductNum)
+	fmt.Println("Parsed Request Data:", req.GetProductId(), req.GetProductNum())
 
 	if err != nil {
 		// c.HTML(consts.StatusOK, "cart", utils.WarpResponse(ctx, c, hertzUtils.H{"warning": err}))
@@ -79,4 +79,26 @@ func EmptyCart(ctx context.Context, c *app.RequestContext) {
 
 	c.JSON(consts.StatusOK, resp)
 	//utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
+}
+
+// ChangeQty .
+// @router /changeqty [POST]
+func ChangeQty(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req cart.ChangeQtyReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		return
+	}
+
+	_, err = service.NewChangeQtyService(ctx, c).Run(&req)
+
+	if err != nil {
+		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		return
+	}
+	//utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
+	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, hertzUtils.H{"message": "success"}))
+
 }
