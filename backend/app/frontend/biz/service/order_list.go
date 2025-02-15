@@ -55,7 +55,7 @@ func (h *OrderListService) Run(req *common.Empty) (resp map[string]any, err erro
 				ProductName: p.Name,
 				Picture:     p.Picture,
 				Cost:        item.Cost,
-				Qty:         i.Quantity,
+				Qty:         int32(i.Quantity),
 			})
 		}
 

@@ -108,7 +108,7 @@ export default {
       try {
         commit('SET_LOADING', true)
         commit('UPDATE_QUANTITY', { Id, Qty })
-        await axios.post(`/api/cart`, {
+        await axios.post(`/api/changeqty`, {
           product_id: Id,
           product_num: Qty,
         })
