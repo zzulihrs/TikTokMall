@@ -66,7 +66,9 @@
       <div class="footer-content">
         © 字节跳动青训营后端项目.
       </div>
+      
     </el-footer>
+    <ChatDialog/>
   </el-container>
 </template>
 
@@ -75,7 +77,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import UserDropdown from './UserDropdown.vue'
-
+import ChatDialog from './ChatDialog.vue'
 // Verify router availability
 onMounted(() => {
   if (!router) {
