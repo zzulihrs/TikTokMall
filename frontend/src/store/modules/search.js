@@ -31,7 +31,7 @@ const actions = {
     commit('SET_LOADING', true); // 开始搜索时，设置加载状态为 true
     try {
       // 发送 GET 请求到指定的 URL，携带查询参数 q
-      const response = await axios.get('http://localhost:8080/search', {
+      const response = await axios.get('api/search', {
         params: {
           q: query // 查询参数
         }
