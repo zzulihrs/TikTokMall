@@ -12,11 +12,11 @@
           <h3>订单详情</h3>
           <el-table :data="cartItems" stripe>
             <el-table-column prop="name" label="商品名称" />
-            <el-table-column prop="price" label="单价" />
-            <el-table-column prop="quantity" label="数量" />
+            <el-table-column prop="Price" label="单价" />
+            <el-table-column prop="Qty" label="数量" />
             <el-table-column label="小计">
               <template #default="{row}">
-                {{ (row.price * row.quantity).toFixed(2) }}
+                {{ (row.Price * row.Qty).toFixed(2) }}
               </template>
             </el-table-column>
           </el-table>
@@ -24,7 +24,7 @@
           <el-divider />
 
           <div class="total-amount">
-            总计: ¥{{ totalAmount.toFixed(2) }}
+            总计: ¥{{ totalAmount?.toFixed(2) }}
           </div>
 
           <el-button type="primary" @click="nextStep">去支付</el-button>
@@ -97,17 +97,29 @@
                   <el-row :gutter="10">
                     <el-col :span="8">
                       <el-form-item label="有效期(月)" prop="expMonth">
-                        <el-input v-model="form.expMonth" placeholder="MM"></el-input>
+                        <el-input
+                          v-model.number="form.expMonth"
+                          type="number"
+                          placeholder="MM"
+                        ></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
                       <el-form-item label="有效期(年)" prop="expYear">
-                        <el-input v-model="form.expYear" placeholder="YYYY"></el-input>
+                        <el-input
+                          v-model.number="form.expYear"
+                          type="number"
+                          placeholder="YYYY"
+                        ></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
                       <el-form-item label="CVV" prop="cvv">
-                        <el-input v-model="form.cvv" placeholder="CVV"></el-input>
+                        <el-input
+                          v-model.number="form.cvv"
+                          type="number"
+                          placeholder="CVV"
+                        ></el-input>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -142,6 +154,7 @@ import { ref, computed, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { ElMessage } from 'element-plus'
+import axios from 'axios'
 
 const form = reactive({
   email: '',
@@ -154,9 +167,9 @@ const form = reactive({
   country: '',
   paymentMethod: 'card',
   cardNumber: '',
-  expMonth: '',
-  expYear: '',
-  cvv: ''
+  expMonth: null,
+  expYear: null,
+  cvv: null
 })
 
 const rules = reactive({
@@ -190,7 +203,7 @@ const rules = reactive({
   ],
   cardNumber: [
     { required: true, message: '请输入卡号', trigger: 'blur' },
-    { 
+    {
       validator: (rule, value, callback) => {
         if (form.paymentMethod === 'card' && !value) {
           callback(new Error('请输入卡号'))
@@ -202,13 +215,44 @@ const rules = reactive({
     }
   ],
   expMonth: [
-    { required: true, message: '请输入有效期月份', trigger: 'blur' }
+    { required: true, message: '请输入有效期月份', trigger: 'blur' },
+    {
+      validator: (rule, value, callback) => {
+        if (!value || value < 1 || value > 12) {
+          callback(new Error('月份必须在1-12之间'))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'blur'
+    }
   ],
   expYear: [
-    { required: true, message: '请输入有效期年份', trigger: 'blur' }
+    { required: true, message: '请输入有效期年份', trigger: 'blur' },
+    {
+      validator: (rule, value, callback) => {
+        const currentYear = new Date().getFullYear()
+        if (!value || value <= currentYear) {
+          callback(new Error('年份不能小于当前年份'))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'blur'
+    }
   ],
   cvv: [
-    { required: true, message: '请输入CVV', trigger: 'blur' }
+    { required: true, message: '请输入CVV', trigger: 'blur' },
+    {
+      validator: (rule, value, callback) => {
+        if (!value || String(value).length < 3 || String(value).length > 4) {
+          callback(new Error('CVV必须是3-4位数字'))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'blur'
+    }
   ]
 })
 
@@ -232,12 +276,62 @@ const nextStep = () => {
   activeStep.value++
 }
 
-const handlePayment = () => {
-  // 模拟支付处理
-  setTimeout(() => {
-    activeStep.value++
-    store.dispatch('cart/clearCart')
-  }, 1000)
+const paymentForm = ref(null)
+
+const handlePayment = async () => {
+  // 表单验证
+  const valid = await paymentForm.value.validate()
+  if (!valid) {
+    return
+  }
+
+  try {
+    // 调用支付接口，确保转换为数字类型
+    const response = await axios.post('/api/checkout/waiting', {
+      firstname: form?.firstName,
+      lastname: form?.lastName,
+      email: form?.email,
+      country: form?.country,
+      zipcode: form?.zipCode,
+      city: form?.city,
+      province: form?.province,
+      street: form?.street,
+      card_num: form?.cardNumber,
+      expiration_year: parseInt(form?.expYear),
+      expiration_month: parseInt(form?.expMonth),
+      cvv: parseInt(form?.cvv)
+    })
+
+    // 如果支付提交成功，开始轮询结果
+    if (response.data.redirect) {
+      const result = await pollCheckoutResult()
+    }
+  } catch (err) {
+    ElMessage.error('支付失败：' + err.message)
+  }
+}
+
+// 轮询支付结果
+const pollCheckoutResult = async () => {
+  const maxAttempts = 10
+  const interval = 2000 // 2秒间隔
+
+  for (let i = 0; i < maxAttempts; i++) {
+    try {
+      const response = await axios.get('/api/checkout/result')
+
+      if (response?.data?.user_id) {
+        activeStep.value = 2
+        store.dispatch('cart/clearCart')
+        ElMessage.success('支付成功！')
+        return response.data
+      }
+      await new Promise(resolve => setTimeout(resolve, interval))
+    } catch (err) {
+      console.error('轮询出错:', err)
+    }
+  }
+  throw new Error('支付超时，请检查订单状态')
 }
 
 const goToHome = () => {

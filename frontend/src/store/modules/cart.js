@@ -13,11 +13,11 @@ export default {
     items: (state) => state.items,
   totalAmount: (state) => {
     return state.items.reduce((total, item) => {
-      return total + (item.price * item.quantity)
+      return total + (item.Price * item.Qty)
     }, 0)
   },
   totalQuantity: (state) => {
-    return state.items.reduce((total, item) => total + item.quantity, 0)
+    return state?.items?.reduce((total, item) => total + item?.Qty, 0)
   },
     loading: (state) => state.loading,
     error: (state) => state.error
@@ -30,15 +30,15 @@ export default {
     ADD_ITEM(state, item) {
       const existing = state.items.find(i => i.id === item.id)
       if (existing) {
-        existing.quantity += item.quantity
+        existing.Qty += item.Qty
       } else {
         state.items.push(item)
       }
     },
-    UPDATE_QUANTITY(state, { id, quantity }) {
+    UPDATE_QUANTITY(state, { id, Qty }) {
       const item = state.items.find(i => i.id === id)
       if (item) {
-        item.quantity = quantity
+        item.Qty = Qty
       }
     },
     REMOVE_ITEM(state, id) {
@@ -59,8 +59,8 @@ export default {
     async fetchCart({ commit }) {
       try {
         commit('SET_LOADING', true)
-        const { data } = await axios.get('http://localhost:8080/api/cart')
-        commit('SET_ITEMS', data.items)
+        const { data } = await axios.get('/api/cart')
+        commit('SET_ITEMS', data?.items || [])
         commit('SET_ERROR', null)
       } catch (error) {
         commit('SET_ERROR', error.message)
@@ -72,7 +72,7 @@ export default {
       try {
         commit('SET_LOADING', true)
         commit('ADD_ITEM', item)
-        await axios.post('http://localhost:8080/api/cart', item)
+        await axios.post('/api/cart', item)
         commit('SET_ERROR', null)
       } catch (error) {
         commit('SET_ERROR', error.message)
@@ -96,7 +96,7 @@ export default {
       try {
         commit('SET_LOADING', true)
         commit('CLEAR_CART')
-        await axios.delete('http://localhost:8080/api/cart')
+        await axios.get(`/api/emptyCart`)
         commit('SET_ERROR', null)
       } catch (error) {
         commit('SET_ERROR', error.message)
@@ -104,11 +104,14 @@ export default {
         commit('SET_LOADING', false)
       }
     },
-    async updateQuantity({ commit }, { id, quantity }) {
+    async updateQuantity({ commit }, { Id, Qty }) {
       try {
         commit('SET_LOADING', true)
-        commit('UPDATE_QUANTITY', { id, quantity })
-        await axios.put(`http://localhost:8080/api/cart/${id}`, { quantity })
+        commit('UPDATE_QUANTITY', { Id, Qty })
+        await axios.post(`/api/cart`, {
+          product_id: Id,
+          product_num: Qty,
+        })
         commit('SET_ERROR', null)
       } catch (error) {
         commit('SET_ERROR', error.message)

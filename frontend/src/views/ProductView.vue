@@ -12,13 +12,13 @@
         <el-col :span="12">
           <div class="product-details">
             <h1 class="product-title">{{ product?.name }}</h1>
-            <p class="product-price">${{ product?.price.toFixed(2) }}</p>
+            <p class="product-price">${{ product?.price?.toFixed(2) }}</p>
             <el-divider />
             <p class="product-description">{{ product?.description }}</p>
 
             <div class="product-actions">
               <el-input-number
-                v-model="quantity"
+                v-model="Qty"
                 :min="1"
                 :max="10"
                 size="large"
@@ -43,17 +43,21 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import axios from "axios";
+import {useStore} from "vuex";
 
 const route = useRoute()
-const product = ref({
+const store = useStore()
+
+let product = ref({
   id: route.params.id,
   name: '',
   description: '',
-  price: 0,
+  Price: 0,
   image: ''
 })
-const quantity = ref(1)
+let Qty = ref(1)
 const loading = ref(true)
+let Id = ref(0)
 
 const fetchProduct = async () => {
   try {
@@ -72,8 +76,10 @@ const fetchProduct = async () => {
     const data = response?.data?.item
     product.value = {
       ...data,
-      price: parseFloat(data?.price)
+      Price: parseFloat(data?.Price)
     }
+    Id = data?.id
+
   } catch (error) {
     ElMessage.error('Failed to load product details')
     console.error(error)
@@ -82,9 +88,16 @@ const fetchProduct = async () => {
   }
 }
 
-const addToCart = () => {
-  ElMessage.success('Added to cart')
-  // Implement cart functionality
+const addToCart = (event) => {
+  event.preventDefault()
+  event.stopPropagation()
+  store.dispatch('cart/addItem', {
+    product_id: Id,
+    product_num: Qty.value,
+    Id: Id,
+    Qty: Qty.value,
+  })
+  ElMessage.success('已加入购物车')
 }
 
 onMounted(() => {

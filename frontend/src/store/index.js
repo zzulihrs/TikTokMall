@@ -3,7 +3,7 @@ import auth from './modules/auth'
 import cart from './modules/cart'
 import search from './modules/search'
 
-export default createStore({
+const store = createStore({
   modules: {
     auth,
     cart,
@@ -32,3 +32,8 @@ export default createStore({
     chatHistory: state => state.chatHistory
   }
 })
+
+// 初始化用户状态
+store.dispatch('auth/initialize')
+
+export default store
