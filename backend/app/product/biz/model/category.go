@@ -27,6 +27,10 @@ func (c *CategoryQuery) GetProductByCategoryName(name string) (categories []Cate
 		Preload("Products").Find(&categories).Error
 	return
 }
+func (c *CategoryQuery) InsertMany(categories []Category) (err error) {
+	err = c.db.WithContext(c.ctx).Model(&Category{}).Create(&categories).Error
+	return
+}
 
 func NewCategoryQuery(ctx context.Context, db *gorm.DB) *CategoryQuery {
 	return &CategoryQuery{

@@ -41,8 +41,8 @@ func SearchProducts(ctx context.Context, c *app.RequestContext) {
 		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
-
 	resp, err := service.NewSearchProductsService(ctx, c).Run(&req)
+
 	if err != nil {
 		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return

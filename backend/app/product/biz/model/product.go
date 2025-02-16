@@ -3,6 +3,7 @@ package model
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/cloudwego/hertz/pkg/common/json"
@@ -17,6 +18,11 @@ type Product struct {
 	Description string  `json:"description"`
 	Picture     string  `json:"picture"`
 	Price       float32 `json:"price"`
+	SliderImgs  string  `json:"slider_imgs"`
+	Stock       int32   `json:"stock"`
+	// 添加外键字段
+	MerchantID int `json:"merchant_id"`
+	Merchant   Merchant
 	// 商品和分类是多对多的关系，因此需要一个中间表来存储关系
 	Categories []Category `json:"categories" gorm:"many2many:product_category;"`
 }
@@ -30,14 +36,19 @@ type ProductQuery struct {
 	db  *gorm.DB
 }
 
-func (p ProductQuery) GetById(productId int) (product Product, err error) {
-	err = p.db.WithContext(p.ctx).Model(&Product{}).First(&product, productId).Error
+func (p *ProductQuery) GetById(productId int) (product Product, err error) {
+	err = p.db.WithContext(p.ctx).Model(&Product{}).Preload("Categories").First(&product, productId).Where("deleted_at IS NULL").Error
 	return
 }
 
-func (p ProductQuery) SearchProducts(q string) (products []*Product, err error) {
-	err = p.db.WithContext(p.ctx).Model(&Product{}).Find(&products, "name like ? or description like ?",
+func (p *ProductQuery) SearchProducts(q string) (products []*Product, err error) {
+	log.Printf("q: %s", q)
+	err = p.db.WithContext(p.ctx).Model(&Product{}).Find(&products, "name like ? or description like ? and deleted_at IS NULL",
 		"%"+q+"%", "%"+q+"%").Error
+	return
+}
+func (p *ProductQuery) InsertMany(products []Product) (err error) {
+	err = p.db.WithContext(p.ctx).Model(&Product{}).Create(&products).Error
 	return
 }
 

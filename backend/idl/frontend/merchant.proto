@@ -8,12 +8,31 @@ import "api.proto";
 import "frontend/common.proto";
 
 service MerchantService {
-   rpc AddProduct(AddProductReq) returns(common.Empty) {
+    // 权限认证
+    rpc Auth(common.Empty) returns(common.Empty) {
+        option (api.get) = "/marchant/auth";
+    }
+    // 商品详情 （可加轮播图）
+    rpc ProductDetial(common.Empty) returns(common.Empty) {
+        option (api.get) = "/marchant/product/detail/:id";
+    }
+    // 删除商品
+    rpc DeleteProduct(common.Empty) returns(common.Empty) {
+        option (api.get) = "/marchant/product/delete/:id";
+    }
+
+    // 添加单个商品
+    rpc AddProduct(AddProductReq) returns(common.Empty) {
       option (api.post) = "/marchant/product/add";
-   }
-   rpc GetProductListByMerchant(GetProductListByMerchantReq) returns(GetProductListByMerchantResp) {
+    }
+    // 获取商品列表（没有轮播图）
+    rpc GetProductListByMerchant(GetProductListByMerchantReq) returns(GetProductListByMerchantResp) {
       option (api.get) = "/marchant/product/list";
-   }
+    }
+    // 修改商品信息（暂时没有轮播图）
+    rpc UpdateProduct(UpdateProductReq) returns(common.Empty) {
+      option (api.post) = "/marchant/product/update";
+    }
 }
 
 /*
@@ -39,15 +58,21 @@ message AddProductReq {
 }
 /*
 {
+    "uid": 1,
     "product_name": "电视",
     "category_id": 1,
     "min_price": 10,
     "max_price": 20,
-    "max_quanity": 10,
+    "max_stock": 10,
 }
 */
 message GetProductListByMerchantReq {
-
+    int64 uid = 1;
+    string product_name = 2;
+    int64 category_id = 3;
+    float min_price = 4;
+    float max_price = 5;
+    int64 max_stock = 6;
 }
 
 
@@ -61,7 +86,7 @@ message GetProductListByMerchantReq {
             "category_id": 1,
             "img_url": "static/images/product1.jpg",
             "price": 1999,
-            "quanity": 100,
+            "stock": 100,
             "description": "这是一款超级好看的电视"
         }
     ]
@@ -79,6 +104,14 @@ message Product {
     int64 category_id = 3;
     string img_url = 4;
     float price = 5;
-    int64 quanity = 6;
+    int64 stock = 6;
     string description = 7;
+}
+
+
+
+message UpdateProductReq {
+    int64 id = 1;
+    string name = 2;
+    float price = 3;
 }

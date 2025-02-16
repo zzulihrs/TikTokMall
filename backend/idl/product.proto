@@ -5,8 +5,11 @@ package product;
 option go_package = "/product";
 
 service ProductCatalogService {
+    // 获取商品列表, 添加了商家信息，但没有类别信息。暂时没用到
     rpc ListProducts(ListProductsReq) returns (ListProductsResp) {}
+    // 获取商品详情，商家，类别，都有
     rpc GetProduct(GetProductReq) returns (GetProductResp) {}
+    // 搜索商品，商家：有；类别：无
     rpc SearchProducts(SearchProductsReq) returns (SearchProductsResp) {}
 }
 
@@ -23,6 +26,10 @@ message Product {
     string picture = 4; // 商品图片地址
     float price = 5; // 商品价格
     repeated string categories = 6; // 商品分类
+    uint32 stock = 7; // 商品库存
+    uint32 ownerId = 8; // 商品所属用户ID
+    string ownerName = 9; // 商品所属用户名称
+    repeated string sliderImgs = 10; // 商品轮播图地址
 }
 
 message ListProductsResp {
