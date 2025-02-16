@@ -37,12 +37,48 @@ message AddProductReq {
     string img_url = 5;
     repeated string slider_imgs = 6;
 }
-
-
+/*
+{
+    "product_name": "电视",
+    "category_id": 1,
+    "min_price": 10,
+    "max_price": 20,
+    "max_quanity": 10,
+}
+*/
 message GetProductListByMerchantReq {
 
 }
 
+
+/*
+{
+    "msg": "success",
+    "data": [
+        {
+            "id": 1,
+            "name": "电视",
+            "category_id": 1,
+            "img_url": "static/images/product1.jpg",
+            "price": 1999,
+            "quanity": 100,
+            "description": "这是一款超级好看的电视"
+        }
+    ]
+}
+*/
 message GetProductListByMerchantResp {
-   
+    string msg = 1;
+    repeated Product data = 2;
+    
+}
+
+message Product {
+    int64 id = 1;
+    string name = 2;
+    int64 category_id = 3;
+    string img_url = 4;
+    float price = 5;
+    int64 quanity = 6;
+    string description = 7;
 }
