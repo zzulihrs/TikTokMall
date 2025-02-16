@@ -63,6 +63,9 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import axios from "axios";
+import {useStore} from "vuex";
+
+const store = useStore()
 
 const router = useRouter()
 
@@ -110,24 +113,25 @@ const handleRegister = async () => {
       confirmPassword: form.value.confirmPassword
     });
 
-    if(response?.status == 200) {
-      const userData = {
-        email: response.data.email,
-        password: form.value.password,
-        avatar: response?.data?.avatar || 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-        token: response.data.token,
-      };
+    console.log(response);
 
-      store.dispatch('auth/login', userData);
+    if(response?.status == 200) {
+      // const userData = {
+      //   email: response.data.email,
+      //   password: form.value.password,
+      //   avatar: response?.data?.avatar || 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
+      //   token: response.data.token,
+      // };
+
+      // await store.dispatch('auth/login', userData);
       loading.value = false;
 
       ElMessage.success('注册成功');
       // 跳转login页面
-      router.push('/login');
+      await router.push('/login');
     } else {
       loading.value = false;
       ElMessage.error('注册失败: ', response);
-      console.error('Register failed:', response);
     }
 
   } catch (error) {

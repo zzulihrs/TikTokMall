@@ -128,7 +128,7 @@ onMounted(async () => {
       })
   } catch (error) {
     console.error('获取订单失败:', error)
-    ElMessage.error('获取订单失败')
+    // ElMessage.error('获取订单失败')
   } finally {
     loading.value = false
   }
