@@ -14,6 +14,9 @@ type RPCClient interface {
 	Service() string
 	Register(ctx context.Context, Req *user.RegisterReq, callOptions ...callopt.Option) (r *user.RegisterResp, err error)
 	Login(ctx context.Context, Req *user.LoginReq, callOptions ...callopt.Option) (r *user.LoginResp, err error)
+	Update(ctx context.Context, Req *user.UpdateUserReq, callOptions ...callopt.Option) (r *user.UpdateUserResp, err error)
+	Delete(ctx context.Context, Req *user.DeleteUserReq, callOptions ...callopt.Option) (r *user.DeleteUserResp, err error)
+	Query(ctx context.Context, Req *user.QueryUserReq, callOptions ...callopt.Option) (r *user.QueryUserResp, err error)
 }
 
 func NewRPCClient(dstService string, opts ...client.Option) (RPCClient, error) {
@@ -48,4 +51,16 @@ func (c *clientImpl) Register(ctx context.Context, Req *user.RegisterReq, callOp
 
 func (c *clientImpl) Login(ctx context.Context, Req *user.LoginReq, callOptions ...callopt.Option) (r *user.LoginResp, err error) {
 	return c.kitexClient.Login(ctx, Req, callOptions...)
+}
+
+func (c *clientImpl) Update(ctx context.Context, Req *user.UpdateUserReq, callOptions ...callopt.Option) (r *user.UpdateUserResp, err error) {
+	return c.kitexClient.Update(ctx, Req, callOptions...)
+}
+
+func (c *clientImpl) Delete(ctx context.Context, Req *user.DeleteUserReq, callOptions ...callopt.Option) (r *user.DeleteUserResp, err error) {
+	return c.kitexClient.Delete(ctx, Req, callOptions...)
+}
+
+func (c *clientImpl) Query(ctx context.Context, Req *user.QueryUserReq, callOptions ...callopt.Option) (r *user.QueryUserResp, err error) {
+	return c.kitexClient.Query(ctx, Req, callOptions...)
 }
