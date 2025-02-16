@@ -4,9 +4,13 @@ package user;
 
 option go_package="/user";
 
+
 service UserService {
     rpc Register(RegisterReq) returns (RegisterResp) {}
     rpc Login(LoginReq) returns (LoginResp) {}
+    rpc Update(UpdateUserReq) returns (UpdateUserResp) {}
+    rpc Delete(DeleteUserReq) returns (DeleteUserResp) {}
+    rpc Query(QueryUserReq) returns (QueryUserResp) {}
 }
 
 message RegisterReq {
@@ -26,4 +30,32 @@ message LoginReq {
 
 message LoginResp {
     int32 user_id = 1;
+}
+
+message UpdateUserReq {
+    int64 user_id = 1;
+    string email = 2; 
+    string password = 3; 
+}
+
+message UpdateUserResp {
+    int64 user_id = 1;
+}
+
+message DeleteUserReq {
+    int64 user_id = 1; 
+}
+message DeleteUserResp {
+    
+}
+
+
+message QueryUserReq {
+    int64 user_id = 1;
+}
+
+message QueryUserResp {
+    int64 user_id = 1;
+    string email = 2;
+    string password = 3;
 }
