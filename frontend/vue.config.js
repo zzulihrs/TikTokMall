@@ -2,6 +2,7 @@ const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
+    port: 8000, // 修改为你需要的端口号
     proxy: {
       '/api': {
         target: 'http://localhost:8080/', // 你要请求的接口的前缀

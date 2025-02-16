@@ -53,7 +53,7 @@ gen-frontend: # make gen-frontend page=home
 
 .PHONY: gen-frontend-auth-page
 gen-frontend-auth-page:
-	@cd app/frontend && cwgo server --type HTTP --module github.com/tiktokmall/backend/app/frontend --service frontend -I ../../idl --idl ../../idl/frontend/auth_page.proto
+	@cd app/frontend && cwgo server --type HTTP --module github.com/tiktokmall/backend/app/frontend --service frontend -I ../../idl --idl ../../idl/frontend/user_page.proto
 
 # 生成 rpc
 .PHONY: gen-client
