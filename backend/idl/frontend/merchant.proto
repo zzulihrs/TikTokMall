@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package frontend.merchant;
+
+option go_package = "frontend/merchant";
+
+import "api.proto";
+import "frontend/common.proto";
+
+service MerchantService {
+   rpc AddProduct(AddProductReq) returns(common.Empty) {
+      option (api.post) = "/marchant/product/add";
+   }
+   rpc GetProductListByMerchant(GetProductListByMerchantReq) returns(GetProductListByMerchantResp) {
+      option (api.get) = "/marchant/product/list";
+   }
+}
+
+/*
+{
+    "name": "电视",
+    "price": 19.2,
+    "description": "这是一段描述",
+    "category": "家电",
+    "img_url": "static/a.png",
+    "slider_imgs": [
+        "static/a.png",
+        "http://127.0.0.1:xxx/aaa.mp4"
+    ]
+}
+*/
+message AddProductReq {
+    string name = 1;
+    float price = 2;
+    string description = 3;
+    string category = 4;
+    string img_url = 5;
+    repeated string slider_imgs = 6;
+}
+
+
+message GetProductListByMerchantReq {
+
+}
+
+message GetProductListByMerchantResp {
+   
+}
