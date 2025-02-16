@@ -37,6 +37,10 @@ for service in "${SERVICES[@]}"; do
     # 返回到脚本开始时的目录
     popd > /dev/null
     echo "$service started."
+
+    # 等待 5 秒, 同时启动多个服务太占内存
+    sleep 5
+    echo "sleep 5s."
 done
 
 echo "All services have been started."
