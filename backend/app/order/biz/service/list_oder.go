@@ -28,7 +28,7 @@ func (s *ListOderService) Run(req *order.ListOrderReq) (resp *order.ListOrderRes
 				Cost: vitem.Cost,
 				Item: &cart.CartItem{
 					ProductId: vitem.ProductId,
-					Quantity:  vitem.Quantity,
+					Quantity:  uint32(vitem.Quantity),
 				},
 			})
 		}
