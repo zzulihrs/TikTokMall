@@ -40,13 +40,17 @@
           </el-row>
         </el-col>
 
+        <!-- 当前页，个人头像左边，加一个我是店家的超链接 -->
         <el-col :span="8">
           <div class="header-right">
             <el-menu mode="horizontal" :ellipsis="false">
+            <el-menu-item index="5" v-show="isAuthenticated" @click="goToMerchant">我是店家</el-menu-item>
               <el-menu-item v-if="!isAuthenticated" index="3" @click="goToLogin">登录</el-menu-item>
-              <el-submenu v-else index="4">
+              <el-menu-item v-else index="4">
                 <UserDropdown></UserDropdown>
-              </el-submenu>
+              </el-menu-item>
+                  
+              
               <el-menu-item index="6" @click="goToCart">
                 <el-badge :value="cartCount" :max="99">
                   <el-icon><ShoppingCart /></el-icon>
@@ -158,6 +162,9 @@ const handleLogout = () => {
 
 const goToCart = () => {
   router.push('/cart')
+}
+const goToMerchant = () => {
+  router.push('/merchant')
 }
 </script>
 

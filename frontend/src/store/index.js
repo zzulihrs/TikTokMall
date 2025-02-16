@@ -2,12 +2,14 @@ import { createStore } from 'vuex'
 import auth from './modules/auth'
 import cart from './modules/cart'
 import search from './modules/search'
+import merchant from './modules/merchant'
 
 const store = createStore({
   modules: {
     auth,
     cart,
-    search
+    search,
+    merchant
   }
 })
 
