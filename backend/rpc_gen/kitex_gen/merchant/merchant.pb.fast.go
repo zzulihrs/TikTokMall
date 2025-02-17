@@ -103,7 +103,7 @@ ReadFieldError:
 }
 
 func (x *MerchantProductSimpleInfo) fastReadField1(buf []byte, _type int8) (offset int, err error) {
-	x.Id, offset, err = fastpb.ReadInt32(buf, _type)
+	x.Id, offset, err = fastpb.ReadInt64(buf, _type)
 	return offset, err
 }
 
@@ -188,7 +188,7 @@ ReadFieldError:
 }
 
 func (x *MerchantProductDetailInfo) fastReadField1(buf []byte, _type int8) (offset int, err error) {
-	x.Id, offset, err = fastpb.ReadInt32(buf, _type)
+	x.Id, offset, err = fastpb.ReadInt64(buf, _type)
 	return offset, err
 }
 
@@ -258,7 +258,7 @@ ReadFieldError:
 }
 
 func (x *GetMerchantReq) fastReadField1(buf []byte, _type int8) (offset int, err error) {
-	x.Id, offset, err = fastpb.ReadString(buf, _type)
+	x.Id, offset, err = fastpb.ReadInt64(buf, _type)
 	return offset, err
 }
 
@@ -333,7 +333,7 @@ ReadFieldError:
 }
 
 func (x *AddProductReq) fastReadField1(buf []byte, _type int8) (offset int, err error) {
-	x.MerchantId, offset, err = fastpb.ReadInt32(buf, _type)
+	x.MerchantId, offset, err = fastpb.ReadInt64(buf, _type)
 	return offset, err
 }
 
@@ -386,12 +386,12 @@ ReadFieldError:
 }
 
 func (x *DeleteProductReq) fastReadField1(buf []byte, _type int8) (offset int, err error) {
-	x.MerchantId, offset, err = fastpb.ReadInt32(buf, _type)
+	x.MerchantId, offset, err = fastpb.ReadInt64(buf, _type)
 	return offset, err
 }
 
 func (x *DeleteProductReq) fastReadField2(buf []byte, _type int8) (offset int, err error) {
-	x.Pid, offset, err = fastpb.ReadInt32(buf, _type)
+	x.Pid, offset, err = fastpb.ReadInt64(buf, _type)
 	return offset, err
 }
 
@@ -434,7 +434,7 @@ ReadFieldError:
 }
 
 func (x *UpdateProductReq) fastReadField1(buf []byte, _type int8) (offset int, err error) {
-	x.MerchantId, offset, err = fastpb.ReadInt32(buf, _type)
+	x.MerchantId, offset, err = fastpb.ReadInt64(buf, _type)
 	return offset, err
 }
 
@@ -612,12 +612,12 @@ ReadFieldError:
 }
 
 func (x *ProductDetailReq) fastReadField1(buf []byte, _type int8) (offset int, err error) {
-	x.MerchantId, offset, err = fastpb.ReadInt32(buf, _type)
+	x.MerchantId, offset, err = fastpb.ReadInt64(buf, _type)
 	return offset, err
 }
 
 func (x *ProductDetailReq) fastReadField2(buf []byte, _type int8) (offset int, err error) {
-	x.Pid, offset, err = fastpb.ReadInt32(buf, _type)
+	x.Pid, offset, err = fastpb.ReadInt64(buf, _type)
 	return offset, err
 }
 
@@ -702,7 +702,7 @@ func (x *MerchantProductSimpleInfo) fastWriteField1(buf []byte) (offset int) {
 	if x.Id == 0 {
 		return offset
 	}
-	offset += fastpb.WriteInt32(buf[offset:], 1, x.GetId())
+	offset += fastpb.WriteInt64(buf[offset:], 1, x.GetId())
 	return offset
 }
 
@@ -765,7 +765,7 @@ func (x *MerchantProductDetailInfo) fastWriteField1(buf []byte) (offset int) {
 	if x.Id == 0 {
 		return offset
 	}
-	offset += fastpb.WriteInt32(buf[offset:], 1, x.GetId())
+	offset += fastpb.WriteInt64(buf[offset:], 1, x.GetId())
 	return offset
 }
 
@@ -838,10 +838,10 @@ func (x *GetMerchantReq) FastWrite(buf []byte) (offset int) {
 }
 
 func (x *GetMerchantReq) fastWriteField1(buf []byte) (offset int) {
-	if x.Id == "" {
+	if x.Id == 0 {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 1, x.GetId())
+	offset += fastpb.WriteInt64(buf[offset:], 1, x.GetId())
 	return offset
 }
 
@@ -892,7 +892,7 @@ func (x *AddProductReq) fastWriteField1(buf []byte) (offset int) {
 	if x.MerchantId == 0 {
 		return offset
 	}
-	offset += fastpb.WriteInt32(buf[offset:], 1, x.GetMerchantId())
+	offset += fastpb.WriteInt64(buf[offset:], 1, x.GetMerchantId())
 	return offset
 }
 
@@ -924,7 +924,7 @@ func (x *DeleteProductReq) fastWriteField1(buf []byte) (offset int) {
 	if x.MerchantId == 0 {
 		return offset
 	}
-	offset += fastpb.WriteInt32(buf[offset:], 1, x.GetMerchantId())
+	offset += fastpb.WriteInt64(buf[offset:], 1, x.GetMerchantId())
 	return offset
 }
 
@@ -932,7 +932,7 @@ func (x *DeleteProductReq) fastWriteField2(buf []byte) (offset int) {
 	if x.Pid == 0 {
 		return offset
 	}
-	offset += fastpb.WriteInt32(buf[offset:], 2, x.GetPid())
+	offset += fastpb.WriteInt64(buf[offset:], 2, x.GetPid())
 	return offset
 }
 
@@ -956,7 +956,7 @@ func (x *UpdateProductReq) fastWriteField1(buf []byte) (offset int) {
 	if x.MerchantId == 0 {
 		return offset
 	}
-	offset += fastpb.WriteInt32(buf[offset:], 1, x.GetMerchantId())
+	offset += fastpb.WriteInt64(buf[offset:], 1, x.GetMerchantId())
 	return offset
 }
 
@@ -1085,7 +1085,7 @@ func (x *ProductDetailReq) fastWriteField1(buf []byte) (offset int) {
 	if x.MerchantId == 0 {
 		return offset
 	}
-	offset += fastpb.WriteInt32(buf[offset:], 1, x.GetMerchantId())
+	offset += fastpb.WriteInt64(buf[offset:], 1, x.GetMerchantId())
 	return offset
 }
 
@@ -1093,7 +1093,7 @@ func (x *ProductDetailReq) fastWriteField2(buf []byte) (offset int) {
 	if x.Pid == 0 {
 		return offset
 	}
-	offset += fastpb.WriteInt32(buf[offset:], 2, x.GetPid())
+	offset += fastpb.WriteInt64(buf[offset:], 2, x.GetPid())
 	return offset
 }
 
@@ -1164,7 +1164,7 @@ func (x *MerchantProductSimpleInfo) sizeField1() (n int) {
 	if x.Id == 0 {
 		return n
 	}
-	n += fastpb.SizeInt32(1, x.GetId())
+	n += fastpb.SizeInt64(1, x.GetId())
 	return n
 }
 
@@ -1227,7 +1227,7 @@ func (x *MerchantProductDetailInfo) sizeField1() (n int) {
 	if x.Id == 0 {
 		return n
 	}
-	n += fastpb.SizeInt32(1, x.GetId())
+	n += fastpb.SizeInt64(1, x.GetId())
 	return n
 }
 
@@ -1300,10 +1300,10 @@ func (x *GetMerchantReq) Size() (n int) {
 }
 
 func (x *GetMerchantReq) sizeField1() (n int) {
-	if x.Id == "" {
+	if x.Id == 0 {
 		return n
 	}
-	n += fastpb.SizeString(1, x.GetId())
+	n += fastpb.SizeInt64(1, x.GetId())
 	return n
 }
 
@@ -1354,7 +1354,7 @@ func (x *AddProductReq) sizeField1() (n int) {
 	if x.MerchantId == 0 {
 		return n
 	}
-	n += fastpb.SizeInt32(1, x.GetMerchantId())
+	n += fastpb.SizeInt64(1, x.GetMerchantId())
 	return n
 }
 
@@ -1386,7 +1386,7 @@ func (x *DeleteProductReq) sizeField1() (n int) {
 	if x.MerchantId == 0 {
 		return n
 	}
-	n += fastpb.SizeInt32(1, x.GetMerchantId())
+	n += fastpb.SizeInt64(1, x.GetMerchantId())
 	return n
 }
 
@@ -1394,7 +1394,7 @@ func (x *DeleteProductReq) sizeField2() (n int) {
 	if x.Pid == 0 {
 		return n
 	}
-	n += fastpb.SizeInt32(2, x.GetPid())
+	n += fastpb.SizeInt64(2, x.GetPid())
 	return n
 }
 
@@ -1418,7 +1418,7 @@ func (x *UpdateProductReq) sizeField1() (n int) {
 	if x.MerchantId == 0 {
 		return n
 	}
-	n += fastpb.SizeInt32(1, x.GetMerchantId())
+	n += fastpb.SizeInt64(1, x.GetMerchantId())
 	return n
 }
 
@@ -1547,7 +1547,7 @@ func (x *ProductDetailReq) sizeField1() (n int) {
 	if x.MerchantId == 0 {
 		return n
 	}
-	n += fastpb.SizeInt32(1, x.GetMerchantId())
+	n += fastpb.SizeInt64(1, x.GetMerchantId())
 	return n
 }
 
@@ -1555,7 +1555,7 @@ func (x *ProductDetailReq) sizeField2() (n int) {
 	if x.Pid == 0 {
 		return n
 	}
-	n += fastpb.SizeInt32(2, x.GetPid())
+	n += fastpb.SizeInt64(2, x.GetPid())
 	return n
 }
 

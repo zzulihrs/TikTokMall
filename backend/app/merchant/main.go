@@ -1,20 +1,37 @@
 package main
 
 import (
+	"context"
 	"net"
 	"time"
 
 	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
+	"github.com/joho/godotenv"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
+	"github.com/tiktokmall/backend/app/merchant/biz/dal"
 	"github.com/tiktokmall/backend/app/merchant/conf"
+	"github.com/tiktokmall/backend/common/mtl"
+	"github.com/tiktokmall/backend/common/serversuite"
 	"github.com/tiktokmall/backend/rpc_gen/kitex_gen/merchant/merchantservice"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
+var (
+	ServiceName  = conf.GetConf().Kitex.Service
+	RegisterAddr = conf.GetConf().Registry.RegistryAddress[0]
+)
+
 func main() {
+	_ = godotenv.Load()
+	mtl.InitMetric(ServiceName,
+		conf.GetConf().Kitex.MetricsPort,
+		RegisterAddr)
+	p := mtl.InitTracing(ServiceName)
+	defer p.Shutdown(context.Background())
+	dal.Init()
+
 	opts := kitexInit()
 
 	svr := merchantservice.NewServer(new(MerchantServiceImpl), opts...)
@@ -34,9 +51,12 @@ func kitexInit() (opts []server.Option) {
 	opts = append(opts, server.WithServiceAddr(addr))
 
 	// service info
-	opts = append(opts, server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
-		ServiceName: conf.GetConf().Kitex.Service,
-	}))
+	opts = append(opts,
+		server.WithServiceAddr(addr),
+		server.WithSuite(serversuite.CommonServerSuite{
+			CurrentServiceName: ServiceName,
+			RegisterAddr:       RegisterAddr,
+		}))
 
 	// klog
 	logger := kitexlogrus.NewLogger()

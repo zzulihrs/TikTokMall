@@ -5,6 +5,7 @@ use (
 	./app/checkout
 	./app/email
 	./app/frontend
+	./app/merchant
 	./app/order
 	./app/payment
 	./app/product

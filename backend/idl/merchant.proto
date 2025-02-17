@@ -26,7 +26,7 @@ message Category {
 }
 
 message MerchantProductSimpleInfo {
-    int32 id = 1;
+    int64 id = 1;
     string name = 2;
     string description = 3;
     int32 stock = 4;
@@ -35,7 +35,7 @@ message MerchantProductSimpleInfo {
 }
 
 message MerchantProductDetailInfo {
-    int32 id = 1;
+    int64 id = 1;
     string name = 2;
     string description = 3;
     int32 stock = 4;
@@ -46,7 +46,7 @@ message MerchantProductDetailInfo {
 }
 
 message GetMerchantReq {
-    string id = 1;
+    int64 id = 1;
 }
 
 message GetMerchantResp {
@@ -56,7 +56,7 @@ message GetMerchantResp {
 }
 
 message AddProductReq {    
-    int32 merchantId = 1;
+    int64 merchantId = 1;
     MerchantProductDetailInfo product = 2;
 }
 
@@ -66,8 +66,8 @@ message AddProductResp {
 
 
 message DeleteProductReq {
-    int32 merchantId = 1;
-    int32 pid = 2;
+    int64 merchantId = 1;
+    int64 pid = 2;
 }
 
 message DeleteProductResp {
@@ -75,7 +75,7 @@ message DeleteProductResp {
 }
 
 message UpdateProductReq {
-    int32 merchantId = 1;
+    int64 merchantId = 1;
     MerchantProductDetailInfo product = 2;
 }
 
@@ -98,8 +98,8 @@ message SearchProductsResp {
 }
 
 message ProductDetailReq {
-    int32 merchantId = 1;
-    int32 pid = 2;
+    int64 merchantId = 1;
+    int64 pid = 2;
 }
 message ProductDetailResp {
     MerchantProductDetailInfo product = 1;
