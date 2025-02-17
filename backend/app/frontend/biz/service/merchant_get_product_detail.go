@@ -25,3 +25,29 @@ func (h *MerchantGetProductDetailService) Run(req *merchant.MerchantGetProductDe
 	// todo edit your code
 	return
 }
+
+/*
+Response
+{
+    "code": 200,
+    "message": "sss",
+    "product": {
+        "id": 1,
+        "name": "aa",
+        "description": "aaa",
+        "stock": 23,
+        "price": 19.26,
+        "img_url": "static/img.png",
+        "catetory": [
+            {
+                "id": 1,
+                "name": "t-shirt",
+                "description": "t-shirt"
+            }
+        ],
+        "slider_img": [
+            "static/img.png"
+        ]
+    }
+}
+*/

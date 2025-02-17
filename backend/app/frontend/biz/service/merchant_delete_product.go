@@ -25,3 +25,11 @@ func (h *MerchantDeleteProductService) Run(req *merchant.MerchantDeleteProductRe
 	// todo edit your code
 	return
 }
+
+/*
+Response
+{
+    "code": 200,
+    "message": "delete sucess"
+}
+*/

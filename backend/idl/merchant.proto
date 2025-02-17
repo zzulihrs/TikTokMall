@@ -4,42 +4,23 @@ package merchant;
 
 option go_package = "/merchant";
 
-import "common/common.proto";
 service MerchantService {
-    // 权限认证
-    rpc Auth(AuthReq) returns (AuthResp) {};
-    // 商品查询
-    rpc SearchProducts(SearchProductsReq) returns (SearchProductsResp) {};
-    // 商品详情
-    rpc ProductDetail(ProductDetailReq) returns (ProductDetailResp) {};
-    // 删除商品
+    // 获取店家信息
+    rpc GetMerchant(GetMerchantReq) returns (GetMerchantResp) {};
+    // 店家添加商品
+    rpc AddProduct(AddProductReq) returns (AddProductResp) {};
+    // 店家删除商品
     rpc DeleteProduct(DeleteProductReq) returns (DeleteProductResp) {};
     // 修改商品信息
     rpc UpdateProduct(UpdateProductReq) returns (UpdateProductResp) {};
-    // 新增商品
-    rpc CreateProduct(CreateProductReq) returns (CreateProductResp) {};
+    // 商品查询（条件查询）
+    rpc SearchProducts(SearchProductsReq) returns (SearchProductsResp) {};
+    // 商品详情
+    rpc ProductDetail(ProductDetailReq) returns (ProductDetailResp) {};
 }
 
-message AuthReq {
-    string uid = 1;
-}
-
-message AuthResp {
-    string token = 1;
-}
-
-message SearchProductsReq {
-    string name = 1;
-    string category = 2;
-    int32 max_stock = 3;
-    float min_price = 4;
-    float max_price = 5;
-    int32 page_no = 6;
-    int32 page_size = 7;
-    int32 merchant_id = 8;
-}
 message Category {
-    int32 id = 1;
+    int64 id = 1;
     string name = 2;
     string description = 3;
 }
@@ -50,7 +31,7 @@ message MerchantProductSimpleInfo {
     string description = 3;
     int32 stock = 4;
     float price = 5;
-    string img_url = 6;
+    string imgUrl = 6;
 }
 
 message MerchantProductDetailInfo {
@@ -59,9 +40,57 @@ message MerchantProductDetailInfo {
     string description = 3;
     int32 stock = 4;
     float price = 5;
-    string img_url = 6;
+    string imgUrl = 6;
     repeated Category category = 7;
-    repeated string slider_img = 8;
+    repeated string sliderImgs = 8;
+}
+
+message GetMerchantReq {
+    string id = 1;
+}
+
+message GetMerchantResp {
+    int64 id = 1;
+    string username = 2;
+    string email = 3;
+}
+
+message AddProductReq {    
+    int32 merchantId = 1;
+    MerchantProductDetailInfo product = 2;
+}
+
+message AddProductResp {
+    
+}
+
+
+message DeleteProductReq {
+    int32 merchantId = 1;
+    int32 pid = 2;
+}
+
+message DeleteProductResp {
+
+}
+
+message UpdateProductReq {
+    int32 merchantId = 1;
+    MerchantProductDetailInfo product = 2;
+}
+
+message UpdateProductResp {    
+}
+
+message SearchProductsReq {
+    string name = 1;
+    int64 categoryId = 2; // 单个类别id
+    int32 maxStock = 3;
+    float minPrice = 4;
+    float maxPrice = 5;
+    int32 pageNo = 6;
+    int32 pageSize = 7;
+    int64 merchantId = 8;
 }
 
 message SearchProductsResp {
@@ -69,34 +98,11 @@ message SearchProductsResp {
 }
 
 message ProductDetailReq {
-    int32 uid = 1;
+    int32 merchantId = 1;
     int32 pid = 2;
 }
 message ProductDetailResp {
-    MerchantProductSimpleInfo product = 1;
+    MerchantProductDetailInfo product = 1;
 }
 
-message DeleteProductReq {
-    int32 uid = 1;
-    int32 pid = 2;
-}
 
-message DeleteProductResp {
-}
-
-message UpdateProductReq {
-    int32 uid = 1;
-    MerchantProductDetailInfo product = 2;
-}
-
-message UpdateProductResp {    
-}
-
-message CreateProductReq {    
-    int32 uid = 1;
-    MerchantProductDetailInfo product = 2;
-}
-
-message CreateProductResp {
-    
-}

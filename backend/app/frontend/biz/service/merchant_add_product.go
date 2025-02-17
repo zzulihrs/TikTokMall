@@ -25,3 +25,11 @@ func (h *MerchantAddProductService) Run(req *merchant.MerchantAddProductReq) (re
 	// todo edit your code
 	return
 }
+
+/*
+Response
+{
+    "code": 58,
+    "message": "pariatur deserunt ullamco labore"
+}
+*/

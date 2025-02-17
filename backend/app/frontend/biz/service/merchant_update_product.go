@@ -25,3 +25,11 @@ func (h *MerchantUpdateProductService) Run(req *merchant.MerchantUpdateProductRe
 	// todo edit your code
 	return
 }
+
+/*
+Response
+{
+    "code": 200,
+    "message": "success"
+}
+*/
