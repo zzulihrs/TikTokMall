@@ -82,6 +82,8 @@ message MerchantAddProductReq {
     repeated Category categories = 4 [(api.body) = "categories"];
     string img_url = 5 [(api.body) = "img_url"];
     repeated string slider_imgs = 6 [(api.body) = "slider_imgs"];
+    int64 mid = 7 [(api.body) = "mid"];
+    int32 stock = 8 [(api.body) = "stock"];
 }
 /*
 {
@@ -96,9 +98,11 @@ message MerchantDeleteProductReq {
 
 /*
 {
+    "mid": 100,
     "pid": 100,
     "name": "电视",
     "price": 19.2,
+    "stock": 20,
     "description": "这是一段描述",
     "categories": [
         {
@@ -127,6 +131,8 @@ message MerchantUpdateProductReq {
     repeated Category categories = 5 [(api.body) = "categories"];
     string img_url = 6 [(api.body) = "img_url"];
     repeated string slider_imgs = 7 [(api.body) = "slider_imgs"];
+    int64 mid = 8 [(api.body) = "mid"];
+    int32 stock = 9 [(api.body) = "stock"];
 }
 /*
 {

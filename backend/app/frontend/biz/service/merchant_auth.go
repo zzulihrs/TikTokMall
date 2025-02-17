@@ -5,7 +5,9 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	merchant "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/merchant"
+	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
 	"github.com/tiktokmall/backend/app/frontend/utils"
+	rpcmerchant "github.com/tiktokmall/backend/rpc_gen/kitex_gen/merchant"
 )
 
 type MerchantAuthService struct {
@@ -32,8 +34,25 @@ func (h *MerchantAuthService) Run(req *merchant.MerchantAuthReq) (resp utils.H, 
 	//}()
 	// todo edit your code
 	// 1. 调用 merchantrpc 获取店家信息
+	merchantResp, err := rpc.MerchantClient.GetMerchant(h.Context, &rpcmerchant.GetMerchantReq{
+		Id: req.Uid,
+	})
+	if err != nil {
+		return nil, err
+	}
 	// 2. 包装店家信息生成 token
+	token := utils.GenerateToken(merchantResp.Id, merchantResp.Username)
 	// 3. 返回 token 和店家信息 response
+	resp = utils.H{
+		"code":    200,
+		"message": "OK",
+		"token":   token,
+		"merchant_info": utils.H{
+			"id":       merchantResp.Id,
+			"username": merchantResp.Username,
+			"email":    merchantResp.Email,
+		},
+	}
 	return
 }
 

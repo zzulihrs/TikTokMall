@@ -5,7 +5,9 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	merchant "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/merchant"
+	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
 	"github.com/tiktokmall/backend/app/frontend/utils"
+	rpcmerchant "github.com/tiktokmall/backend/rpc_gen/kitex_gen/merchant"
 )
 
 type MerchantGetProductListService struct {
@@ -23,7 +25,38 @@ func (h *MerchantGetProductListService) Run(req *merchant.MerchantGetProductList
 	// hlog.CtxInfof(h.Context, "resp = %+v", resp)
 	//}()
 	// todo edit your code
-	return
+	psResp, err := rpc.MerchantClient.SearchProducts(h.Context, &rpcmerchant.SearchProductsReq{
+		Name:       req.Name,
+		CategoryId: req.CategoryId,
+		MaxStock:   int32(req.MaxStock),
+		MaxPrice:   req.MaxPrice,
+		MinPrice:   req.MinPrice,
+		PageNo:     req.PageNo,
+		PageSize:   req.PageSize,
+		MerchantId: req.MerchantId,
+	})
+	if err != nil {
+		return utils.H{
+			"code":    500,
+			"message": "获取商品列表失败",
+		}, err
+	}
+	products := make([]utils.H, len(psResp.Products))
+	for i, p := range psResp.Products {
+		products[i] = utils.H{
+			"id":          p.Id,
+			"name":        p.Name,
+			"description": p.Description,
+			"stock":       p.Stock,
+			"price":       p.Price,
+			"img_url":     p.ImgUrl,
+		}
+	}
+	return utils.H{
+		"code":    200,
+		"message": "OK",
+		"data":    products,
+	}, nil
 }
 
 /*
