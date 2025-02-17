@@ -1,19 +1,102 @@
 syntax = "proto3";
 
-package email;
+package merchant;
 
-option go_package = "/email";
+option go_package = "/merchant";
 
-message EmailReq {
-    string from = 1;
-    string to = 2;
-    string context_type = 3;
-    string subject = 4;
-    string content = 5;
+import "common/common.proto";
+service MerchantService {
+    // 权限认证
+    rpc Auth(AuthReq) returns (AuthResp) {};
+    // 商品查询
+    rpc SearchProducts(SearchProductsReq) returns (SearchProductsResp) {};
+    // 商品详情
+    rpc ProductDetail(ProductDetailReq) returns (ProductDetailResp) {};
+    // 删除商品
+    rpc DeleteProduct(DeleteProductReq) returns (DeleteProductResp) {};
+    // 修改商品信息
+    rpc UpdateProduct(UpdateProductReq) returns (UpdateProductResp) {};
+    // 新增商品
+    rpc CreateProduct(CreateProductReq) returns (CreateProductResp) {};
 }
 
-message EmailResp {}
+message AuthReq {
+    string uid = 1;
+}
 
-service EmailService {
-    rpc Send(EmailReq) returns (EmailResp) {};
+message AuthResp {
+    string token = 1;
+}
+
+message SearchProductsReq {
+    string name = 1;
+    string category = 2;
+    int32 max_stock = 3;
+    float min_price = 4;
+    float max_price = 5;
+    int32 page_no = 6;
+    int32 page_size = 7;
+    int32 merchant_id = 8;
+}
+message Category {
+    int32 id = 1;
+    string name = 2;
+    string description = 3;
+}
+
+message MerchantProductSimpleInfo {
+    int32 id = 1;
+    string name = 2;
+    string description = 3;
+    int32 stock = 4;
+    float price = 5;
+    string img_url = 6;
+}
+
+message MerchantProductDetailInfo {
+    int32 id = 1;
+    string name = 2;
+    string description = 3;
+    int32 stock = 4;
+    float price = 5;
+    string img_url = 6;
+    repeated Category category = 7;
+    repeated string slider_img = 8;
+}
+
+message SearchProductsResp {
+    repeated MerchantProductSimpleInfo products = 1;
+}
+
+message ProductDetailReq {
+    int32 uid = 1;
+    int32 pid = 2;
+}
+message ProductDetailResp {
+    MerchantProductSimpleInfo product = 1;
+}
+
+message DeleteProductReq {
+    int32 uid = 1;
+    int32 pid = 2;
+}
+
+message DeleteProductResp {
+}
+
+message UpdateProductReq {
+    int32 uid = 1;
+    MerchantProductDetailInfo product = 2;
+}
+
+message UpdateProductResp {    
+}
+
+message CreateProductReq {    
+    int32 uid = 1;
+    MerchantProductDetailInfo product = 2;
+}
+
+message CreateProductResp {
+    
 }
