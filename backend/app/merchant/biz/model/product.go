@@ -48,8 +48,8 @@ func (p *ProductQuery) SearchProducts(q string) (products []*Product, err error)
 		"%"+q+"%", "%"+q+"%").Error
 	return
 }
-func (p *ProductQuery) GetProductListByCondition(condition string) (products []*Product, err error) {
-	err = p.db.WithContext(p.ctx).Model(&Product{}).Where(condition).Find(&products).Error
+func (p *ProductQuery) GetProductListByCondition(condition string, pageNo, pageSize int) (products []*Product, err error) {
+	err = p.db.WithContext(p.ctx).Model(&Product{}).Where(condition).Offset((pageNo - 1) * pageSize).Limit(pageSize).Find(&products).Error
 	return
 }
 func (p *ProductQuery) InsertMany(products []Product) (err error) {
