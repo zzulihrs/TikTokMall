@@ -39,6 +39,11 @@ gen-cart:
 	@cd rpc_gen && cwgo client  --type RPC --module github.com/tiktokmall/backend/rpc_gen --service cart -I ../idl --idl ../idl/cart.proto
 	@cd app/cart && cwgo server --type RPC --module github.com/tiktokmall/backend/app/cart --service cart --pass "-use github.com/tiktokmall/backend/rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/cart.proto
 
+.PHONY: gen-payment
+gen-payment:
+	@cd rpc_gen && cwgo client --type RPC --service payment --module github.com/tiktokmall/backend/rpc_gen --I ../idl --idl ../idl/payment.proto
+	@cd app/payment && cwgo server --type RPC --service payment --module github.com/tiktokmall/backend/app/payment --pass "-use github.com/tiktokmall/backend/rpc_gen/kitex_gen" -I ../../idl --idl ../../idl/payment.proto
+
 .PHONY: gen-rpc
 gen-rpc: # gen-rpc svc=cart
 	@cd rpc_gen && cwgo client  --type RPC --module github.com/tiktokmall/backend/rpc_gen --service ${svc} -I ../idl --idl ../idl/${svc}.proto
@@ -53,7 +58,7 @@ gen-frontend: # make gen-frontend page=home
 
 .PHONY: gen-frontend-auth-page
 gen-frontend-auth-page:
-	@cd app/frontend && cwgo server --type HTTP --module github.com/tiktokmall/backend/app/frontend --service frontend -I ../../idl --idl ../../idl/frontend/auth_page.proto
+	@cd app/frontend && cwgo server --type HTTP --module github.com/tiktokmall/backend/app/frontend --service frontend -I ../../idl --idl ../../idl/frontend/user_page.proto
 
 # 生成 rpc
 .PHONY: gen-client

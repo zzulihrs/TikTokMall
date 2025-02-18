@@ -88,6 +88,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+import {ElMessage} from "element-plus";
 
 const loading = ref(true)
 const orders = ref([])
@@ -127,7 +128,7 @@ onMounted(async () => {
       })
   } catch (error) {
     console.error('获取订单失败:', error)
-    ElMessage.error('获取订单失败')
+    // ElMessage.error('获取订单失败')
   } finally {
     loading.value = false
   }

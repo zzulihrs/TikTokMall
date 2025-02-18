@@ -29,7 +29,7 @@ SVC
 ``` bash
 # backend 目录下
 # 下载依赖
-go work sync
+bash load_lib.sh
 # 启动 mysql、redis 等中间件
 docker compose up -d
 # 启动所有服务, 输出在 log/${svc}.log 中

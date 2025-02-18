@@ -23,3 +23,24 @@ func (s *UserServiceImpl) Login(ctx context.Context, req *user.LoginReq) (resp *
 
 	return resp, err
 }
+
+// Update implements the UserServiceImpl interface.
+func (s *UserServiceImpl) Update(ctx context.Context, req *user.UpdateUserReq) (resp *user.UpdateUserResp, err error) {
+	resp, err = service.NewUpdateService(ctx).Run(req)
+
+	return resp, err
+}
+
+// Delete implements the UserServiceImpl interface.
+func (s *UserServiceImpl) Delete(ctx context.Context, req *user.DeleteUserReq) (resp *user.DeleteUserResp, err error) {
+	resp, err = service.NewDeleteService(ctx).Run(req)
+
+	return resp, err
+}
+
+// Query implements the UserServiceImpl interface.
+func (s *UserServiceImpl) Query(ctx context.Context, req *user.QueryUserReq) (resp *user.QueryUserResp, err error) {
+	resp, err = service.NewQueryService(ctx).Run(req)
+
+	return resp, err
+}

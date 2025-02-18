@@ -23,6 +23,10 @@ func (s *ListProductsService) Run(req *product.ListProductsReq) (resp *product.L
 	if err != nil {
 		return nil, err
 	}
+	// TODO: 添加商家信息
+	merchantSet := make(map[int]int)
+	merchantIDs := []int{}
+
 	resp = &product.ListProductsResp{}
 	for _, c := range cs {
 		for _, p := range c.Products {
@@ -32,8 +36,25 @@ func (s *ListProductsService) Run(req *product.ListProductsReq) (resp *product.L
 				Price:       p.Price,
 				Description: p.Description,
 				Picture:     p.Picture,
+				Stock:       uint32(p.Stock),
+				OwnerId:     uint32(p.MerchantID),
 			})
+			if merchantSet[p.MerchantID] == 0 {
+				merchantSet[p.MerchantID] = len(merchantIDs) + 1
+				merchantIDs = append(merchantIDs, p.MerchantID)
+			}
 		}
 	}
+
+	merchants, err := model.NewMerchantQuery(s.ctx, mysql.DB).GetManyById(merchantIDs)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, p := range resp.Products {
+		mIndex := merchantSet[int(p.OwnerId)] - 1
+		p.OwnerName = merchants[mIndex].Username
+	}
+
 	return resp, nil
 }

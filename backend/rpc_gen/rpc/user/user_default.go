@@ -24,3 +24,30 @@ func Login(ctx context.Context, req *user.LoginReq, callOptions ...callopt.Optio
 	}
 	return resp, nil
 }
+
+func Update(ctx context.Context, req *user.UpdateUserReq, callOptions ...callopt.Option) (resp *user.UpdateUserResp, err error) {
+	resp, err = defaultClient.Update(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "Update call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}
+
+func Delete(ctx context.Context, req *user.DeleteUserReq, callOptions ...callopt.Option) (resp *user.DeleteUserResp, err error) {
+	resp, err = defaultClient.Delete(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "Delete call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}
+
+func Query(ctx context.Context, req *user.QueryUserReq, callOptions ...callopt.Option) (resp *user.QueryUserResp, err error) {
+	resp, err = defaultClient.Query(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "Query call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}

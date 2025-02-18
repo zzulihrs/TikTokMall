@@ -73,7 +73,10 @@ onMounted(async () => {
 
 const removeItem = async (item) => {
   try {
-    await store.dispatch('cart/removeItem', item.id)
+    await store.dispatch('cart/updateQuantity', {
+      Id: item.Id,
+      Qty: 0
+    })
     ElMessage.success('删除成功')
   } catch (err) {
     ElMessage.error('删除失败：' + err.message)

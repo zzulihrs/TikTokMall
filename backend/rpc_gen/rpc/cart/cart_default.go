@@ -33,3 +33,12 @@ func EmptyCart(ctx context.Context, req *cart.EmptyCartReq, callOptions ...callo
 	}
 	return resp, nil
 }
+
+func ChangeQty(ctx context.Context, req *cart.ChangeQtyReq, callOptions ...callopt.Option) (resp *cart.ChangeQtyResp, err error) {
+	resp, err = defaultClient.ChangeQty(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "ChangeQty call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}

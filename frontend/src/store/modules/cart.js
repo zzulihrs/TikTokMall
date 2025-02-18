@@ -28,7 +28,7 @@ export default {
       state.items = items
     },
     ADD_ITEM(state, item) {
-      const existing = state.items.find(i => i.id === item.id)
+      const existing = state.items.find(i => i.Id === item.id)
       if (existing) {
         existing.Qty += item.Qty
       } else {
@@ -36,13 +36,13 @@ export default {
       }
     },
     UPDATE_QUANTITY(state, { id, Qty }) {
-      const item = state.items.find(i => i.id === id)
+      const item = state.items.find(i => i.Id === id)
       if (item) {
         item.Qty = Qty
       }
     },
     REMOVE_ITEM(state, id) {
-      state.items = state.items.filter(i => i.id !== id)
+      state.items = state.items.filter(i => i.Id !== id)
     },
     CLEAR_CART(state) {
       state.items = []
@@ -108,7 +108,7 @@ export default {
       try {
         commit('SET_LOADING', true)
         commit('UPDATE_QUANTITY', { Id, Qty })
-        await axios.post(`/api/cart`, {
+        await axios.post(`/api/changeqty`, {
           product_id: Id,
           product_num: Qty,
         })

@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package frontend.user;
+
+
+import "api.proto";
+
+option go_package = "frontend/user";
+
+message User {
+    string email = 1;
+    string password = 2;
+}
+
+
+message UpdateUserReq {
+    int64 user_id = 1 [(api.path) = "user_id", (api.vd) = "$>0"];
+    string email = 2 [(api.form)="email"];
+    string password = 3 [(api.form)="password"];
+}
+
+message UpdateUserResp {
+    int32 status_code = 1 [(api.body) = "status_code"];
+    string msg = 2;
+}
+
+message QueryUserReq {
+    int64 user_id = 1 [(api.path) = "user_id", (api.vd) = "$>0"];
+}
+message QueryUserResp {
+    int32 status_code = 1 [(api.body) = "status_code"];
+    string msg = 2;
+    User user = 3;
+}
+
+
+
+message DeleteUserReq {
+    int64 user_id = 1 [(api.path) = "user_id", (api.vd) = "$>0"];
+}
+
+message DeleteUserResp {
+    int32 status_code = 1 [(api.body) = "status_code"];
+    string msg = 2;
+}
+
+service UserService {
+    rpc update(UpdateUserReq) returns (UpdateUserResp) {
+        option (api.post) = "/user/update";
+    };
+    rpc queryUser(QueryUserReq) returns (QueryUserResp) {
+        option (api.get) = "/user/query/:user_id";
+    }
+    rpc deleteUser(DeleteUserReq) returns (DeleteUserResp) {
+        option (api.post) = "/user/delete/:user_id";
+    }
+}
