@@ -25,10 +25,21 @@ services:
       retries: 5
       start_period: 30s
   redis:
-    container_name: redis
-    image: "redis:7.2.4-alpine"
+    image: redis/redis-stack:latest
+    container_name: redis-st
     ports:
-      - "6379:6379"
+      - "6379:6379"  # Redis port
+      - "8001:8001"  # RedisInsight port
+    volumes:
+      - ./data/redis:/data
+    environment:
+      - REDIS_ARGS=--dir /data --appendonly no --save 1800 1
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
   # 消息队列
   nats:
     container_name: nats

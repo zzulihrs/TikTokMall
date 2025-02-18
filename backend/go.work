@@ -1,6 +1,7 @@
 go 1.23.1
 
 use (
+	./app/agent
 	./app/cart
 	./app/checkout
 	./app/email

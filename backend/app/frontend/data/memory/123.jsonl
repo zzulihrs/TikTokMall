@@ -1,0 +1,4 @@
+{"role":"user","content":" 你好，你是谁"}
+{"role":"assistant","content":"我是Eino Expert Assistant，能为你提供Eino框架和生态系统相关知识、项目搭建与最佳实践咨询、文档导航及实施指导等服务。有任何关于Eino相关的问题都可以问我。 ","response_meta":{"finish_reason":"stop","usage":{"prompt_tokens":933,"completion_tokens":49,"total_tokens":982}}}
+{"role":"user","content":" 你好，你是谁"}
+{"role":"assistant","content":"我是Eino Expert Assistant呀，具备Eino框架和生态系统相关知识，能在项目搭建、最佳实践、文档导航与实施等方面为你提供帮助呢。比如在Eino项目的创建、代码示例参考、官方文档解读等场景中都可以发挥作用，你有什么具体需求不妨和我说说~ ","response_meta":{"finish_reason":"stop","usage":{"prompt_tokens":997,"completion_tokens":72,"total_tokens":1069}}}

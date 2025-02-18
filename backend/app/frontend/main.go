@@ -4,6 +4,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"time"
 
@@ -14,6 +15,8 @@ import (
 	"github.com/tiktokmall/backend/common/mtl"
 
 	frontendUtils "github.com/tiktokmall/backend/app/frontend/utils"
+
+	"log"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/middlewares/server/recovery"
@@ -32,6 +35,7 @@ import (
 	"github.com/hertz-contrib/sessions"
 	"github.com/hertz-contrib/sessions/redis"
 	"github.com/joho/godotenv"
+	"github.com/tiktokmall/backend/app/agent/cmd/einoagent/agent"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
@@ -101,6 +105,13 @@ func main() {
 		// tmpl {{ }} 使用 define 中的名称
 		ctx.HTML(consts.StatusOK, "sign-up", utils.H{"title": "Sign Up"})
 	})
+
+	// agent service
+	if err := agent.Init(); err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("chat-model = %s\n", os.Getenv("ARK_CHAT_MODEL"))
+	fmt.Printf("embed model = %s\n", os.Getenv("ARK_EMBEDDING_MODEL"))
 	h.Spin()
 }
 
