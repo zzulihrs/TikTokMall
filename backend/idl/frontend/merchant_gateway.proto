@@ -9,29 +9,32 @@ option go_package = "frontend/merchant";
 
 // NOTE: 不要与 idl 文件夹下的其他 proto 文件重名
 service MerchantService {
+    rpc MerchantPing(common.Empty) returns(common.Empty) {
+        option (api.get) = "/merchant/ping";
+    }
     // 权限认证
     rpc MerchantAuth(MerchantAuthReq) returns(common.Empty) {
-        option (api.post) = "/marchant/auth";
+        option (api.post) = "/merchant/auth";
     }
     // 添加单个商品
     rpc MerchantAddProduct(MerchantAddProductReq) returns(common.Empty) {
-        option (api.post) = "/marchant/product/add";
+        option (api.post) = "/merchant/product/add";
     }
     // 删除商品
     rpc MerchantDeleteProduct(MerchantDeleteProductReq) returns(common.Empty) {
-        option (api.post) = "/marchant/product/delete";
+        option (api.post) = "/merchant/product/delete";
     }
     // 修改商品信息（暂时没有轮播图）
     rpc MerchantUpdateProduct(MerchantUpdateProductReq) returns(common.Empty) {
-        option (api.post) = "/marchant/product/update";
+        option (api.post) = "/merchant/product/update";
     }
     // 商品查询（列表）（没有轮播图）
     rpc MerchantGetProductList(MerchantGetProductListReq) returns(common.Empty) {
-      option (api.post) = "/marchant/product/list";
+      option (api.post) = "/merchant/product/list";
     }
     // 商品详情 （可加轮播图）
     rpc MerchantGetProductDetail(MerchantGetProductDetailReq) returns(common.Empty) {
-        option (api.post) = "/marchant/product/detail";
+        option (api.post) = "/merchant/product/detail";
     }
 }
 

@@ -18,10 +18,11 @@ func Register(r *server.Hertz) {
 
 	root := r.Group("/", rootMw()...)
 	{
-		_marchant := root.Group("/marchant", _marchantMw()...)
-		_marchant.POST("/auth", append(_merchantauthMw(), merchant.MerchantAuth)...)
+		_merchant := root.Group("/merchant", _merchantMw()...)
+		_merchant.POST("/auth", append(_merchantauthMw(), merchant.MerchantAuth)...)
+		_merchant.GET("/ping", append(_merchantpingMw(), merchant.MerchantPing)...)
 		{
-			_product := _marchant.Group("/product", _productMw()...)
+			_product := _merchant.Group("/product", _productMw()...)
 			_product.POST("/add", append(_merchantaddproductMw(), merchant.MerchantAddProduct)...)
 			_product.POST("/delete", append(_merchantdeleteproductMw(), merchant.MerchantDeleteProduct)...)
 			_product.POST("/detail", append(_merchantgetproductdetailMw(), merchant.MerchantGetProductDetail)...)

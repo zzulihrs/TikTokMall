@@ -11,8 +11,8 @@ import (
 
 func TestMerchantAuth(t *testing.T) {
 	h := server.Default()
-	h.POST("/marchant/auth", MerchantAuth)
-	path := "/marchant/auth"                                  // todo: you can customize query
+	h.POST("/merchant/auth", MerchantAuth)
+	path := "/merchant/auth"                                  // todo: you can customize query
 	body := &ut.Body{Body: bytes.NewBufferString(""), Len: 1} // todo: you can customize body
 	header := ut.Header{}                                     // todo: you can customize header
 	w := ut.PerformRequest(h.Engine, "POST", path, body, header)
@@ -26,8 +26,8 @@ func TestMerchantAuth(t *testing.T) {
 
 func TestMerchantAddProduct(t *testing.T) {
 	h := server.Default()
-	h.POST("/marchant/product/add", MerchantAddProduct)
-	path := "/marchant/product/add"                           // todo: you can customize query
+	h.POST("/merchant/product/add", MerchantAddProduct)
+	path := "/merchant/product/add"                           // todo: you can customize query
 	body := &ut.Body{Body: bytes.NewBufferString(""), Len: 1} // todo: you can customize body
 	header := ut.Header{}                                     // todo: you can customize header
 	w := ut.PerformRequest(h.Engine, "POST", path, body, header)
@@ -41,8 +41,8 @@ func TestMerchantAddProduct(t *testing.T) {
 
 func TestMerchantDeleteProduct(t *testing.T) {
 	h := server.Default()
-	h.POST("/marchant/product/delete", MerchantDeleteProduct)
-	path := "/marchant/product/delete"                        // todo: you can customize query
+	h.POST("/merchant/product/delete", MerchantDeleteProduct)
+	path := "/merchant/product/delete"                        // todo: you can customize query
 	body := &ut.Body{Body: bytes.NewBufferString(""), Len: 1} // todo: you can customize body
 	header := ut.Header{}                                     // todo: you can customize header
 	w := ut.PerformRequest(h.Engine, "POST", path, body, header)
@@ -56,8 +56,8 @@ func TestMerchantDeleteProduct(t *testing.T) {
 
 func TestMerchantUpdateProduct(t *testing.T) {
 	h := server.Default()
-	h.POST("/marchant/product/update", MerchantUpdateProduct)
-	path := "/marchant/product/update"                        // todo: you can customize query
+	h.POST("/merchant/product/update", MerchantUpdateProduct)
+	path := "/merchant/product/update"                        // todo: you can customize query
 	body := &ut.Body{Body: bytes.NewBufferString(""), Len: 1} // todo: you can customize body
 	header := ut.Header{}                                     // todo: you can customize header
 	w := ut.PerformRequest(h.Engine, "POST", path, body, header)
@@ -71,8 +71,8 @@ func TestMerchantUpdateProduct(t *testing.T) {
 
 func TestMerchantGetProductList(t *testing.T) {
 	h := server.Default()
-	h.POST("/marchant/product/list", MerchantGetProductList)
-	path := "/marchant/product/list"                          // todo: you can customize query
+	h.POST("/merchant/product/list", MerchantGetProductList)
+	path := "/merchant/product/list"                          // todo: you can customize query
 	body := &ut.Body{Body: bytes.NewBufferString(""), Len: 1} // todo: you can customize body
 	header := ut.Header{}                                     // todo: you can customize header
 	w := ut.PerformRequest(h.Engine, "POST", path, body, header)
@@ -86,11 +86,26 @@ func TestMerchantGetProductList(t *testing.T) {
 
 func TestMerchantGetProductDetail(t *testing.T) {
 	h := server.Default()
-	h.POST("/marchant/product/detail", MerchantGetProductDetail)
-	path := "/marchant/product/detail"                        // todo: you can customize query
+	h.POST("/merchant/product/detail", MerchantGetProductDetail)
+	path := "/merchant/product/detail"                        // todo: you can customize query
 	body := &ut.Body{Body: bytes.NewBufferString(""), Len: 1} // todo: you can customize body
 	header := ut.Header{}                                     // todo: you can customize header
 	w := ut.PerformRequest(h.Engine, "POST", path, body, header)
+	resp := w.Result()
+	t.Log(string(resp.Body()))
+
+	// todo edit your unit test.
+	// assert.DeepEqual(t, 200, resp.StatusCode())
+	// assert.DeepEqual(t, "null", string(resp.Body()))
+}
+
+func TestMerchantPing(t *testing.T) {
+	h := server.Default()
+	h.GET("/merchant/ping", MerchantPing)
+	path := "/merchant/ping"                                  // todo: you can customize query
+	body := &ut.Body{Body: bytes.NewBufferString(""), Len: 1} // todo: you can customize body
+	header := ut.Header{}                                     // todo: you can customize header
+	w := ut.PerformRequest(h.Engine, "GET", path, body, header)
 	resp := w.Result()
 	t.Log(string(resp.Body()))
 

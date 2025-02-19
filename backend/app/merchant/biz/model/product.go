@@ -38,7 +38,7 @@ type ProductQuery struct {
 }
 
 func (p *ProductQuery) GetById(productId int) (product Product, err error) {
-	err = p.db.WithContext(p.ctx).Model(&Product{}).Preload("Categories").First(&product, productId).Where("deleted_at IS NULL").Error
+	err = p.db.WithContext(p.ctx).Model(&Product{}).Preload("Categories").Where("id = ? and deleted_at IS NULL", productId).First(&product).Error
 	return
 }
 
@@ -49,6 +49,7 @@ func (p *ProductQuery) SearchProducts(q string) (products []*Product, err error)
 	return
 }
 func (p *ProductQuery) GetProductListByCondition(condition string, pageNo, pageSize int) (products []*Product, err error) {
+	condition = condition + " and deleted_at IS NULL"
 	err = p.db.WithContext(p.ctx).Model(&Product{}).Where(condition).Offset((pageNo - 1) * pageSize).Limit(pageSize).Find(&products).Error
 	return
 }
@@ -58,14 +59,17 @@ func (p *ProductQuery) InsertMany(products []Product) (err error) {
 }
 
 func (p *ProductQuery) DeleteByPidAndMid(productId, merchantId int) (err error) {
-	err = p.db.WithContext(p.ctx).Model(&Product{}).UpdateColumn("deleted_at", time.Now()).Where("id = ? and merchant_id = ? and deleted_at IS NULL", productId, merchantId).Error
+	log.Printf("productId: %d, merchantId: %d", productId, merchantId)
+	err = p.db.WithContext(p.ctx).Model(&Product{}).Where("id = ? and merchant_id = ? and deleted_at IS NULL", productId, merchantId).UpdateColumn("deleted_at", time.Now()).Error
 	return
 }
 
 func (p *ProductQuery) UpdateOne(product Product) (err error) {
 	db := p.db.WithContext(p.ctx)
 	var oldProduct Product
-	err = db.Model(&Product{}).Find(&product, product.ID, product.MerchantID).First(oldProduct).Error
+	err = db.Model(&Product{}).Preload("Categories").Where("id = ? and merchant_id = ?", product.ID, product.MerchantID).First(&oldProduct).Error
+	log.Printf("oldProduct: %v", oldProduct)
+	log.Printf("newProduct: %v", product)
 	if err != nil {
 		return
 	}
@@ -99,7 +103,8 @@ func (p *ProductQuery) UpdateOne(product Product) (err error) {
 		db.Model(&Product{}).Association("Categories").Clear()
 	}
 	if updateFlag {
-		err = db.Model(&Product{}).Save(&oldProduct).Error
+		oldProduct.UpdatedAt = time.Now()
+		err = db.Model(&Product{}).Where("id = ? and merchant_id = ?", product.ID, product.MerchantID).Save(&oldProduct).Error
 	}
 	return
 }

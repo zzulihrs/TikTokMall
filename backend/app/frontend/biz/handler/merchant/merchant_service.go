@@ -7,11 +7,12 @@ import (
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/tiktokmall/backend/app/frontend/biz/service"
 	"github.com/tiktokmall/backend/app/frontend/biz/utils"
+	common "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/common"
 	merchant "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/merchant"
 )
 
 // MerchantAuth .
-// @router /marchant/auth [POST]
+// @router /merchant/auth [POST]
 func MerchantAuth(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req merchant.MerchantAuthReq
@@ -34,7 +35,7 @@ func MerchantAuth(ctx context.Context, c *app.RequestContext) {
 }
 
 // MerchantAddProduct .
-// @router /marchant/product/add [POST]
+// @router /merchant/product/add [POST]
 func MerchantAddProduct(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req merchant.MerchantAddProductReq
@@ -47,7 +48,10 @@ func MerchantAddProduct(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewMerchantAddProductService(ctx, c).Run(&req)
 	if err != nil {
-		c.JSON(consts.StatusInternalServerError, utils.WarpResponse(ctx, c, resp))
+		c.JSON(consts.StatusInternalServerError, utils.H{
+			"code":    500,
+			"message": err.Error(),
+		})
 		// utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
@@ -57,7 +61,7 @@ func MerchantAddProduct(ctx context.Context, c *app.RequestContext) {
 }
 
 // MerchantDeleteProduct .
-// @router /marchant/product/delete [POST]
+// @router /merchant/product/delete [POST]
 func MerchantDeleteProduct(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req merchant.MerchantDeleteProductReq
@@ -80,10 +84,11 @@ func MerchantDeleteProduct(ctx context.Context, c *app.RequestContext) {
 }
 
 // MerchantUpdateProduct .
-// @router /marchant/product/update [POST]
+// @router /merchant/product/update [POST]
 func MerchantUpdateProduct(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req merchant.MerchantUpdateProductReq
+	// BUG: 无法修改类别
 	err = c.BindAndValidate(&req)
 	if err != nil {
 		c.JSON(consts.StatusBadRequest, nil)
@@ -103,7 +108,7 @@ func MerchantUpdateProduct(ctx context.Context, c *app.RequestContext) {
 }
 
 // MerchantGetProductList .
-// @router /marchant/product/list [POST]
+// @router /merchant/product/list [POST]
 func MerchantGetProductList(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req merchant.MerchantGetProductListReq
@@ -126,7 +131,7 @@ func MerchantGetProductList(ctx context.Context, c *app.RequestContext) {
 }
 
 // MerchantGetProductDetail .
-// @router /marchant/product/detail [POST]
+// @router /merchant/product/detail [POST]
 func MerchantGetProductDetail(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req merchant.MerchantGetProductDetailReq
@@ -146,4 +151,24 @@ func MerchantGetProductDetail(ctx context.Context, c *app.RequestContext) {
 
 	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
 	// utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
+}
+
+// MerchantPing .
+// @router /merchant/ping [GET]
+func MerchantPing(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req common.Empty
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		return
+	}
+
+	resp, err := service.NewMerchantPingService(ctx, c).Run(&req)
+
+	if err != nil {
+		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		return
+	}
+	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
 }

@@ -25,23 +25,29 @@ func (s *UpdateProductService) Run(req *merchant.UpdateProductReq) (resp *mercha
 	if err = checkUpdateProductReq(req); err != nil {
 		return nil, err
 	}
-	// 2. 检查商户
+	// 2. 检查商户, TODO: 去掉也行
 	_, err = model.NewMerchantQuery(s.ctx, mysql.DB).GetById(int(req.GetMerchantId()))
 	if err != nil {
 		return nil, fmt.Errorf("merchant [%v] not found, err:%w", req.GetMerchantId(), err)
 	}
 	// 3. 检查类别
 	reqCategories := req.GetProduct().GetCategory()
-	reqCsIds := []int64{}
-	for _, c := range reqCategories {
-		reqCsIds = append(reqCsIds, c.GetId())
-	}
-	categories, err := model.NewCategoryQuery(s.ctx, mysql.DB).GetManyById(reqCsIds)
-	if err != nil {
-		return nil, fmt.Errorf("cannot find all categories [%v], err:%w", reqCsIds, err)
+	var categories []model.Category
+	if reqCategories == nil {
+		categories = nil
+	} else {
+		reqCsIds := []int64{}
+		for _, c := range reqCategories {
+			reqCsIds = append(reqCsIds, c.GetId())
+		}
+		categories, err = model.NewCategoryQuery(s.ctx, mysql.DB).GetManyById(reqCsIds)
+		if err != nil {
+			return nil, fmt.Errorf("cannot find all categories [%v], err:%w", reqCsIds, err)
+		}
 	}
 	// 4. 插入商品 与 类别关系
 	newProduct := &model.Product{
+		Base:        model.Base{ID: int(req.GetProduct().GetId())},
 		Name:        req.GetProduct().GetName(),
 		Description: req.GetProduct().GetDescription(),
 		Picture:     req.GetProduct().GetImgUrl(),
@@ -63,6 +69,9 @@ func checkUpdateProductReq(req *merchant.UpdateProductReq) error {
 	if reqProduct == nil {
 		return kerrors.NewBizStatusError(2004001, "product is required")
 	}
+	if reqProduct.GetId() <= 0 {
+		return kerrors.NewBizStatusError(2004001, "product id must be > 0")
+	}
 	if reqProduct.GetName() == "" {
 		return kerrors.NewBizStatusError(2004001, "product name is required")
 	}
@@ -72,9 +81,9 @@ func checkUpdateProductReq(req *merchant.UpdateProductReq) error {
 	if reqProduct.GetStock() < 0 {
 		return kerrors.NewBizStatusError(2004001, "product stock must be >= 0")
 	}
-	reqCategory := reqProduct.GetCategory()
-	if reqCategory == nil {
-		return kerrors.NewBizStatusError(2004001, "product category is required")
-	}
+	// reqCategory := reqProduct.GetCategory()
+	// if reqCategory == nil {
+	// 	return kerrors.NewBizStatusError(2004001, "product category is required")
+	// }
 	return nil
 }

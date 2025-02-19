@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/cloudwego/kitex/pkg/kerrors"
 	"github.com/tiktokmall/backend/app/merchant/biz/dal/mysql"
@@ -51,6 +52,10 @@ func (s *AddProductService) Run(req *merchant.AddProductReq) (resp *merchant.Add
 		Stock:       int32(req.GetProduct().GetStock()),
 		MerchantID:  int(req.GetMerchantId()),
 		Categories:  categories,
+		Base: model.Base{
+			CreatedAt: time.Now(),
+			UpdatedAt: time.Now(),
+		},
 	}
 	err = model.NewProductQuery(s.ctx, mysql.DB).InsertMany([]model.Product{*newProduct})
 	if err != nil {

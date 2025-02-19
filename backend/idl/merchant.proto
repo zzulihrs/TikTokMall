@@ -5,7 +5,7 @@ package merchant;
 option go_package = "/merchant";
 
 service MerchantService {
-    // 获取店家信息
+    // 获取店家信息（通过 mid）
     rpc GetMerchant(GetMerchantReq) returns (GetMerchantResp) {};
     // 店家添加商品
     rpc AddProduct(AddProductReq) returns (AddProductResp) {};

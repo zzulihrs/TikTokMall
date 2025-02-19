@@ -35,7 +35,7 @@ func (s *SearchProductsService) Run(req *merchant.SearchProductsReq) (resp *merc
 		return nil, fmt.Errorf("merchant [%v] not found, err:%w", req.GetMerchantId(), err)
 	}
 	// 3. 规整条件
-	conditions := []string{}
+	conditions := []string{fmt.Sprintf("merchant_id = %v", req.GetMerchantId())}
 	if req.GetName() != "" {
 		conditions = append(conditions, fmt.Sprintf("name LIKE '%%%v%%'", req.GetName()))
 	}

@@ -2,11 +2,13 @@ package service
 
 import (
 	"context"
+	"log"
 
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/tiktokmall/backend/app/frontend/biz/utils"
 	merchant "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/merchant"
 	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
-	"github.com/tiktokmall/backend/app/frontend/utils"
+
 	rpcmerchant "github.com/tiktokmall/backend/rpc_gen/kitex_gen/merchant"
 )
 
@@ -34,6 +36,7 @@ func (h *MerchantAuthService) Run(req *merchant.MerchantAuthReq) (resp utils.H, 
 	//}()
 	// todo edit your code
 	// 1. 调用 merchantrpc 获取店家信息
+	log.Printf("MerchantAuthService Run, req = %+v", req)
 	merchantResp, err := rpc.MerchantClient.GetMerchant(h.Context, &rpcmerchant.GetMerchantReq{
 		Id: req.Uid,
 	})

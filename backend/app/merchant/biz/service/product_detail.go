@@ -28,6 +28,9 @@ func (s *ProductDetailService) Run(req *merchant.ProductDetailReq) (resp *mercha
 		return nil, kerrors.NewBizStatusError(2004001, "product id must be > 0")
 	}
 	product, err := model.NewProductQuery(s.ctx, mysql.DB).GetById(int(req.GetPid()))
+	if err != nil {
+		return nil, err
+	}
 	if product.MerchantID != int(req.GetMerchantId()) {
 		return nil, kerrors.NewBizStatusError(2004001, "merchant id not match")
 	}
