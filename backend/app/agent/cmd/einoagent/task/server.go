@@ -26,7 +26,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/cloudwego/hertz/pkg/route"
 
-	"github.com/cloudwego/eino-examples/quickstart/eino_assistant/pkg/tool/task"
+	"github.com/tiktokmall/backend/app/agent/pkg/tool/task"
 )
 
 //go:embed web

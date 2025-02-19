@@ -2,3 +2,19 @@
 {"role":"assistant","content":"我是Eino Expert Assistant，能为你提供Eino框架和生态系统相关知识、项目搭建与最佳实践咨询、文档导航及实施指导等服务。有任何关于Eino相关的问题都可以问我。 ","response_meta":{"finish_reason":"stop","usage":{"prompt_tokens":933,"completion_tokens":49,"total_tokens":982}}}
 {"role":"user","content":" 你好，你是谁"}
 {"role":"assistant","content":"我是Eino Expert Assistant呀，具备Eino框架和生态系统相关知识，能在项目搭建、最佳实践、文档导航与实施等方面为你提供帮助呢。比如在Eino项目的创建、代码示例参考、官方文档解读等场景中都可以发挥作用，你有什么具体需求不妨和我说说~ ","response_meta":{"finish_reason":"stop","usage":{"prompt_tokens":997,"completion_tokens":72,"total_tokens":1069}}}
+{"role":"user","content":" 你好，帮我定个明天下午的任务三点，我要吃饭"}
+{"role":"assistant","content":"已成功为你添加明天下午三点吃饭的任务。任务ID为39811745-e74c-4bdc-a36d-77c0fe62eccc ，你后续可以随时查阅或调整该任务。  ","response_meta":{"finish_reason":"stop","usage":{"prompt_tokens":1367,"completion_tokens":58,"total_tokens":1425}}}
+{"role":"user","content":" 你好，我有什么任务吗"}
+{"role":"assistant","content":"你有一个任务，具体信息如下：\n- 任务ID：39811745-e74c-4bdc-a36d-77c0fe62eccc\n- 任务标题：明天下午三点吃饭任务\n- 任务内容：吃饭\n- 截止时间：2025-02-20 15:00:00 \n- 创建时间：2025-02-19T05:30:22+08:00 \n- 任务状态：未完成 、未删除 ","response_meta":{"finish_reason":"stop","usage":{"prompt_tokens":1395,"completion_tokens":131,"total_tokens":1526}}}
+{"role":"user","content":"你好，帮我看看用户为1的订单"}
+{"role":"assistant","content":"很抱歉，我无法获取到用户ID为1的订单信息。系统返回错误为 “Failed to fetch orders: service discovery error: Get \\\"http://127.0.0.1:8500/v1/health/service/order?passing=1\\\": dial tcp 127.0.0.1:8500: connect: connection refused”，这表明在尝试连接订单查询服务时出现了连接拒绝的问题，可能是相关服务未正常运行或网络配置存在问题 。你可以联系相关技术人员检查服务状态和网络设置。  ","response_meta":{"finish_reason":"stop","usage":{"prompt_tokens":1421,"completion_tokens":128,"total_tokens":1549}}}
+{"role":"user","content":"你好，帮我看看用户为1的订单"}
+{"role":"assistant","content":"没有找到用户ID为1的订单信息。若有其他需求，你可以重新发起提问。  ","response_meta":{"finish_reason":"stop","usage":{"prompt_tokens":1421,"completion_tokens":22,"total_tokens":1443}}}
+{"role":"user","content":"你好，帮我看看订单"}
+{"role":"assistant","content":"未找到相关订单信息。若有其他需求，你可以重新发起提问。  ","response_meta":{"finish_reason":"stop","usage":{"prompt_tokens":1375,"completion_tokens":18,"total_tokens":1393}}}
+{"role":"user","content":"你好，你是谁"}
+{"role":"assistant","content":"我是Eino Expert Assistant，能够为你提供Eino框架和生态系统相关的知识解答，在项目搭建、最佳实践咨询、文档导航及实施指导等方面给你助力，还能进行网页搜索、克隆GitHub仓库、打开文件/链接以及任务管理等操作呢。请问你有相关需求吗？  ","response_meta":{"finish_reason":"stop","usage":{"prompt_tokens":1204,"completion_tokens":70,"total_tokens":1274}}}
+{"role":"user","content":"你好，你是谁"}
+{"role":"assistant","content":"我是 Eino Expert Assistant，专注于 Eino 框架和生态系统相关的知识领域。可以帮你进行项目搭建咨询、分享最佳实践经验、辅助你理解和运用文档，还能执行如搜索网页、克隆github仓库等一系列操作。你是有关于Eino相关的问题想要咨询吗？  ","response_meta":{"finish_reason":"stop","usage":{"prompt_tokens":1140,"completion_tokens":69,"total_tokens":1209}}}
+{"role":"user","content":"你好"}
+{"role":"assistant","content":"你好！有什么关于Eino框架、项目相关的问题都可以告诉我，比如项目搭建、文档理解方面的问题 ，我很乐意为你解答。  ","response_meta":{"finish_reason":"stop","usage":{"prompt_tokens":1178,"completion_tokens":37,"total_tokens":1215}}}

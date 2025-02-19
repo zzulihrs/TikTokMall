@@ -24,8 +24,8 @@ import (
 
 	"github.com/cloudwego/eino-ext/devops"
 
-	"github.com/cloudwego/eino-examples/quickstart/eino_assistant/cmd/einoagent/agent"
-	"github.com/cloudwego/eino-examples/quickstart/eino_assistant/cmd/einoagent/task"
+	"github.com/tiktokmall/backend/app/agent/cmd/einoagent/agent"
+	"github.com/tiktokmall/backend/app/agent/cmd/einoagent/task"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/server"

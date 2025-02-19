@@ -36,8 +36,8 @@ import (
 	"github.com/cloudwego/eino/compose"
 	"github.com/cloudwego/eino/schema"
 
-	"github.com/cloudwego/eino-examples/quickstart/eino_assistant/eino/einoagent"
-	"github.com/cloudwego/eino-examples/quickstart/eino_assistant/pkg/mem"
+	"github.com/tiktokmall/backend/app/agent/eino/einoagent"
+	"github.com/tiktokmall/backend/app/agent/pkg/mem"
 )
 
 var id = flag.String("id", "", "conversation id")

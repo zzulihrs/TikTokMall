@@ -19,12 +19,13 @@ package einoagent
 import (
 	"context"
 
-	"github.com/cloudwego/eino-examples/quickstart/eino_assistant/pkg/tool/einotool"
-	"github.com/cloudwego/eino-examples/quickstart/eino_assistant/pkg/tool/gitclone"
-	"github.com/cloudwego/eino-examples/quickstart/eino_assistant/pkg/tool/open"
-	"github.com/cloudwego/eino-examples/quickstart/eino_assistant/pkg/tool/task"
 	"github.com/cloudwego/eino-ext/components/tool/duckduckgo"
 	"github.com/cloudwego/eino/components/tool"
+	"github.com/tiktokmall/backend/app/agent/pkg/tool/einotool"
+	"github.com/tiktokmall/backend/app/agent/pkg/tool/gitclone"
+	"github.com/tiktokmall/backend/app/agent/pkg/tool/open"
+	"github.com/tiktokmall/backend/app/agent/pkg/tool/orderlookup"
+	"github.com/tiktokmall/backend/app/agent/pkg/tool/task"
 )
 
 func GetTools(ctx context.Context) ([]tool.BaseTool, error) {
@@ -48,17 +49,22 @@ func GetTools(ctx context.Context) ([]tool.BaseTool, error) {
 		return nil, err
 	}
 
-	toolDDGSearch, err := NewDDGSearch(ctx, nil)
+	// toolDDGSearch, err := NewDDGSearch(ctx, nil)
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	toolOrderLookUp, err := NewOrderLookUpTool(ctx)
 	if err != nil {
 		return nil, err
 	}
-
 	return []tool.BaseTool{
 		einoAssistantTool,
 		toolTask,
 		toolOpen,
 		toolGitClone,
-		toolDDGSearch,
+		// toolDDGSearch,
+		toolOrderLookUp,
 	}, nil
 }
 
@@ -95,4 +101,8 @@ func NewEinoAssistantTool(ctx context.Context) (tn tool.BaseTool, err error) {
 
 func NewTaskTool(ctx context.Context) (tn tool.BaseTool, err error) {
 	return task.NewTaskTool(ctx, nil)
+}
+
+func NewOrderLookUpTool(ctx context.Context) (tn tool.BaseTool, err error) {
+	return orderlookup.NewOrderLookup(ctx, nil)
 }

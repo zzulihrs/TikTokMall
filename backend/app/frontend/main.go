@@ -4,7 +4,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"time"
 
@@ -110,8 +109,8 @@ func main() {
 	if err := agent.Init(); err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("chat-model = %s\n", os.Getenv("ARK_CHAT_MODEL"))
-	fmt.Printf("embed model = %s\n", os.Getenv("ARK_EMBEDDING_MODEL"))
+	// fmt.Printf("chat-model = %s\n", os.Getenv("ARK_CHAT_MODEL"))
+	// fmt.Printf("embed model = %s\n", os.Getenv("ARK_EMBEDDING_MODEL"))
 	h.Spin()
 }
 

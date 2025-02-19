@@ -29,7 +29,7 @@ import (
 	"github.com/google/uuid"
 	redisCli "github.com/redis/go-redis/v9"
 
-	redispkg "github.com/cloudwego/eino-examples/quickstart/eino_assistant/pkg/redis"
+	redispkg "github.com/tiktokmall/backend/app/agent/pkg/redis"
 )
 
 func init() {

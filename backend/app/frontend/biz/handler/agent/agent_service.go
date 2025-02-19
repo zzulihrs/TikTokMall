@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	hertzUtils "github.com/cloudwego/hertz/pkg/common/utils"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/tiktokmall/backend/app/frontend/biz/service"
 	"github.com/tiktokmall/backend/app/frontend/biz/utils"
@@ -30,5 +29,5 @@ func HandleChat(ctx context.Context, c *app.RequestContext) {
 	}
 
 	// utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
-	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, hertzUtils.H{"message": "success"}))
+	// c.JSON(consts.StatusOK, map[string]any{})
 }

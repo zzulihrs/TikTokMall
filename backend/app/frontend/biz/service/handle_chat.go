@@ -40,6 +40,7 @@ func (h *HandleChatService) Run(req *common.Empty) (resp *common.Empty, err erro
 
 	log.Printf("[Chat] Starting chat with ID: %s, Message: %s\n", id, message)
 
+	// core function
 	sr, err := agent.RunAgent(h.Context, id, message)
 	if err != nil {
 		log.Printf("[Chat] Error running agent: %v\n", err)

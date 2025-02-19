@@ -28,7 +28,7 @@ import (
 	"github.com/cloudwego/eino/components/embedding"
 	"github.com/redis/go-redis/v9"
 
-	"github.com/cloudwego/eino-examples/quickstart/eino_assistant/eino/knowledgeindexing"
+	"github.com/tiktokmall/backend/app/agent/eino/knowledgeindexing"
 )
 
 func main() {

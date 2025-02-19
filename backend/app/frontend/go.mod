@@ -26,7 +26,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/kr/pretty v0.3.1
 	github.com/redis/go-redis/v9 v9.7.0
-	github.com/tiktokmall/backend/app/agent v0.0.0-00010101000000-000000000000
+	github.com/tiktokmall/backend/app/agent v0.0.0-20250211064059-c80247252426
 	github.com/tiktokmall/backend/common v0.0.0-00010101000000-000000000000
 	github.com/tiktokmall/backend/rpc_gen v0.0.0-00010101000000-000000000000
 	go.uber.org/zap v1.27.0
@@ -50,7 +50,6 @@ require (
 	github.com/cloudwego/configmanager v0.2.2 // indirect
 	github.com/cloudwego/dynamicgo v0.4.7-0.20241220085612-55704ea4ca8f // indirect
 	github.com/cloudwego/eino v0.3.7 // indirect
-	github.com/cloudwego/eino-examples/quickstart/eino_assistant v0.0.0-20250211064059-c80247252426 // indirect
 	github.com/cloudwego/eino-ext/callbacks/langfuse v0.0.0-20250117061805-cd80d1780d76 // indirect
 	github.com/cloudwego/eino-ext/components/embedding/ark v0.0.0-20250116071241-3f1eaaafd49c // indirect
 	github.com/cloudwego/eino-ext/components/model/ark v0.0.0-20250117061805-cd80d1780d76 // indirect
@@ -135,6 +134,7 @@ require (
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
+	github.com/ugorji/go/codec v1.2.11 // indirect
 	github.com/volcengine/volc-sdk-golang v1.0.23 // indirect
 	github.com/volcengine/volcengine-go-sdk v1.0.160 // indirect
 	github.com/yargevad/filepathx v1.0.0 // indirect
