@@ -63,6 +63,7 @@ export default {
         commit('SET_ITEMS', data?.items || [])
         commit('SET_ERROR', null)
       } catch (error) {
+        commit('SET_ITEMS', [])
         commit('SET_ERROR', error.message)
       } finally {
         commit('SET_LOADING', false)
@@ -71,8 +72,8 @@ export default {
     async addItem({ commit }, item) {
       try {
         commit('SET_LOADING', true)
-        commit('ADD_ITEM', item)
         await axios.post('/api/cart', item)
+        // commit('ADD_ITEM', item)
         commit('SET_ERROR', null)
       } catch (error) {
         commit('SET_ERROR', error.message)

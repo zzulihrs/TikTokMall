@@ -5,7 +5,7 @@ module.exports = defineConfig({
     port: 8000,
     proxy: {
       '/api': {
-        target: 'http://localhost:8080/', // 你要请求的接口的前缀
+        target: 'http://62.234.20.127:8080/', // 你要请求的接口的前缀
         changeOrigin: true, // 允许跨域
         pathRewrite: {
           '^/api': '' // 重写路径
