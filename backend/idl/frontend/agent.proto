@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package frontend.agent;
+
+import "api.proto";
+import "frontend/common.proto";
+
+option go_package = "frontend/agent";
+
+// 聊天服务定义
+service AgentService {
+    // 发送聊天消息
+    rpc HandleChat(common.Empty) returns (common.Empty) {
+        option (api.get) = "agent/api/chat";
+    }
+    
+}
