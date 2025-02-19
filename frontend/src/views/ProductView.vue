@@ -88,16 +88,23 @@ const fetchProduct = async () => {
   }
 }
 
-const addToCart = (event) => {
+const addToCart = async (event) => {
   event.preventDefault()
   event.stopPropagation()
-  store.dispatch('cart/addItem', {
+  await store.dispatch('cart/addItem', {
     product_id: Id,
     product_num: Qty.value,
     Id: Id,
     Qty: Qty.value,
   })
-  ElMessage.success('已加入购物车')
+  console.warn(store.state.cart.error);
+
+  if (store.state.cart.error === null) {
+    ElMessage.success('已加入购物车')
+    await store.dispatch('cart/fetchCart')
+  }
+  else
+    ElMessage.error(store.state.cart.error)
 }
 
 onMounted(() => {
