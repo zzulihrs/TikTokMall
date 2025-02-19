@@ -81,11 +81,11 @@ export default {
         commit('SET_LOADING', false)
       }
     },
-    async removeItem({ commit }, id) {
+    async removeItem({ commit }, {Id}) {
       try {
         commit('SET_LOADING', true)
-        commit('REMOVE_ITEM', id)
-        await axios.delete(`http://localhost:8080/api/cart/${id}`)
+        commit('REMOVE_ITEM', Id)
+        // await axios.delete(`http://localhost:8080/api/cart/${id}`)
         commit('SET_ERROR', null)
       } catch (error) {
         commit('SET_ERROR', error.message)
