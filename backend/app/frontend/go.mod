@@ -12,6 +12,7 @@ require (
 	github.com/aliyun/alibabacloud-oss-go-sdk-v2 v1.2.0
 	github.com/cloudwego/hertz v0.9.3
 	github.com/cloudwego/kitex v0.12.1
+	github.com/golang/protobuf v1.5.4
 	github.com/hertz-contrib/cors v0.1.0
 	github.com/hertz-contrib/gzip v0.0.3
 	github.com/hertz-contrib/logger/accesslog v0.0.0-20241107070745-e4ce8c54dd97
@@ -66,7 +67,6 @@ require (
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
-	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/gomodule/redigo v1.8.9 // indirect
 	github.com/google/btree v1.0.0 // indirect
 	github.com/google/pprof v0.0.0-20240727154555-813a5fbdbec8 // indirect
