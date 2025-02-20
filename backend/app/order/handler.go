@@ -23,3 +23,10 @@ func (s *OrderServiceImpl) ListOder(ctx context.Context, req *order.ListOrderReq
 
 	return resp, err
 }
+
+// ChangeOrderStatus implements the OrderServiceImpl interface.
+func (s *OrderServiceImpl) ChangeOrderStatus(ctx context.Context, req *order.ChangeOrderStatusReq) (resp *order.ChangeOrderStatusResp, err error) {
+	resp, err = service.NewChangeOrderStatusService(ctx).Run(req)
+
+	return resp, err
+}

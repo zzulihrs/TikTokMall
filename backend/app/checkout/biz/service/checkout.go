@@ -108,10 +108,23 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 			CreditCardExpirationMonth: req.GetCreditCard().GetCreditCardExpirationMonth(),
 		},
 	}
-	paymentResult, err := rpc.PaymentClient.Charge(s.ctx, &payReq)
-	if err != nil {
-		return nil, fmt.Errorf("charge failed: %v", err)
+
+	paymentResult := &payment.ChargeResp{}
+	if req.GetPaymentMethod() == "card" { // 银行卡支付
+		paymentResult, err = rpc.PaymentClient.Charge(s.ctx, &payReq)
+		if err != nil {
+			return nil, fmt.Errorf("charge failed: %v", err)
+		}
+		// 修改订单状态为支付成功
+		rpc.OrderClient.ChangeOrderStatus(s.ctx, &order.ChangeOrderStatusReq{
+			OrderId:     orderId,
+			OrderStatus: 1,
+			UserId:      req.GetUserId(),
+		})
+	} else if req.GetPaymentMethod() == "card" { // 支付宝支付
+		// TODO
 	}
+
 	_, err = rpc.CartClient.EmptyCart(s.ctx, &cart.EmptyCartReq{UserId: req.GetUserId()})
 	if err != nil {
 		return nil, fmt.Errorf("empty cart failed: %v", err)

@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-
 	"github.com/tiktokmall/backend/app/order/biz/dal/mysql"
 	"github.com/tiktokmall/backend/app/order/biz/model"
 	"github.com/tiktokmall/backend/rpc_gen/kitex_gen/cart"
@@ -37,6 +36,7 @@ func (s *ListOderService) Run(req *order.ListOrderReq) (resp *order.ListOrderRes
 			UserId:       v.UserId,
 			UserCurrency: v.UserCurrency,
 			Email:        v.Consignee.Email,
+			OrderStatus:  v.OrderStatus,
 			CreatedAt:    int32(v.CreatedAt.Unix()),
 			Address: &order.Address{
 				Country:       v.Consignee.Country,

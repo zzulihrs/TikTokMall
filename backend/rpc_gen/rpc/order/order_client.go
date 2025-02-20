@@ -4,9 +4,9 @@ import (
 	"context"
 	order "github.com/tiktokmall/backend/rpc_gen/kitex_gen/order"
 
-	"github.com/tiktokmall/backend/rpc_gen/kitex_gen/order/orderservice"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"
+	"github.com/tiktokmall/backend/rpc_gen/kitex_gen/order/orderservice"
 )
 
 type RPCClient interface {
@@ -14,6 +14,7 @@ type RPCClient interface {
 	Service() string
 	PlaceOrder(ctx context.Context, Req *order.PlaceOrderReq, callOptions ...callopt.Option) (r *order.PlaceOrderResp, err error)
 	ListOder(ctx context.Context, Req *order.ListOrderReq, callOptions ...callopt.Option) (r *order.ListOrderResp, err error)
+	ChangeOrderStatus(ctx context.Context, Req *order.ChangeOrderStatusReq, callOptions ...callopt.Option) (r *order.ChangeOrderStatusResp, err error)
 }
 
 func NewRPCClient(dstService string, opts ...client.Option) (RPCClient, error) {
@@ -48,4 +49,8 @@ func (c *clientImpl) PlaceOrder(ctx context.Context, Req *order.PlaceOrderReq, c
 
 func (c *clientImpl) ListOder(ctx context.Context, Req *order.ListOrderReq, callOptions ...callopt.Option) (r *order.ListOrderResp, err error) {
 	return c.kitexClient.ListOder(ctx, Req, callOptions...)
+}
+
+func (c *clientImpl) ChangeOrderStatus(ctx context.Context, Req *order.ChangeOrderStatusReq, callOptions ...callopt.Option) (r *order.ChangeOrderStatusResp, err error) {
+	return c.kitexClient.ChangeOrderStatus(ctx, Req, callOptions...)
 }

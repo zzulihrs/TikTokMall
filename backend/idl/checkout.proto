@@ -23,8 +23,9 @@ message CheckoutReq {
     string firstname = 2;
     string lastname = 3;
     string email = 4;
-    Address address = 5;
-    payment.CreditCardInfo credit_card = 6;
+    string payment_method = 5; // 支付方式 card-银行卡 alipay-支付宝
+    Address address = 6;
+    payment.CreditCardInfo credit_card = 7;
 }
 
 message CheckoutResp {
