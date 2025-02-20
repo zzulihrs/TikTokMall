@@ -15,3 +15,12 @@ func Charge(ctx context.Context, req *payment.ChargeReq, callOptions ...callopt.
 	}
 	return resp, nil
 }
+
+func Alipay(ctx context.Context, req *payment.AlipayReq, callOptions ...callopt.Option) (resp *payment.AlipayResp, err error) {
+	resp, err = defaultClient.Alipay(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "Alipay call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}

@@ -7,6 +7,7 @@ import (
 	"github.com/tiktokmall/backend/rpc_gen/kitex_gen/cart/cartservice"
 	"github.com/tiktokmall/backend/rpc_gen/kitex_gen/checkout/checkoutservice"
 	"github.com/tiktokmall/backend/rpc_gen/kitex_gen/order/orderservice"
+	"github.com/tiktokmall/backend/rpc_gen/kitex_gen/payment/paymentservice"
 	"github.com/tiktokmall/backend/rpc_gen/kitex_gen/product/productcatalogservice"
 	"github.com/tiktokmall/backend/rpc_gen/kitex_gen/user/userservice"
 
@@ -24,6 +25,7 @@ var (
 	CartClient     cartservice.Client
 	CheckoutClient checkoutservice.Client
 	OrderClient    orderservice.Client
+	PaymentClient  paymentservice.Client
 	once           sync.Once
 	opts           []client.Option
 	err            error
@@ -44,6 +46,7 @@ func Init() {
 		initCartClient()
 		initCheckoutClient()
 		initOrderClient()
+		initPaymentClient()
 	})
 }
 
@@ -69,5 +72,10 @@ func initCheckoutClient() {
 
 func initOrderClient() {
 	OrderClient, err = orderservice.NewClient("order", opts...)
+	frontendUtils.MustHandleError(err)
+}
+
+func initPaymentClient() {
+	PaymentClient, err = paymentservice.NewClient("payment", opts...)
 	frontendUtils.MustHandleError(err)
 }

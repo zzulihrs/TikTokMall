@@ -152,6 +152,66 @@ func (x *ChargeResp) fastReadField1(buf []byte, _type int8) (offset int, err err
 	return offset, err
 }
 
+func (x *AlipayReq) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+	switch number {
+	case 1:
+		offset, err = x.fastReadField1(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 2:
+		offset, err = x.fastReadField2(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	default:
+		offset, err = fastpb.Skip(buf, _type, number)
+		if err != nil {
+			goto SkipFieldError
+		}
+	}
+	return offset, nil
+SkipFieldError:
+	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+ReadFieldError:
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_AlipayReq[number], err)
+}
+
+func (x *AlipayReq) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	x.TransactionId, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *AlipayReq) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	x.TotalAmount, offset, err = fastpb.ReadFloat(buf, _type)
+	return offset, err
+}
+
+func (x *AlipayResp) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+	switch number {
+	case 1:
+		offset, err = x.fastReadField1(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	default:
+		offset, err = fastpb.Skip(buf, _type, number)
+		if err != nil {
+			goto SkipFieldError
+		}
+	}
+	return offset, nil
+SkipFieldError:
+	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+ReadFieldError:
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_AlipayResp[number], err)
+}
+
+func (x *AlipayResp) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	x.PayUrl, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
 func (x *CreditCardInfo) FastWrite(buf []byte) (offset int) {
 	if x == nil {
 		return offset
@@ -251,6 +311,47 @@ func (x *ChargeResp) fastWriteField1(buf []byte) (offset int) {
 		return offset
 	}
 	offset += fastpb.WriteString(buf[offset:], 1, x.GetTransactionId())
+	return offset
+}
+
+func (x *AlipayReq) FastWrite(buf []byte) (offset int) {
+	if x == nil {
+		return offset
+	}
+	offset += x.fastWriteField1(buf[offset:])
+	offset += x.fastWriteField2(buf[offset:])
+	return offset
+}
+
+func (x *AlipayReq) fastWriteField1(buf []byte) (offset int) {
+	if x.TransactionId == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 1, x.GetTransactionId())
+	return offset
+}
+
+func (x *AlipayReq) fastWriteField2(buf []byte) (offset int) {
+	if x.TotalAmount == 0 {
+		return offset
+	}
+	offset += fastpb.WriteFloat(buf[offset:], 2, x.GetTotalAmount())
+	return offset
+}
+
+func (x *AlipayResp) FastWrite(buf []byte) (offset int) {
+	if x == nil {
+		return offset
+	}
+	offset += x.fastWriteField1(buf[offset:])
+	return offset
+}
+
+func (x *AlipayResp) fastWriteField1(buf []byte) (offset int) {
+	if x.PayUrl == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 1, x.GetPayUrl())
 	return offset
 }
 
@@ -356,6 +457,47 @@ func (x *ChargeResp) sizeField1() (n int) {
 	return n
 }
 
+func (x *AlipayReq) Size() (n int) {
+	if x == nil {
+		return n
+	}
+	n += x.sizeField1()
+	n += x.sizeField2()
+	return n
+}
+
+func (x *AlipayReq) sizeField1() (n int) {
+	if x.TransactionId == "" {
+		return n
+	}
+	n += fastpb.SizeString(1, x.GetTransactionId())
+	return n
+}
+
+func (x *AlipayReq) sizeField2() (n int) {
+	if x.TotalAmount == 0 {
+		return n
+	}
+	n += fastpb.SizeFloat(2, x.GetTotalAmount())
+	return n
+}
+
+func (x *AlipayResp) Size() (n int) {
+	if x == nil {
+		return n
+	}
+	n += x.sizeField1()
+	return n
+}
+
+func (x *AlipayResp) sizeField1() (n int) {
+	if x.PayUrl == "" {
+		return n
+	}
+	n += fastpb.SizeString(1, x.GetPayUrl())
+	return n
+}
+
 var fieldIDToName_CreditCardInfo = map[int32]string{
 	1: "CreditCartNumber",
 	2: "CreditCardCvv",
@@ -372,4 +514,13 @@ var fieldIDToName_ChargeReq = map[int32]string{
 
 var fieldIDToName_ChargeResp = map[int32]string{
 	1: "TransactionId",
+}
+
+var fieldIDToName_AlipayReq = map[int32]string{
+	1: "TransactionId",
+	2: "TotalAmount",
+}
+
+var fieldIDToName_AlipayResp = map[int32]string{
+	1: "PayUrl",
 }

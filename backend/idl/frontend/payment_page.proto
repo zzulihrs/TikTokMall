@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package frontend.payment;
+
+import "api.proto";
+import "frontend/common.proto";
+
+option go_package = "frontend/payment";
+
+
+service PaymentService {
+
+    rpc Alipay(AlipayReq) returns (common.Empty) {
+        option (api.get) = "/alipay";
+    }
+
+    // 给支付宝调用的，收到/payresult，去修改订单状态
+    rpc Payresult(PayresultReq) returns (common.Empty) {
+        option (api.post) = "/payresult";
+    }
+
+    // 给支付宝调用的，收到/paysuccess，直接跳转到支付成功页面
+    rpc Paysuccess(common.Empty) returns (common.Empty) {
+        option (api.get) = "/paysuccess";
+    }
+
+}
+
+message AlipayReq{
+    uint32 transaction_id = 1 [(api.form) = "transaction_id"];
+    double total_amount = 2 [(api.form) = "total_amount"];
+}
+
+// 异步通知，根据结果修改订单状态
+message PayresultReq{
+    uint32 transaction_id = 1 [(api.form) = "transaction_id"];
+}

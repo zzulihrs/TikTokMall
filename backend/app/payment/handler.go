@@ -16,3 +16,10 @@ func (s *PaymentServiceImpl) Charge(ctx context.Context, req *payment.ChargeReq)
 
 	return resp, err
 }
+
+// Alipay implements the PaymentServiceImpl interface.
+func (s *PaymentServiceImpl) Alipay(ctx context.Context, req *payment.AlipayReq) (resp *payment.AlipayResp, err error) {
+	resp, err = service.NewAlipayService(ctx).Run(req)
+
+	return resp, err
+}

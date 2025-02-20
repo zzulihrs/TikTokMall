@@ -6,6 +6,7 @@ option go_package = "payment";
 
 service PaymentService {
     rpc Charge(ChargeReq) returns (ChargeResp) {}
+    rpc Alipay(AlipayReq) returns (AlipayResp) {}
 }
 
 message CreditCardInfo {
@@ -24,4 +25,13 @@ message ChargeReq {
 
 message ChargeResp {
     string transaction_id = 1;
+}
+
+message AlipayReq{
+    string transaction_id = 1;
+    float total_amount = 2;
+}
+
+message AlipayResp{
+    string payUrl = 1;
 }
