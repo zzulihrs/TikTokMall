@@ -57,7 +57,7 @@ const routes = [
     path: '/merchant',
     name: 'merchant',
     redirect: '/merchant/product/list',
-    // component: () => import('../views/MerchantProductView.vue'),
+    // component: () => import('../views/MerchantProductListView.vue'),
     // TODO: reuiresMerchant 店家权限校验
     meta: { requiresMerchant: true }, // 假设需要店家权限
     // 在这个路由中，添加子路由
@@ -65,12 +65,17 @@ const routes = [
       {
         path: 'product/list',
         name:'merchantProductsList',
-        component: () => import('../views/MerchantProductView.vue')
+        component: () => import('../views/MerchantProductListView.vue')
       },
       {
         path: 'product/add',
         name:'merchantAddProduct',
         component: () => import('../views/MerchantAddProductView.vue')
+      },
+      {
+        path: 'product/detail',
+        name:'merchantProductDetail',
+        component: () => import('../views/MerchantProductDetail.vue')
       },
     ]
   }

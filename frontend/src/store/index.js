@@ -3,13 +3,15 @@ import auth from './modules/auth'
 import cart from './modules/cart'
 import search from './modules/search'
 import merchant from './modules/merchant'
+import category from './modules/category'
 
 const store = createStore({
   modules: {
     auth,
     cart,
     search,
-    merchant
+    merchant,
+    category
   },
   state: {
     chatHistory: []
