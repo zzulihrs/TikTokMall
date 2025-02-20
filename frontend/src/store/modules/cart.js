@@ -11,14 +11,14 @@ export default {
 
   getters: {
     items: (state) => state.items,
-  totalAmount: (state) => {
-    return state.items.reduce((total, item) => {
-      return total + (item.Price * item.Qty)
-    }, 0)
-  },
-  totalQuantity: (state) => {
-    return state?.items?.reduce((total, item) => total + item?.Qty, 0)
-  },
+    totalAmount: (state) => {
+      return state.items.reduce((total, item) => {
+        return total + (item.Price * item.Qty)
+      }, 0)
+    },
+    totalQuantity: (state) => {
+      return state?.items?.reduce((total, item) => total + item?.Qty, 0)
+    },
     loading: (state) => state.loading,
     error: (state) => state.error
   },
