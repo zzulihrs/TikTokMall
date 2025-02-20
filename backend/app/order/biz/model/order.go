@@ -17,11 +17,13 @@ type Consignee struct {
 
 type Order struct {
 	gorm.Model
-	OrderId      string      `gorm:"type:varchar(100);uniqueIndex"`
-	UserId       uint32      `gorm:"type:int(11)"`
-	UserCurrency string      `gorm:"type:varchar(100)"`
-	Consignee    Consignee   `gorm:"embedded"`
-	OrderItem    []OrderItem `gorm:"foreignKey:OrderIdRefer;references:OrderId"`
+	OrderId       string      `gorm:"type:varchar(100);uniqueIndex"`
+	UserId        uint32      `gorm:"type:int(11)"`
+	OrderStatus   uint32      `gorm:"type:int(11)`
+	PaymentMethod string      `gorm:"type:varchar(100)"`
+	UserCurrency  string      `gorm:"type:varchar(100)"`
+	Consignee     Consignee   `gorm:"embedded"`
+	OrderItem     []OrderItem `gorm:"foreignKey:OrderIdRefer;references:OrderId"`
 }
 
 func (Order) TableName() string {
@@ -31,4 +33,8 @@ func (Order) TableName() string {
 func ListOrder(db *gorm.DB, ctx context.Context, userId uint32) (orders []Order, err error) {
 	err = db.WithContext(ctx).Model(&Order{}).Where(&Order{UserId: userId}).Preload("OrderItem").Find(&orders).Error
 	return
+}
+
+func ChangeOrderStatus(db *gorm.DB, ctx context.Context, orderId string, status uint32, userId uint32) error {
+	return db.WithContext(ctx).Model(&Order{}).Where(&Order{OrderId: orderId, UserId: userId}).Update("order_status", status).Error
 }

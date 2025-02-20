@@ -1,11 +1,9 @@
 #!/bin/bash
-
 # backend目录执行
 ROOT_PATH=$PWD/app
-
 # 微服务列表，每个微服务的目录名称
-declare -a SERVICES=("cart" "checkout" "email" "frontend" "order" "payment" "product" "user")
-
+declare -a SERVICES=("cart" "checkout" "email" "frontend" "merchant" "order" "payment" "product" "user")
+sleep 10 # 等docker启动完成
 # 启动所有微服务
 for service in "${SERVICES[@]}"; do
     echo "Starting $service..."
