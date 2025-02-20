@@ -4,9 +4,9 @@ import (
 	"context"
 	checkout "github.com/tiktokmall/backend/rpc_gen/kitex_gen/checkout"
 
-	"github.com/tiktokmall/backend/rpc_gen/kitex_gen/checkout/checkoutservice"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/client/callopt"
+	"github.com/tiktokmall/backend/rpc_gen/kitex_gen/checkout/checkoutservice"
 )
 
 type RPCClient interface {

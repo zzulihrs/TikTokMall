@@ -2,9 +2,9 @@ package checkout
 
 import (
 	"context"
-	checkout "github.com/tiktokmall/backend/rpc_gen/kitex_gen/checkout"
 	"github.com/cloudwego/kitex/client/callopt"
 	"github.com/cloudwego/kitex/pkg/klog"
+	checkout "github.com/tiktokmall/backend/rpc_gen/kitex_gen/checkout"
 )
 
 func Checkout(ctx context.Context, req *checkout.CheckoutReq, callOptions ...callopt.Option) (resp *checkout.CheckoutResp, err error) {
