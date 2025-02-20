@@ -77,6 +77,9 @@ const removeItem = async (item) => {
       Id: item.Id,
       Qty: 0
     })
+    await store.dispatch('cart/removeItem', {
+      Id: item.Id,
+    })
     ElMessage.success('删除成功')
   } catch (err) {
     ElMessage.error('删除失败：' + err.message)

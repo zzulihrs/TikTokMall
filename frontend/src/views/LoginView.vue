@@ -86,11 +86,13 @@ const handleLogin = async () => {
         token: response.data.token || 'test-token',
       };
 
-      store.dispatch('auth/login', userData);
+      await store.dispatch('auth/login', userData);
       loading.value = true;
 
       ElMessage.success('登录成功');
-      router.push('/');
+      await router.push('/');
+      await store.dispatch('cart/fetchCart')
+
     } else {
       loading.value = false;
       ElMessage.error(response?.data);

@@ -11,6 +11,7 @@ import (
 	category "github.com/tiktokmall/backend/app/frontend/biz/router/category"
 	checkout "github.com/tiktokmall/backend/app/frontend/biz/router/checkout"
 	home "github.com/tiktokmall/backend/app/frontend/biz/router/home"
+	merchant "github.com/tiktokmall/backend/app/frontend/biz/router/merchant"
 	order "github.com/tiktokmall/backend/app/frontend/biz/router/order"
 	oss "github.com/tiktokmall/backend/app/frontend/biz/router/oss"
 	payment "github.com/tiktokmall/backend/app/frontend/biz/router/payment"
@@ -24,6 +25,8 @@ func GeneratedRegister(r *server.Hertz) {
 	payment.Register(r)
 
 	agent.Register(r)
+
+	merchant.Register(r)
 
 	oss.Register(r)
 	user.Register(r)

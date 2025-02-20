@@ -24,14 +24,19 @@ import { SwitchButton, Tickets } from '@element-plus/icons-vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import axios from "axios";
 
 const store = useStore()
 const router = useRouter()
+import Cookies from 'js-cookie';
 
 const user = computed(() => store?.state?.auth?.user)
 
 const handleCommand = (command) => {
   if (command === 'logout') {
+    axios.post('/api/auth/logout');
+    store.dispatch('cart/fetchCart')
+    Cookies.remove("cloudwego-shop")
     store.dispatch('auth/logout')
     ElMessage.success('已退出登录')
     router.push('/')
