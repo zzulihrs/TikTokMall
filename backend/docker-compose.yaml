@@ -13,8 +13,12 @@ services:
     image: "mysql:8"
     environment:
       MYSQL_ROOT_PASSWORD: "root"
+    restart: always #  设置重启策略为always
+    mem_limit: 2g   # 增加内存限制
+    cpus: 2         # 增加CPU数量
     volumes:
       - "./db/sql/ini:/docker-entrypoint-initdb.d"
+      - "./db/mysql_data:/var:lib/mysql"
     ports:
       - "3306:3306"
     # 健康检查，避免服务连接 mysql 时，mysql 服务没有启动

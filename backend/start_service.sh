@@ -2,8 +2,11 @@
 # backend目录执行
 ROOT_PATH=$PWD/app
 # 微服务列表，每个微服务的目录名称
-declare -a SERVICES=("cart" "checkout" "email" "frontend" "merchant" "order" "payment" "product" "user")
+declare -a SERVICES=("cart" "checkout" "email" "frontend" "order" "payment" "product" "user" "merchant")
 sleep 10 # 等docker启动完成
+# 创建数据文件夹（如果不存在）
+mkdir -p /backend/db/mysql_data/ /backend/data/redis/
+chmod -R 777 /backend/db/mysql_data/ /backend/data/redis/
 # 启动所有微服务
 for service in "${SERVICES[@]}"; do
     echo "Starting $service..."
