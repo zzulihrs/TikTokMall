@@ -8,6 +8,7 @@ import (
 	oss "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/oss"
 	"io"
 	"log"
+	"os"
 )
 
 type UploadImageService struct {
@@ -46,11 +47,15 @@ func (h *UploadImageService) Run(req *oss.UploadFileRequest) (resp *oss.UploadRe
 	// 初始化 OSS 工具类
 	ossUtils, err := utils.NewOssUtils()
 	if err != nil {
-		log.Fatalf("初始化 OSS 工具失败: %v", err)
+		log.Println("初始化 OSS 工具失败: %v", err)
 	}
 	temp, err := ossUtils.UploadImage(h.Context, buffer, fileName)
 	if err != nil {
-		log.Fatalf("上传图片失败: %v", err)
+		id := os.Getenv("OSS_ACCESS_KEY_ID")
+		secret := os.Getenv("OSS_ACCESS_KEY_SECRET")
+		log.Println("上传图片失败: %v", err)
+		log.Println("id: ", id)
+		log.Println("secret: ", secret)
 		return nil, err
 	}
 	resp = &oss.UploadResponse{
