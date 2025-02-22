@@ -297,7 +297,7 @@ const handlePayment = async () => {
       province: form?.province,
       street: form?.street,
       card_num: form?.cardNumber,
-      payment_method: form?.paymentMethod,
+      payment: form?.paymentMethod,
       expiration_year: parseInt(form?.expYear),
       expiration_month: parseInt(form?.expMonth),
       cvv: parseInt(form?.cvv)
