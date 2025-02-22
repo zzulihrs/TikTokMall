@@ -663,6 +663,11 @@ func (x *SearchProductsResp) FastRead(buf []byte, _type int8, number int32) (off
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 2:
+		offset, err = x.fastReadField2(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -684,6 +689,11 @@ func (x *SearchProductsResp) fastReadField1(buf []byte, _type int8) (offset int,
 	}
 	x.Products = append(x.Products, &v)
 	return offset, nil
+}
+
+func (x *SearchProductsResp) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	x.Count, offset, err = fastpb.ReadInt64(buf, _type)
+	return offset, err
 }
 
 func (x *ProductDetailReq) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
@@ -1236,6 +1246,7 @@ func (x *SearchProductsResp) FastWrite(buf []byte) (offset int) {
 		return offset
 	}
 	offset += x.fastWriteField1(buf[offset:])
+	offset += x.fastWriteField2(buf[offset:])
 	return offset
 }
 
@@ -1246,6 +1257,14 @@ func (x *SearchProductsResp) fastWriteField1(buf []byte) (offset int) {
 	for i := range x.GetProducts() {
 		offset += fastpb.WriteMessage(buf[offset:], 1, x.GetProducts()[i])
 	}
+	return offset
+}
+
+func (x *SearchProductsResp) fastWriteField2(buf []byte) (offset int) {
+	if x.Count == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt64(buf[offset:], 2, x.GetCount())
 	return offset
 }
 
@@ -1775,6 +1794,7 @@ func (x *SearchProductsResp) Size() (n int) {
 		return n
 	}
 	n += x.sizeField1()
+	n += x.sizeField2()
 	return n
 }
 
@@ -1785,6 +1805,14 @@ func (x *SearchProductsResp) sizeField1() (n int) {
 	for i := range x.GetProducts() {
 		n += fastpb.SizeMessage(1, x.GetProducts()[i])
 	}
+	return n
+}
+
+func (x *SearchProductsResp) sizeField2() (n int) {
+	if x.Count == 0 {
+		return n
+	}
+	n += fastpb.SizeInt64(2, x.GetCount())
 	return n
 }
 
@@ -1912,6 +1940,7 @@ var fieldIDToName_SearchProductsReq = map[int32]string{
 
 var fieldIDToName_SearchProductsResp = map[int32]string{
 	1: "Products",
+	2: "Count",
 }
 
 var fieldIDToName_ProductDetailReq = map[int32]string{

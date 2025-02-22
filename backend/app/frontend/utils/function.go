@@ -2,7 +2,6 @@ package utils
 
 import (
 	"context"
-	"fmt"
 )
 
 func GetUserIdFromCtx(ctx context.Context) uint32 {
@@ -31,7 +30,6 @@ func GetUsernameFromCtx(ctx context.Context) string {
 }
 func GetEmailFromCtx(ctx context.Context) string {
 	email := ctx.Value(EmailKey)
-	fmt.Println("email", email)
 	if email == nil {
 		return ""
 	}

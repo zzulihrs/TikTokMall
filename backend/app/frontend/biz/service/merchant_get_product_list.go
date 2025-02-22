@@ -25,6 +25,7 @@ func (h *MerchantGetProductListService) Run(req *merchant.MerchantGetProductList
 	// hlog.CtxInfof(h.Context, "resp = %+v", resp)
 	//}()
 	// todo edit your code
+	// log.Printf("merchant get product list, req: %+v", req)
 	psResp, err := rpc.MerchantClient.SearchProducts(h.Context, &rpcmerchant.SearchProductsReq{
 		Name:       req.Name,
 		CategoryId: req.CategoryId,
@@ -56,6 +57,7 @@ func (h *MerchantGetProductListService) Run(req *merchant.MerchantGetProductList
 		"code":    200,
 		"message": "OK",
 		"data":    products,
+		"total":   psResp.Count,
 	}, nil
 }
 

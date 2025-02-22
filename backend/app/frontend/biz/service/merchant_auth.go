@@ -4,7 +4,10 @@ import (
 	"context"
 	"fmt"
 
+	"log"
+
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/hertz-contrib/sessions"
 	"github.com/tiktokmall/backend/app/frontend/biz/utils"
 	merchant "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/merchant"
 	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
@@ -33,10 +36,14 @@ func (h *MerchantAuthService) Run(req *merchant.MerchantAuthReq) (resp utils.H, 
 
 	uid := frontendUtils.GetUserIdFromCtx(h.Context)
 	email := frontendUtils.GetEmailFromCtx(h.Context)
+	if uid == 0 {
+		return nil, fmt.Errorf("未登录")
+	}
 	// 1. 调用 merchantrpc 获取店家信息
 	merchantResp, err := rpc.MerchantClient.GetMerchant(h.Context, &rpcmerchant.GetMerchantReq{
 		Id: int64(uid),
 	})
+	log.Printf("merchantResp: %+v", merchantResp)
 	if err != nil {
 		return nil, err
 	}
@@ -44,6 +51,22 @@ func (h *MerchantAuthService) Run(req *merchant.MerchantAuthReq) (resp utils.H, 
 		return nil, fmt.Errorf("认证失败，email 不匹配")
 	}
 
+	// 2. 定义新的 session
+	// 获取 请求的上下文 得到 session
+	session := sessions.Default(h.RequestContext)
+	// 利用 redis 存储 user_id
+	// 设置 Cookie
+	// Cookie
+	session.Delete("merchant_id")
+	session.Set("user_id", uid)
+	session.Set("username", merchantResp.Username)
+	session.Set("email", email)
+	session.Set("merchant_id", merchantResp.Id)
+	log.Printf("session: set merchant_id: %v", merchantResp.Id)
+	err = session.Save()
+	if err != nil {
+		return nil, err
+	}
 	// 2. 包装店家信息生成 token
 	token := utils.GenerateToken(merchantResp.Id, merchantResp.Username)
 	// 3. 返回 token 和店家信息 response

@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"log"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	merchant "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/merchant"
@@ -37,6 +38,7 @@ func (h *MerchantRegisterService) Run(req *merchant.MerchantRegisterReq) (resp m
 	userId := frontendUtils.GetUserIdFromCtx(h.Context)
 	username := frontendUtils.GetUsernameFromCtx(h.Context)
 	email := frontendUtils.GetEmailFromCtx(h.Context)
+	log.Printf("merchant regisgter: userId, email, username: %v, %v, %v", userId, email, username)
 	rpc.MerchantClient.AddMerchant(h.Context, &rpcmerchant.AddMerchantReq{
 		Uid:      int64(userId),
 		Username: username,

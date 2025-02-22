@@ -33,7 +33,7 @@ func MerchantAddProduct(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
+	c.JSON(consts.StatusOK, resp)
 	// utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
 }
 
@@ -59,7 +59,7 @@ func MerchantDeleteProduct(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
+	c.JSON(consts.StatusOK, resp)
 	// utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
 }
 
@@ -86,7 +86,7 @@ func MerchantUpdateProduct(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
+	c.JSON(consts.StatusOK, resp)
 	// utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
 }
 
@@ -112,7 +112,7 @@ func MerchantGetProductList(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
+	c.JSON(consts.StatusOK, resp)
 	// utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
 }
 
@@ -138,7 +138,7 @@ func MerchantGetProductDetail(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
+	c.JSON(consts.StatusOK, resp)
 	// utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
 }
 
@@ -162,7 +162,7 @@ func MerchantPing(ctx context.Context, c *app.RequestContext) {
 		})
 		return
 	}
-	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
+	c.JSON(consts.StatusOK, resp)
 }
 
 // MerchantRegister .
@@ -185,7 +185,7 @@ func MerchantRegister(ctx context.Context, c *app.RequestContext) {
 		})
 		return
 	}
-	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
+	c.JSON(consts.StatusOK, resp)
 }
 
 // MerchantAuth .

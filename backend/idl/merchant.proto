@@ -111,6 +111,7 @@ message SearchProductsReq {
 
 message SearchProductsResp {
     repeated MerchantProductSimpleInfo products = 1;
+    int64 count = 2;
 }
 
 message ProductDetailReq {

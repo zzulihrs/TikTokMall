@@ -18,7 +18,8 @@ func NewGetMerchantService(ctx context.Context) *GetMerchantService {
 // Run create note info
 func (s *GetMerchantService) Run(req *merchant.GetMerchantReq) (resp *merchant.GetMerchantResp, err error) {
 	// Finish your business logic.
-	m, err := model.NewMerchantQuery(s.ctx, mysql.DB).GetById(int(req.GetId()))
+
+	m, err := model.NewMerchantQuery(s.ctx, mysql.DB).GetByUid(int(req.GetId()))
 	if err != nil {
 		return nil, err
 	}

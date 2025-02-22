@@ -32,7 +32,6 @@ func (s *SearchProductsService) Run(req *product.SearchProductsReq) (resp *produ
 	merchantSet := make(map[int]int)
 	merchantIDs := []int{}
 	for _, p := range ps {
-		log.Printf("p: %#v\n", p)
 		results = append(results, &product.Product{
 			Id:          uint32(p.ID),
 			Name:        p.Name,

@@ -80,7 +80,7 @@ const store = useStore();
 const router = useRouter();
 
 // 路由跳转
-const goToProductDetail = (product) => router.push(`/product/detail/${product.id}`);
+const goToProductDetail = (product) => router.push(`/products/${product.id}`);
 
 
 // Vuex 数据
@@ -109,9 +109,6 @@ const searchProducts = () => {
 // 分页处理
 const handleSizeChange = (newSize) => store.dispatch('merchant/handleSizeChange', newSize);
 const handleCurrentChange = (newPage) => store.dispatch('merchant/handleCurrentChange', newPage);
-
-// 初始化加载
-store.dispatch('merchant/fetchProducts');
 </script>
 
 <style scoped>

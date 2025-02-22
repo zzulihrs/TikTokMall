@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/cloudwego/kitex/pkg/kerrors"
@@ -23,18 +24,15 @@ func (s *SearchProductsService) Run(req *merchant.SearchProductsReq) (resp *merc
 	// Finish your business logic.
 	// TODO: 列表条件查询
 	// 1. 检查参数
+	// log.Printf("search products, req: %+v", req)
 	if req.GetMerchantId() <= 0 {
 		return nil, kerrors.NewBizStatusError(2004001, "merchant id must be > 0")
 	}
 	if req.GetMaxPrice() < req.GetMinPrice() {
 		return nil, kerrors.NewBizStatusError(2004001, "max price must be >= min price")
 	}
-	// 2. 检查商户
-	_, err = model.NewMerchantQuery(s.ctx, mysql.DB).GetById(int(req.GetMerchantId()))
-	if err != nil {
-		return nil, fmt.Errorf("merchant [%v] not found, err:%w", req.GetMerchantId(), err)
-	}
-	// 3. 规整条件
+	// 2. 规整条件
+
 	conditions := []string{fmt.Sprintf("merchant_id = %v", req.GetMerchantId())}
 	if req.GetName() != "" {
 		conditions = append(conditions, fmt.Sprintf("name LIKE '%%%v%%'", req.GetName()))
@@ -53,6 +51,7 @@ func (s *SearchProductsService) Run(req *merchant.SearchProductsReq) (resp *merc
 	}
 	// 3. 拼接条件
 	condition := strings.Join(conditions, " AND ")
+	log.Printf("condition: %v", condition)
 	// 4. 分页
 	pageNo := req.GetPageNo()
 	if pageNo == 0 {
@@ -63,7 +62,7 @@ func (s *SearchProductsService) Run(req *merchant.SearchProductsReq) (resp *merc
 		pageSize = 10
 	}
 	// 5. 搜索商品
-	products, err := model.NewProductQuery(s.ctx, mysql.DB).GetProductListByCondition(condition, int(pageNo), int(pageSize))
+	products, count, err := model.NewProductQuery(s.ctx, mysql.DB).GetProductListByCondition(condition, int(pageNo), int(pageSize))
 	rps := make([]*merchant.MerchantProductSimpleInfo, len(products))
 	for i, p := range products {
 		rps[i] = &merchant.MerchantProductSimpleInfo{
@@ -75,8 +74,10 @@ func (s *SearchProductsService) Run(req *merchant.SearchProductsReq) (resp *merc
 			Stock:       int32(p.Stock),
 		}
 	}
+
 	resp = &merchant.SearchProductsResp{
 		Products: rps,
+		Count:    count,
 	}
 	return
 }

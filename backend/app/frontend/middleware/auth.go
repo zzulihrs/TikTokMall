@@ -60,6 +60,10 @@ func MerchantProduct() app.HandlerFunc {
 			return
 		}
 		merchantId := session.Get("merchant_id")
+		// log.Printf("userId: %v", userId)
+		// log.Printf("merchantId: %v", merchantId)
+		// log.Printf("username: %v", username)
+		// log.Printf("email: %v", email)
 		if merchantId == nil {
 			c.JSON(302, "merchant_id 为空")
 			c.Abort()

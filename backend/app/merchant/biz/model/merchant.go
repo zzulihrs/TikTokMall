@@ -8,7 +8,7 @@ import (
 
 type Merchant struct {
 	Base
-	UserId   int    `json:"user_id" gorm:"unique"`
+	UserId   int    `json:"user_id" gorm:"unique; unique_index"`
 	Username string `json:"username"`
 	Email    string `json:"email" gorm:"unique"`
 	// 添加反向关联
@@ -24,8 +24,13 @@ type MerchantQuery struct {
 	db  *gorm.DB
 }
 
-func (m *MerchantQuery) GetById(merchantId int) (merchant Merchant, err error) {
-	err = m.db.WithContext(m.ctx).Model(&Merchant{}).First(&merchant, merchantId).Error
+func (m *MerchantQuery) GetById(id int) (merchant Merchant, err error) {
+	err = m.db.WithContext(m.ctx).Model(&Merchant{}).Where("id = ?", id).First(&merchant).Error
+	return
+}
+
+func (m *MerchantQuery) GetByUid(uid int) (merchant Merchant, err error) {
+	err = m.db.WithContext(m.ctx).Model(&Merchant{}).Where("user_id = ?", uid).First(&merchant).Error
 	return
 }
 
