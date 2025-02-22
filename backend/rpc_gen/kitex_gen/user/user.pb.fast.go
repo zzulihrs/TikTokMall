@@ -159,6 +159,11 @@ func (x *UpdateUserReq) FastRead(buf []byte, _type int8, number int32) (offset i
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 4:
+		offset, err = x.fastReadField4(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -183,7 +188,12 @@ func (x *UpdateUserReq) fastReadField2(buf []byte, _type int8) (offset int, err 
 }
 
 func (x *UpdateUserReq) fastReadField3(buf []byte, _type int8) (offset int, err error) {
-	x.Password, offset, err = fastpb.ReadString(buf, _type)
+	x.Avatar, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *UpdateUserReq) fastReadField4(buf []byte, _type int8) (offset int, err error) {
+	x.Name, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
@@ -292,6 +302,11 @@ func (x *QueryUserResp) FastRead(buf []byte, _type int8, number int32) (offset i
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 4:
+		offset, err = x.fastReadField4(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -316,7 +331,12 @@ func (x *QueryUserResp) fastReadField2(buf []byte, _type int8) (offset int, err 
 }
 
 func (x *QueryUserResp) fastReadField3(buf []byte, _type int8) (offset int, err error) {
-	x.Password, offset, err = fastpb.ReadString(buf, _type)
+	x.Avatar, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *QueryUserResp) fastReadField4(buf []byte, _type int8) (offset int, err error) {
+	x.Name, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
@@ -418,6 +438,7 @@ func (x *UpdateUserReq) FastWrite(buf []byte) (offset int) {
 	offset += x.fastWriteField1(buf[offset:])
 	offset += x.fastWriteField2(buf[offset:])
 	offset += x.fastWriteField3(buf[offset:])
+	offset += x.fastWriteField4(buf[offset:])
 	return offset
 }
 
@@ -438,10 +459,18 @@ func (x *UpdateUserReq) fastWriteField2(buf []byte) (offset int) {
 }
 
 func (x *UpdateUserReq) fastWriteField3(buf []byte) (offset int) {
-	if x.Password == "" {
+	if x.Avatar == "" {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 3, x.GetPassword())
+	offset += fastpb.WriteString(buf[offset:], 3, x.GetAvatar())
+	return offset
+}
+
+func (x *UpdateUserReq) fastWriteField4(buf []byte) (offset int) {
+	if x.Name == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 4, x.GetName())
 	return offset
 }
 
@@ -507,6 +536,7 @@ func (x *QueryUserResp) FastWrite(buf []byte) (offset int) {
 	offset += x.fastWriteField1(buf[offset:])
 	offset += x.fastWriteField2(buf[offset:])
 	offset += x.fastWriteField3(buf[offset:])
+	offset += x.fastWriteField4(buf[offset:])
 	return offset
 }
 
@@ -527,10 +557,18 @@ func (x *QueryUserResp) fastWriteField2(buf []byte) (offset int) {
 }
 
 func (x *QueryUserResp) fastWriteField3(buf []byte) (offset int) {
-	if x.Password == "" {
+	if x.Avatar == "" {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 3, x.GetPassword())
+	offset += fastpb.WriteString(buf[offset:], 3, x.GetAvatar())
+	return offset
+}
+
+func (x *QueryUserResp) fastWriteField4(buf []byte) (offset int) {
+	if x.Name == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 4, x.GetName())
 	return offset
 }
 
@@ -632,6 +670,7 @@ func (x *UpdateUserReq) Size() (n int) {
 	n += x.sizeField1()
 	n += x.sizeField2()
 	n += x.sizeField3()
+	n += x.sizeField4()
 	return n
 }
 
@@ -652,10 +691,18 @@ func (x *UpdateUserReq) sizeField2() (n int) {
 }
 
 func (x *UpdateUserReq) sizeField3() (n int) {
-	if x.Password == "" {
+	if x.Avatar == "" {
 		return n
 	}
-	n += fastpb.SizeString(3, x.GetPassword())
+	n += fastpb.SizeString(3, x.GetAvatar())
+	return n
+}
+
+func (x *UpdateUserReq) sizeField4() (n int) {
+	if x.Name == "" {
+		return n
+	}
+	n += fastpb.SizeString(4, x.GetName())
 	return n
 }
 
@@ -721,6 +768,7 @@ func (x *QueryUserResp) Size() (n int) {
 	n += x.sizeField1()
 	n += x.sizeField2()
 	n += x.sizeField3()
+	n += x.sizeField4()
 	return n
 }
 
@@ -741,10 +789,18 @@ func (x *QueryUserResp) sizeField2() (n int) {
 }
 
 func (x *QueryUserResp) sizeField3() (n int) {
-	if x.Password == "" {
+	if x.Avatar == "" {
 		return n
 	}
-	n += fastpb.SizeString(3, x.GetPassword())
+	n += fastpb.SizeString(3, x.GetAvatar())
+	return n
+}
+
+func (x *QueryUserResp) sizeField4() (n int) {
+	if x.Name == "" {
+		return n
+	}
+	n += fastpb.SizeString(4, x.GetName())
 	return n
 }
 
@@ -770,7 +826,8 @@ var fieldIDToName_LoginResp = map[int32]string{
 var fieldIDToName_UpdateUserReq = map[int32]string{
 	1: "UserId",
 	2: "Email",
-	3: "Password",
+	3: "Avatar",
+	4: "Name",
 }
 
 var fieldIDToName_UpdateUserResp = map[int32]string{
@@ -790,5 +847,6 @@ var fieldIDToName_QueryUserReq = map[int32]string{
 var fieldIDToName_QueryUserResp = map[int32]string{
 	1: "UserId",
 	2: "Email",
-	3: "Password",
+	3: "Avatar",
+	4: "Name",
 }

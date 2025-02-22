@@ -34,8 +34,9 @@ message LoginResp {
 
 message UpdateUserReq {
     int64 user_id = 1;
-    string email = 2; 
-    string password = 3; 
+    string email = 2;
+    string avatar = 3;
+    string name = 4;
 }
 
 message UpdateUserResp {
@@ -57,5 +58,6 @@ message QueryUserReq {
 message QueryUserResp {
     int64 user_id = 1;
     string email = 2;
-    string password = 3;
+    string avatar = 3;
+    string name = 4;
 }

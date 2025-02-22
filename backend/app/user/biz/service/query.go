@@ -23,9 +23,8 @@ func (s *QueryService) Run(req *user.QueryUserReq) (resp *user.QueryUserResp, er
 		return nil, err
 	}
 	resp = &user.QueryUserResp{
-		UserId:   int64(u.ID),
-		Email:    u.Email,
-		Password: u.PasswordHashed,
+		UserId: int64(u.ID),
+		Email:  u.Email,
 	}
 	return resp, nil
 }

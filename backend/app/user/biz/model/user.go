@@ -10,6 +10,8 @@ type User struct {
 	gorm.Model
 	Email          string `gorm:"unique_index"`
 	PasswordHashed string `gorm:"type:varchar(255) not null"`
+	Username       string `gorm:"type:varchar(255) not null"`
+	Avatar         string `gorm:"type:varchar(255) not null"`
 }
 
 func (User) TableName() string {
