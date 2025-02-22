@@ -210,6 +210,6 @@ func MerchantAuth(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 
-	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
+	c.JSON(consts.StatusOK, resp)
 	// utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
 }

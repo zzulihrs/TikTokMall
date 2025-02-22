@@ -187,7 +187,8 @@ const goToCart = () => {
   router.push('/cart')
 }
 const goToMerchant = () => {
-  router.push('/merchant')
+  // 商家权限认证，无误后，去 merchant 页面
+  store.dispatch('merchant/MerchantAuth');
 }
 
 const merchantDialogVisible = ref(false)

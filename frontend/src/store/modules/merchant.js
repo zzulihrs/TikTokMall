@@ -1,7 +1,10 @@
+import router from '@/router';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 
 const state = {
+  // 店家 id
+  id: 0,
   // 列表页
   searchQuery: { // 搜索条件
     name: '',
@@ -53,6 +56,9 @@ const state = {
 };
 
 const mutations = {
+  SET_MERCHANT_ID(state, id) {
+    state.id = id;
+  },
   SET_SEARCH_QUERY(state, query) {
     state.searchQuery = query;
   },
@@ -76,13 +82,8 @@ const mutations = {
 };
 
 const actions = {
+  // 列表
   async ProductList({ commit, state }) {
-    const config = {
-      headers: {
-        'Authorization': 'Hello World'
-      }
-    }
-
     const data = Object.entries({
       name: state.searchQuery.name,
       category_id: state.searchQuery.category_id,
@@ -91,7 +92,7 @@ const actions = {
       max_price: state.searchQuery.max_price,
       page_no: state.currentPage,
       page_size: state.pageSize,
-      merchant_id: 1,
+      merchant_id: state.id,
     }).reduce((acc, [key, value]) => {
       // 过滤空字符串、null 和 undefined
       if (value !== '' && value !== null && value !== undefined && value != 0) {
@@ -101,8 +102,8 @@ const actions = {
     }, {});
 
     try {
-      console.log("headers:", config.headers, "\ndata:", data, "\n")
-      const response = await axios.post('/api/merchant/product/list', data, config);
+      console.log("merchant/product/list, data:", data, "\n")
+      const response = await axios.post('/api/merchant/product/list', data);
       console.log('merchant/product/list: ', response.data)
       if (+response.data.code !== 200) {
         ElMessage.error('获取商品列表失败：' + response.data.message);
@@ -113,20 +114,15 @@ const actions = {
       ElMessage.error('获取商品列表失败：' + error.message);
     }
   },
-
-  async GetProductMerchant({ commit }, { product_id, merchant_id }) {
-    const config = {
-      headers: {
-        'Authorization': 'Hello World'
-      }
-    }
+  // 商品商品详情
+  async GetProductMerchant({ commit }, { product_id }) {
     const data = Object.entries({
       pid: product_id,
-      mid: merchant_id
+      mid: state.id
     })
     try {
-      // console.log("headers:", config.headers, "\ndata:", data, "\n")
-      const response = await axios.post('/api/merchant/product/detail', data, config);
+      console.log("merchant/product/detail, data:", data, "\n")
+      const response = await axios.post('/api/merchant/product/detail', data);
       console.log('merchant/product/detail: ', response.data)
       if (+response.data.code !== 200) {
         ElMessage.error('获取商品详情失败：' + response.data.message);
@@ -139,14 +135,9 @@ const actions = {
   },
 
   // 添加商品
-  async MerchantAddProduct({ commit, product }) {
-    const config = {
-      headers: {
-        'Authorization': 'Hello World'
-      }
-    }
+  async MerchantAddProduct({ state }, { product }) {
     const data = Object.entries({
-      mid: 100,
+      mid: state.id,
       name: product.name,
       price: product.price,
       stock: product.stock,
@@ -156,7 +147,8 @@ const actions = {
       categories: product.categories
     })
     try {
-      const response = await axios.post('/api/merchant/product/add', data, config);
+      console.log('merchant/product/add, data: ', data , "\n")
+      const response = await axios.post('/api/merchant/product/add', data);
       console.log('merchant/product/add: ', response.data)
       if (+response.data.code !== 200) {
         ElMessage.error('添加商品失败：' + response.data.message);
@@ -165,6 +157,28 @@ const actions = {
     } catch (error) {
       ElMessage.error('添加商品失败：' + error.message);
     }
+  },
+
+  // 权限认证
+  async MerchantAuth({commit, state}) {    
+    
+    if (state.id > 0) {
+      router.push('/merchant');
+      return;
+    }
+    try {
+      console.log('merchant_id: ', state.id)
+      const response = await axios.get('/api/merchant/auth');
+      console.log('merchant/auth: ', response)
+      if (+response.data.code !== 200) {
+        ElMessage.error('添加商品失败：' + response.data.message);
+        return;
+      }
+      commit('SET_MERCHANT_ID', response.data.merchant_info.id)
+    } catch (error) {
+      ElMessage.error('添加商品失败：' + error.message);
+    }
+    router.push('/merchant');
   },
   searchProducts({ commit, dispatch }) {
     commit('SET_CURRENT_PAGE', 1);
