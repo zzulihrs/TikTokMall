@@ -137,8 +137,9 @@ const handleSave = async () => {
 
     // 更新 store 中的用户信息
     store.commit('auth/SET_USER', {
-      avator: editForm.avatar,
-      username: editForm.username,
+      avator: editForm?.avatar,
+      username: editForm?.username,
+      email: store?.state?.auth?.user?.email,
     })
 
     ElMessage.success('保存成功')
