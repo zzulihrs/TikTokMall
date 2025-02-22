@@ -1,7 +1,7 @@
 <template>
     <div style="display: flex; align-items: center; margin-bottom: 20px;">
         <div style="margin-right: 20px;">
-            <el-button type="primary" @click="goToMerchantProductList">商品查询</el-button>
+            <el-button type="primary" @click="goToMerchantProductList">商品列表</el-button>
         </div>
         <div>
             <el-button type="primary" @click="goToMerchantProduct">添加商品</el-button>
