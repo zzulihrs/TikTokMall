@@ -19,6 +19,8 @@ service MerchantService {
     rpc ProductDetail(ProductDetailReq) returns (ProductDetailResp) {};
 }
 
+
+
 message Category {
     int64 id = 1;
     string name = 2;

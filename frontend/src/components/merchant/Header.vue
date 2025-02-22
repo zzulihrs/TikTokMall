@@ -79,6 +79,7 @@ const handleSelect = (index) => {
 }
 
 const goToMerchant = () => {
+  // TODO: 发送一个 http 请求，参数 uid, email
   router.push('/merchant/product/list')
 }
 

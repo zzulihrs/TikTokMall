@@ -172,3 +172,23 @@ func MerchantPing(ctx context.Context, c *app.RequestContext) {
 	}
 	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
 }
+
+// MerchantRegister .
+// @router /merchant/register [GET]
+func MerchantRegister(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req merchant.MerchantRegisterReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		return
+	}
+
+	resp, err := service.NewMerchantRegisterService(ctx, c).Run(&req)
+
+	if err != nil {
+		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		return
+	}
+	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
+}

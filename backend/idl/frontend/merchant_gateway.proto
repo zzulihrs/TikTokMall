@@ -36,6 +36,14 @@ service MerchantService {
     rpc MerchantGetProductDetail(MerchantGetProductDetailReq) returns(common.Empty) {
         option (api.post) = "/merchant/product/detail";
     }
+
+    // 成为店家
+    rpc MerchantRegister(MerchantRegisterReq) returns(common.Empty) {
+        option (api.get) = "/merchant/register";
+    }
+}
+message MerchantRegisterReq {
+    string code = 1 [(api.body) = "code"];
 }
 
 message Category {
