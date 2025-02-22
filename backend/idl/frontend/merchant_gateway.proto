@@ -14,7 +14,7 @@ service MerchantService {
     }
     // 权限认证
     rpc MerchantAuth(MerchantAuthReq) returns(common.Empty) {
-        option (api.post) = "/merchant/auth";
+        option (api.get) = "/merchant/auth";
     }
     // 添加单个商品
     rpc MerchantAddProduct(MerchantAddProductReq) returns(common.Empty) {
@@ -53,13 +53,9 @@ message Category {
 }
 /*
 {
-    "uid": 100,
-    "email": "cloudwego.com"
 }
 */
 message MerchantAuthReq {
-    int64 uid = 1 [(api.body) = "uid"];
-    string email = 2 [(api.body) = "email"];
 }
 
 /*

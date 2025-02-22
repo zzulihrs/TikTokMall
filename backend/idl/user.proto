@@ -1,27 +1,21 @@
 syntax="proto3";
 
 package user;
-
 option go_package="/user";
-enum Gender {
-    Unknown = 0;
-    Male    = 1;
-    Female  = 2;
-}
+
 
 message User {
-    int64 user_id = 1;
+    int64 userId = 1;
     string email = 2;
-    string password = 3;
-    string signature = 4;
-    Gender gender = 5;
-    string nickname = 6;
+    string username = 3;
 }
 
 
 service UserService {
     rpc Register(RegisterReq) returns (RegisterResp) {}
     rpc Login(LoginReq) returns (LoginResp) {}
+    // 用户更新
+
     rpc Update(UpdateUserReq) returns (UpdateUserResp) {}
     rpc Delete(DeleteUserReq) returns (DeleteUserResp) {}
     rpc Query(QueryUserReq) returns (QueryUserResp) {}
@@ -30,11 +24,11 @@ service UserService {
 message RegisterReq {
     string email = 1;
     string password = 2;
-    string confirm_password = 3;
+    string confirmPassword = 3;
 }
 
 message RegisterResp {
-    int32 user_id = 1;
+    int32 userId = 1;
 }
 
 message LoginReq {
@@ -43,32 +37,33 @@ message LoginReq {
 }
 
 message LoginResp {
-    int32 user_id = 1;
+    int64 userId = 1;
+    string username = 2;
+    string email = 3;
 }
 
 message UpdateUserReq {
-    int64 user_id = 1;
+    int64 userId = 1;
     string email = 2; 
-    string signature = 3;
-    Gender gender = 4;
-    string password = 5;
-    string nickname = 6;
+    string password = 3;
+    string username = 4;
 }
 
 message UpdateUserResp {
-    int64 user_id = 1;
+    int64 userId = 1;
 }
 
 message DeleteUserReq {
-    int64 user_id = 1; 
+    int64 userId = 1; 
 }
+
 message DeleteUserResp {
     
 }
 
 
 message QueryUserReq {
-    int64 user_id = 1;
+    int64 userId = 1;
 }
 
 message QueryUserResp {

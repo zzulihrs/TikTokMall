@@ -9,11 +9,32 @@ func GetUserIdFromCtx(ctx context.Context) uint32 {
 	if userId == nil {
 		return uint32(0)
 	}
-	// fmt.Printf("UserId: %v, Type: %T\n", userId, userId)
 	a, ok := userId.(int32)
 	if !ok {
-		// fmt.Println("Error: UserId is not an int32")
 		return uint32(0)
 	}
 	return uint32(a)
+}
+
+func GetUsernameFromCtx(ctx context.Context) string {
+	username := ctx.Value(UsernameKey)
+	if username == nil {
+		return ""
+	}
+	a, ok := username.(string)
+	if !ok {
+		return ""
+	}
+	return a
+}
+func GetEmailFromCtx(ctx context.Context) string {
+	email := ctx.Value(EmailKey)
+	if email == nil {
+		return ""
+	}
+	a, ok := email.(string)
+	if !ok {
+		return ""
+	}
+	return a
 }

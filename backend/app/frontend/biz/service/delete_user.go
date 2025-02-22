@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/hertz-contrib/sessions"
 	user "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/user"
 	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
@@ -20,7 +19,7 @@ func NewDeleteUserService(Context context.Context, RequestContext *app.RequestCo
 	return &DeleteUserService{RequestContext: RequestContext, Context: Context}
 }
 
-func (h *DeleteUserService) Run(req *user.DeleteUserReq) (resp *user.DeleteUserResp, err error) {
+func (h *DeleteUserService) Run(req *user.DeleteUserReq) (resp map[string]any, err error) {
 	//defer func() {
 	// hlog.CtxInfof(h.Context, "req = %+v", req)
 	// hlog.CtxInfof(h.Context, "resp = %+v", resp)
@@ -38,8 +37,11 @@ func (h *DeleteUserService) Run(req *user.DeleteUserReq) (resp *user.DeleteUserR
 	if err != nil {
 		return nil, err
 	}
-	resp = &user.DeleteUserResp{}
-	resp.StatusCode = consts.StatusOK
-	resp.Msg = "delete successfully"
-	return resp, nil
+
+	resp = map[string]any{
+		"code":    200,
+		"message": "ok",
+	}
+
+	return
 }

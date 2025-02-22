@@ -33,6 +33,8 @@ func (s *RegisterService) Run(req *user.RegisterReq) (resp *user.RegisterResp, e
 	newUser := &model.User{
 		Email:          req.Email,
 		PasswordHashed: string(hashedPassword),
+		// TODO: email 当做 username
+		Username: req.Email,
 	}
 	if err = model.Create(mysql.DB, s.ctx, newUser); err != nil {
 		return

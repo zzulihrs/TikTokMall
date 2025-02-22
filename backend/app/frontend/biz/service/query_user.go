@@ -2,12 +2,13 @@ package service
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	user "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/user"
 	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
-	user2 "github.com/tiktokmall/backend/rpc_gen/kitex_gen/user"
+	frontendUtils "github.com/tiktokmall/backend/app/frontend/utils"
+	rpcuser "github.com/tiktokmall/backend/rpc_gen/kitex_gen/user"
 )
 
 type QueryUserService struct {
@@ -19,26 +20,45 @@ func NewQueryUserService(Context context.Context, RequestContext *app.RequestCon
 	return &QueryUserService{RequestContext: RequestContext, Context: Context}
 }
 
-func (h *QueryUserService) Run(req *user.QueryUserReq) (resp *user.QueryUserResp, err error) {
+func (h *QueryUserService) Run(req *user.QueryUserReq) (resp map[string]any, err error) {
 	//defer func() {
 	// hlog.CtxInfof(h.Context, "req = %+v", req)
 	// hlog.CtxInfof(h.Context, "resp = %+v", resp)
 	//}()
 	// todo edit your code
-	userResp, err := rpc.UserClient.Query(h.Context, &user2.QueryUserReq{
-		UserId: req.UserId,
+
+	uid := frontendUtils.GetUserIdFromCtx(h.Context)
+	username := frontendUtils.GetUsernameFromCtx(h.Context)
+	email := frontendUtils.GetEmailFromCtx(h.Context)
+	if uid == 0 {
+		return nil, fmt.Errorf("用户未登录")
+	}
+	if username != "" && email != "" {
+		return map[string]any{
+			"code":    200,
+			"message": "ok",
+			"data": map[string]any{
+				"id":       uid,
+				"username": username,
+				"email":    email,
+			},
+		}, nil
+	}
+	// 数据库
+	userResp, err := rpc.UserClient.Query(h.Context, &rpcuser.QueryUserReq{
+		UserId: int64(uid),
 	})
 	if err != nil {
 		return nil, err
 	}
-	resp = &user.QueryUserResp{}
-	resp.StatusCode = consts.StatusOK
-	resp.Msg = "query successfully"
-	resp.User = &user.User{
-		Email:     userResp.User.Email,
-		Gender:    user.Gender(userResp.User.Gender),
-		Signature: userResp.User.Signature,
-		Nickname:  userResp.User.Nickname,
+	resp = map[string]any{
+		"code":    200,
+		"message": "ok",
+		"data": map[string]any{
+			"id":       uid,
+			"username": userResp.User.Username,
+			"email":    userResp.User.Email,
+		},
 	}
 	return resp, nil
 }

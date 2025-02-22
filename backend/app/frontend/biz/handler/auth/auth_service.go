@@ -15,27 +15,24 @@ import (
 // Login .
 // @router /auth/login [POST]
 func Login(ctx context.Context, c *app.RequestContext) {
-	// var err error
-	// var req auth.LoginReq
-	// err = c.BindAndValidate(&req)
-	// if err != nil {
-	// 	utils.SendErrResponse(ctx, c, consts.StatusOK, err)
-	// 	return
-	// }
+	var err error
+	var req auth.LoginReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		return
+	}
 
-	// redirect, err := service.NewLoginService(ctx, c).Run(&req)
-	// if err != nil {
-	// 	c.JSON(consts.StatusAccepted, "账号不存在/账号密码不匹配")
-	// 	//utils.SendErrResponse(ctx, c, consts.StatusOK, err)
-	// 	return
-	// }
+	resp, err := service.NewLoginService(ctx, c).Run(&req)
+	if err != nil {
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
+		return
+	}
 
-	// c.JSON(consts.StatusOK, redirect)
-	mw.JwtMiddleware.LoginHandler(ctx, c)
-
-	//c.Redirect(consts.StatusOK, []byte(redirect))
-
-	// utils.SendSuccessResponse(ctx, c, consts.StatusOK, "done!")
+	c.JSON(consts.StatusOK, resp)
 }
 
 // Register .

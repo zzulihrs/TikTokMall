@@ -32,11 +32,9 @@ func (h *MerchantRegisterService) Run(req *merchant.MerchantRegisterReq) (resp m
 		}, nil
 	}
 
-	// TODO:
 	userId := frontendUtils.GetUserIdFromCtx(h.Context)
-	// TODO: 获取 username 与 email
-	username, email := "", ""
-	// rpc.UserClient.Query(h.Context, )
+	username := frontendUtils.GetUsernameFromCtx(h.Context)
+	email := frontendUtils.GetEmailFromCtx(h.Context)
 	rpc.MerchantClient.AddMerchant(h.Context, &rpcmerchant.AddMerchantReq{
 		Uid:      int64(userId),
 		Username: username,

@@ -28,9 +28,9 @@ func Auth() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		session := sessions.Default(c)
 		userId := session.Get("user_id")
-
 		if userId == nil {
-			c.Redirect(302, []byte("/sign-in?next="+c.FullPath()))
+			c.JSON(302, "uid 为空")
+			// c.Redirect(302, []byte("/sign-in?next="+c.FullPath()))
 			c.Abort()
 			return
 		}

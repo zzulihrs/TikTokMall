@@ -26,10 +26,8 @@ func (s *UpdateService) Run(req *user.UpdateUserReq) (resp *user.UpdateUserResp,
 	u := &model.User{}
 	u.ID = uint(req.UserId)
 	u.Email = req.Email
-	u.PasswordHashed, err = Crypt(req.Password)
-	u.Gender = int32(req.Gender)
-	u.Nickname = req.Nickname
-	u.Signature = req.Signature
+	u.PasswordHashed, err = crypt(req.Password)
+
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +38,7 @@ func (s *UpdateService) Run(req *user.UpdateUserReq) (resp *user.UpdateUserResp,
 }
 
 // Crypt Encrypt the password using crypto/bcrypt
-func Crypt(password string) (string, error) {
+func crypt(password string) (string, error) {
 	// Generate "cost" factor for the bcrypt algorithm
 	// Hash password with bcrypt
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)

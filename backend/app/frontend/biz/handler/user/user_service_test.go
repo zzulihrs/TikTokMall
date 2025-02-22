@@ -26,8 +26,8 @@ func TestUpdate(t *testing.T) {
 
 func TestQueryUser(t *testing.T) {
 	h := server.Default()
-	h.GET("/user/query/:user_id", QueryUser)
-	path := "/user/query/:user_id"                            // todo: you can customize query
+	h.GET("/user/query", QueryUser)
+	path := "/user/query"                                     // todo: you can customize query
 	body := &ut.Body{Body: bytes.NewBufferString(""), Len: 1} // todo: you can customize body
 	header := ut.Header{}                                     // todo: you can customize header
 	w := ut.PerformRequest(h.Engine, "GET", path, body, header)
@@ -41,11 +41,11 @@ func TestQueryUser(t *testing.T) {
 
 func TestDeleteUser(t *testing.T) {
 	h := server.Default()
-	h.POST("/user/delete/:user_id", DeleteUser)
-	path := "/user/delete/:user_id"                           // todo: you can customize query
+	h.GET("/user/delete", DeleteUser)
+	path := "/user/delete"                                    // todo: you can customize query
 	body := &ut.Body{Body: bytes.NewBufferString(""), Len: 1} // todo: you can customize body
 	header := ut.Header{}                                     // todo: you can customize header
-	w := ut.PerformRequest(h.Engine, "POST", path, body, header)
+	w := ut.PerformRequest(h.Engine, "GET", path, body, header)
 	resp := w.Result()
 	t.Log(string(resp.Body()))
 
