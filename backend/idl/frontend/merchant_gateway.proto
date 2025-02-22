@@ -39,7 +39,7 @@ service MerchantService {
 
     // 成为店家
     rpc MerchantRegister(MerchantRegisterReq) returns(common.Empty) {
-        option (api.get) = "/merchant/register";
+        option (api.post) = "/merchant/register";
     }
 }
 message MerchantRegisterReq {

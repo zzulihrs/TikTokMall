@@ -21,7 +21,7 @@ func Register(r *server.Hertz) {
 		_merchant := root.Group("/merchant", _merchantMw()...)
 		_merchant.GET("/auth", append(_merchantauthMw(), merchant.MerchantAuth)...)
 		_merchant.GET("/ping", append(_merchantpingMw(), merchant.MerchantPing)...)
-		_merchant.GET("/register", append(_merchantregisterMw(), merchant.MerchantRegister)...)
+		_merchant.POST("/register", append(_merchantregisterMw(), merchant.MerchantRegister)...)
 		{
 			_product := _merchant.Group("/product", _productMw()...)
 			_product.POST("/add", append(_merchantaddproductMw(), merchant.MerchantAddProduct)...)

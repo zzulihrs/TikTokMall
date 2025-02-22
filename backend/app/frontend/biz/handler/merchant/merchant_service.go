@@ -165,29 +165,6 @@ func MerchantPing(ctx context.Context, c *app.RequestContext) {
 	c.JSON(consts.StatusOK, resp)
 }
 
-// MerchantRegister .
-// @router /merchant/register [GET]
-func MerchantRegister(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req merchant.MerchantRegisterReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.JSON(consts.StatusBadRequest, nil)
-		return
-	}
-
-	resp, err := service.NewMerchantRegisterService(ctx, c).Run(&req)
-
-	if err != nil {
-		c.JSON(consts.StatusInternalServerError, map[string]any{
-			"code":    500,
-			"message": err.Error(),
-		})
-		return
-	}
-	c.JSON(consts.StatusOK, resp)
-}
-
 // MerchantAuth .
 // @router /merchant/auth [GET]
 func MerchantAuth(ctx context.Context, c *app.RequestContext) {
@@ -212,4 +189,27 @@ func MerchantAuth(ctx context.Context, c *app.RequestContext) {
 
 	c.JSON(consts.StatusOK, resp)
 	// utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
+}
+
+// MerchantRegister .
+// @router /merchant/register [POST]
+func MerchantRegister(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req merchant.MerchantRegisterReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.JSON(consts.StatusBadRequest, nil)
+		return
+	}
+
+	resp, err := service.NewMerchantRegisterService(ctx, c).Run(&req)
+
+	if err != nil {
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
+		return
+	}
+	c.JSON(consts.StatusOK, resp)
 }
