@@ -4,6 +4,7 @@ package frontend.user;
 
 
 import "api.proto";
+import "common.proto";
 
 option go_package = "frontend/user";
 
@@ -14,9 +15,9 @@ message User {
 
 
 message UpdateUserReq {
-    int64 user_id = 1 [(api.path) = "user_id", (api.vd) = "$>0"];
-    string email = 2 [(api.form)="email"];
-    string password = 3 [(api.form)="password"];
+    string email = 1 [(api.form)="email"];
+    string avatar = 2 [(api.form)="avatar"];
+    string name = 3 [(api.form)="name"];
 }
 
 message UpdateUserResp {
@@ -48,10 +49,10 @@ service UserService {
     rpc update(UpdateUserReq) returns (UpdateUserResp) {
         option (api.post) = "/user/update";
     };
-    rpc queryUser(QueryUserReq) returns (QueryUserResp) {
-        option (api.get) = "/user/query/:user_id";
+    rpc queryUser(common.Empty) returns (QueryUserResp) {
+        option (api.get) = "/user/query";
     }
-    rpc deleteUser(DeleteUserReq) returns (DeleteUserResp) {
-        option (api.post) = "/user/delete/:user_id";
+    rpc deleteUser(common.Empty) returns (DeleteUserResp) {
+        option (api.get) = "/user/delete";
     }
 }
