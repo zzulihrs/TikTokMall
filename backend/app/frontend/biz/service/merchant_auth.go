@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/tiktokmall/backend/app/frontend/biz/utils"
@@ -33,18 +32,16 @@ func (h *MerchantAuthService) Run(req *merchant.MerchantAuthReq) (resp utils.H, 
 	//}()
 
 	uid := frontendUtils.GetUserIdFromCtx(h.Context)
-	username := frontendUtils.GetUsernameFromCtx(h.Context)
 	email := frontendUtils.GetEmailFromCtx(h.Context)
 	// 1. 调用 merchantrpc 获取店家信息
-	log.Printf("MerchantAuthService Run, req = %+v", req)
 	merchantResp, err := rpc.MerchantClient.GetMerchant(h.Context, &rpcmerchant.GetMerchantReq{
 		Id: int64(uid),
 	})
 	if err != nil {
 		return nil, err
 	}
-	if username != merchantResp.Username || email != merchantResp.Email {
-		return nil, fmt.Errorf("认证失败，username 或 email 不匹配")
+	if email != merchantResp.Email {
+		return nil, fmt.Errorf("认证失败，email 不匹配")
 	}
 
 	// 2. 包装店家信息生成 token

@@ -41,7 +41,7 @@ func Init() {
 		)
 		if needDemoData {
 			// 先插入 merchant 表数据
-			DB.Exec("INSERT INTO `product`.`merchant` VALUES (1, '2023-12-06 15:05:06', '2023-12-06 15:05:06', NULL, 100, 'cloudwego', 'cloudwego@example.com'), (2, '2024-10-06 15:05:06', '2024-12-06 15:05:06', NULL, 101, 'test', 'test@example.com'), (3, '2024-12-06 15:05:06', '2024-12-06 15:05:06', NULL, 102, 'test', 'test@test.com')")
+			DB.Exec("INSERT INTO `product`.`merchant` VALUES (1, '2023-12-06 15:05:06', '2023-12-06 15:05:06', NULL, 1, 'root', 'root@example.com')")
 			// 再插入 category 表数据
 			DB.Exec("INSERT INTO `product`.`category` VALUES (1, '2023-12-06 15:05:06','2023-12-06 15:05:06', NULL, 'T-Shirt','T-Shirt'),(2,'2023-12-06 15:05:06','2023-12-06 15:05:06', NULL, 'Sticker','Sticker')")
 			// 接着插入 product 表数据

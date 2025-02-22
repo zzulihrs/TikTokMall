@@ -3,11 +3,8 @@
 package merchant
 
 import (
-	"context"
-
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/hertz/pkg/protocol/consts"
-	"github.com/tiktokmall/backend/app/frontend/biz/utils"
+	"github.com/tiktokmall/backend/app/frontend/middleware"
 )
 
 func rootMw() []app.HandlerFunc {
@@ -33,17 +30,8 @@ func _merchantpingMw() []app.HandlerFunc {
 // 保护 merchant/product 下的所有路由
 func _productMw() []app.HandlerFunc {
 	// your code...
-	return []app.HandlerFunc{func(ctx context.Context, c *app.RequestContext) {
-		bs := c.GetHeader("Authorization")
-		if !utils.CheckToken(bs) {
-			c.JSON(consts.StatusBadRequest, utils.H{
-				"code":    400,
-				"message": "token invalid",
-			})
-			c.Abort()
-			return
-		}
-	}}
+	// 保护 merchant/product 下的所有路由
+	return []app.HandlerFunc{middleware.MerchantProduct()}
 }
 
 func _merchantaddproductMw() []app.HandlerFunc {

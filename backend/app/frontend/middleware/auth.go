@@ -39,3 +39,24 @@ func Auth() app.HandlerFunc {
 
 	}
 }
+
+func MerchantProduct() app.HandlerFunc {
+	return func(ctx context.Context, c *app.RequestContext) {
+		session := sessions.Default(c)
+		userId := session.Get("user_id")
+		if userId == nil {
+			c.JSON(302, "uid 为空")
+			c.Abort()
+			return
+		}
+		merchantId := session.Get("merchant_id")
+		if merchantId == nil {
+			c.JSON(302, "merchant_id 为空")
+			c.Abort()
+			return
+		}
+
+		c.Next(ctx)
+
+	}
+}

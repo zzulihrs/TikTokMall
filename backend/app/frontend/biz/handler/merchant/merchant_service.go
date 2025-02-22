@@ -11,32 +11,6 @@ import (
 	merchant "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/merchant"
 )
 
-// MerchantAuth .
-// @router /merchant/auth [POST]
-func MerchantAuth(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req merchant.MerchantAuthReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.JSON(consts.StatusBadRequest, nil)
-		// utils.SendErrResponse(ctx, c, consts.StatusOK, err)
-		return
-	}
-
-	resp, err := service.NewMerchantAuthService(ctx, c).Run(&req)
-	if err != nil {
-		c.JSON(consts.StatusInternalServerError, map[string]any{
-			"code":    500,
-			"message": err.Error(),
-		})
-		// utils.SendErrResponse(ctx, c, consts.StatusOK, err)
-		return
-	}
-
-	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
-	// utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
-}
-
 // MerchantAddProduct .
 // @router /merchant/product/add [POST]
 func MerchantAddProduct(ctx context.Context, c *app.RequestContext) {
@@ -212,4 +186,30 @@ func MerchantRegister(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
+}
+
+// MerchantAuth .
+// @router /merchant/auth [GET]
+func MerchantAuth(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req merchant.MerchantAuthReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.JSON(consts.StatusBadRequest, nil)
+		// utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		return
+	}
+
+	resp, err := service.NewMerchantAuthService(ctx, c).Run(&req)
+	if err != nil {
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
+		// utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		return
+	}
+
+	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
+	// utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
 }

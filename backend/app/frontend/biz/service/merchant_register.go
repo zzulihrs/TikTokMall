@@ -32,6 +32,8 @@ func (h *MerchantRegisterService) Run(req *merchant.MerchantRegisterReq) (resp m
 		}, nil
 	}
 
+	// NOTE: 店家的名称，默认采用 user 的名称
+	// TODO：后续可以考虑进一步优化表结构。
 	userId := frontendUtils.GetUserIdFromCtx(h.Context)
 	username := frontendUtils.GetUsernameFromCtx(h.Context)
 	email := frontendUtils.GetEmailFromCtx(h.Context)
