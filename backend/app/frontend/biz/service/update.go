@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	frontendUtils "github.com/tiktokmall/backend/app/frontend/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	user2 "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/user"
@@ -27,6 +28,7 @@ func (h *UpdateService) Run(req *user2.UpdateUserReq) (resp map[string]any, err 
 	_, err = rpc.UserClient.Update(h.Context, &user.UpdateUserReq{
 		Username: req.Username,
 		Avator:   req.Avator,
+		UserId:   int64(frontendUtils.GetUserIdFromCtx(h.Context)),
 	})
 	if err != nil {
 		return nil, err

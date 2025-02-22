@@ -33,7 +33,14 @@ func Create(db *gorm.DB, ctx context.Context, user *User) error {
 }
 
 func UpdateUser(db *gorm.DB, ctx context.Context, user *User) error {
-	return db.WithContext(ctx).Updates(user).Error
+	updates := map[string]interface{}{
+		"username": user.Username,
+		"avator":   user.Avator,
+	}
+	return db.WithContext(ctx).
+		Model(&User{}).
+		Where("id = ?", user.ID).
+		Updates(updates).Error
 }
 
 func DeleteUser(db *gorm.DB, ctx context.Context, userid int64) error {
