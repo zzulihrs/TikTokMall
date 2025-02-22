@@ -1,7 +1,7 @@
 <template>
   <el-dropdown trigger="click" @command="handleCommand">
     <div class="user-avatar">
-      <el-avatar :size="57" :src="user?.avatar"/>
+      <el-avatar :size="57" :src="user?.avator"/>
     </div>
     <template #dropdown>
       <el-dropdown-menu>
@@ -44,7 +44,7 @@
         <el-input v-model="editForm.username" />
       </el-form-item>
       <el-form-item label="邮箱">
-        <el-input v-model="editForm.email" type="email" />
+        <el-input v-model="editForm.email" type="email" disabled/>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -93,10 +93,6 @@ const handleCommand = (command) => {
 
 // 打开编辑弹窗
 const openEditDialog = async () => {
-  // 获取用户信息
-  const response = await axios.get('/api/user/query')
-  console.log(response?.data?.data);
-  store.commit('auth/SET_USER', response?.data?.data)
 
   editForm.avatar = user.value?.avator || ''
   editForm.username = user.value?.username || ''
