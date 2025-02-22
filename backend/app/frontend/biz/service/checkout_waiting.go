@@ -27,10 +27,11 @@ func (h *CheckoutWaitingService) Run(req *checkout.CheckoutReq) (resp map[string
 	// hlog.Info("checkout waiting service run")
 	userId := frontendUtils.GetUserIdFromCtx(h.Context)
 	_, err = rpc.CheckoutClient.Checkout(h.Context, &rpccheckout.CheckoutReq{
-		UserId:    userId,
-		Firstname: req.GetFirstname(),
-		Lastname:  req.GetLastname(),
-		Email:     req.GetEmail(),
+		UserId:        userId,
+		Firstname:     req.GetFirstname(),
+		Lastname:      req.GetLastname(),
+		Email:         req.GetEmail(),
+		PaymentMethod: req.GetPayment(),
 		Address: &rpccheckout.Address{
 			Country:       req.GetCountry(),
 			ZipCode:       req.GetZipcode(),

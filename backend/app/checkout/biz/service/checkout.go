@@ -116,12 +116,15 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 			return nil, fmt.Errorf("charge failed: %v", err)
 		}
 		// 修改订单状态为支付成功
-		rpc.OrderClient.ChangeOrderStatus(s.ctx, &order.ChangeOrderStatusReq{
+		_, err := rpc.OrderClient.ChangeOrderStatus(s.ctx, &order.ChangeOrderStatusReq{
 			OrderId:     orderId,
 			OrderStatus: 1,
 			UserId:      req.GetUserId(),
 		})
-	} else if req.GetPaymentMethod() == "card" { // 支付宝支付
+		if err != nil {
+			return nil, fmt.Errorf("change order status failed: %v", err)
+		}
+	} else if req.GetPaymentMethod() == "alipay" { // 支付宝支付
 		// TODO
 	}
 
