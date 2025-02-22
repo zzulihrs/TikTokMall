@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"log"
 
 	auth "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/auth"
 	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
@@ -41,7 +40,6 @@ func (h *LoginService) Run(req *auth.LoginReq) (resp map[string]any, err error) 
 	// 利用 redis 存储 user_id
 	// 设置 Cookie
 	// Cookie
-	log.Println(rpc_resp)
 
 	session.Set("user_id", rpc_resp.UserId)
 	session.Set("username", rpc_resp.Username)

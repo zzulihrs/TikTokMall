@@ -24,21 +24,27 @@
   <!-- 编辑用户信息弹窗 -->
   <el-dialog
     v-model="dialogVisible"
-    title="修改个人信息"
+    title="编辑用户信息"
     width="400px"
   >
     <el-form :model="editForm" label-width="80px">
       <el-form-item label="头像">
-        <el-upload
-          class="avatar-uploader"
-          action="/api/uploadImage"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload"
-        >
-          <img v-if="editForm.avatar" :src="editForm.avatar" class="avatar" />
-          <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-        </el-upload>
+        <div class="avatar-upload-container">
+          <el-upload
+            class="avatar-uploader"
+            action="/api/uploadImage"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+          >
+            <img v-if="editForm.avatar" :src="editForm.avatar" class="avatar" />
+            <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+          </el-upload>
+          <div class="avatar-hint">
+            <el-icon><InfoFilled /></el-icon>
+            <span>点击头像可更换图片</span>
+          </div>
+        </div>
       </el-form-item>
       <el-form-item label="用户名">
         <el-input v-model="editForm.username" />
@@ -58,7 +64,7 @@
 
 <script setup>
 import { computed, ref, reactive } from 'vue'
-import { SwitchButton, Tickets, Edit, Plus } from '@element-plus/icons-vue'
+import { SwitchButton, Tickets, Edit, Plus, InfoFilled } from '@element-plus/icons-vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
@@ -131,8 +137,7 @@ const handleSave = async () => {
 
     // 更新 store 中的用户信息
     store.commit('auth/SET_USER', {
-      ...user.value,
-      avatar: editForm.avatar,
+      avator: editForm.avatar,
       username: editForm.username,
     })
 
@@ -152,6 +157,30 @@ const handleSave = async () => {
 
 .user-avatar:hover {
   background-color: rgba(0, 0, 0, 0.04);
+}
+
+.avatar-upload-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.avatar-hint {
+  color: var(--el-text-color-secondary);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.hint-detail {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--el-text-color-placeholder);
+}
+
+.avatar-uploader {
+  flex-shrink: 0;  /* 防止头像被压缩 */
 }
 
 .avatar-uploader {

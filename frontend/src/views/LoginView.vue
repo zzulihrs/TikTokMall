@@ -73,11 +73,13 @@ const loading = ref(false)
 const handleLogin = async () => {
 
   try {
+    // console.log("login, form: ", form.value)
     const response = await axios.post('/api/auth/login', {
       email: form.value.email,
       password: form.value.password,
     });
 
+    // console.log("login: ", response.data)
     if(response?.status === 200)  {
       const userData = {
         email: response.data.email,
