@@ -50,3 +50,10 @@ func (s *MerchantServiceImpl) ProductDetail(ctx context.Context, req *merchant.P
 
 	return resp, err
 }
+
+// AddMerchant implements the MerchantServiceImpl interface.
+func (s *MerchantServiceImpl) AddMerchant(ctx context.Context, req *merchant.AddMerchantReq) (resp *merchant.AddMerchantResp, err error) {
+	resp, err = service.NewAddMerchantService(ctx).Run(req)
+
+	return resp, err
+}

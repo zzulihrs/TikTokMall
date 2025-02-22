@@ -70,3 +70,8 @@ func _merchantupdateproductMw() []app.HandlerFunc {
 	// your code...
 	return nil
 }
+
+func _merchantregisterMw() []app.HandlerFunc {
+	// your code...
+	return nil
+}

@@ -16,6 +16,15 @@ func GetMerchant(ctx context.Context, req *merchant.GetMerchantReq, callOptions 
 	return resp, nil
 }
 
+func AddMerchant(ctx context.Context, req *merchant.AddMerchantReq, callOptions ...callopt.Option) (resp *merchant.AddMerchantResp, err error) {
+	resp, err = defaultClient.AddMerchant(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "AddMerchant call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}
+
 func AddProduct(ctx context.Context, req *merchant.AddProductReq, callOptions ...callopt.Option) (resp *merchant.AddProductResp, err error) {
 	resp, err = defaultClient.AddProduct(ctx, req, callOptions...)
 	if err != nil {
