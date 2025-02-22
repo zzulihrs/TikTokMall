@@ -27,6 +27,7 @@ func (s *QueryService) Run(req *user.QueryUserReq) (resp *user.QueryUserResp, er
 			UserId:   int64(u.ID),
 			Email:    u.Email,
 			Username: u.Username,
+			Avator:   u.Avator,
 		},
 	}
 	return

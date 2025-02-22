@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	user2 "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/user"
@@ -19,21 +18,23 @@ func NewUpdateService(Context context.Context, RequestContext *app.RequestContex
 	return &UpdateService{RequestContext: RequestContext, Context: Context}
 }
 
-func (h *UpdateService) Run(req *user2.UpdateUserReq) (redirect string, err error) {
+func (h *UpdateService) Run(req *user2.UpdateUserReq) (resp map[string]any, err error) {
 	//defer func() {
 	// hlog.CtxInfof(h.Context, "req = %+v", req)
 	// hlog.CtxInfof(h.Context, "resp = %+v", resp)
 	//}()
 	// todo edit your code
-	resp, err := rpc.UserClient.Update(h.Context, &user.UpdateUserReq{
-		UserId: req.UserId,
-		Email:  req.Email,
-		// Avatar: req.Avatar,
+	_, err = rpc.UserClient.Update(h.Context, &user.UpdateUserReq{
+		Username: req.Username,
+		Avator:   req.Avator,
 	})
-	// 没有更新成功
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	redirect = "/:" + fmt.Sprintf("%d", resp.UserId)
-	return redirect, nil
+
+	resp = map[string]any{
+		"code":    200,
+		"message": "ok",
+	}
+	return
 }

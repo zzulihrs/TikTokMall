@@ -8,6 +8,7 @@ message User {
     int64 userId = 1;
     string email = 2;
     string username = 3;
+    string avator = 4;
 }
 
 
@@ -44,13 +45,11 @@ message LoginResp {
 
 message UpdateUserReq {
     int64 userId = 1;
-    string email = 2; 
-    string password = 3;
-    string username = 4;
+    string username = 2; 
+    string avator = 3;
 }
 
 message UpdateUserResp {
-    int64 userId = 1;
 }
 
 message DeleteUserReq {
@@ -67,5 +66,4 @@ message QueryUserReq {
 }
 
 message QueryUserResp {
-     User user = 1;
 }

@@ -28,21 +28,8 @@ func (h *QueryUserService) Run(req *user.QueryUserReq) (resp map[string]any, err
 	// todo edit your code
 
 	uid := frontendUtils.GetUserIdFromCtx(h.Context)
-	username := frontendUtils.GetUsernameFromCtx(h.Context)
-	email := frontendUtils.GetEmailFromCtx(h.Context)
 	if uid == 0 {
-		return nil, fmt.Errorf("用户未登录")
-	}
-	if username != "" && email != "" {
-		return map[string]any{
-			"code":    200,
-			"message": "ok",
-			"data": map[string]any{
-				"id":       uid,
-				"username": username,
-				"email":    email,
-			},
-		}, nil
+		return nil, fmt.Errorf("uid=0, 用户未登录")
 	}
 	// 数据库
 	userResp, err := rpc.UserClient.Query(h.Context, &rpcuser.QueryUserReq{
@@ -58,6 +45,7 @@ func (h *QueryUserService) Run(req *user.QueryUserReq) (resp map[string]any, err
 			"id":       uid,
 			"username": userResp.User.Username,
 			"email":    userResp.User.Email,
+			"avator":   userResp.User.Avator,
 		},
 	}
 	return resp, nil

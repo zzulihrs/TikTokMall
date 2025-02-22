@@ -25,12 +25,8 @@ message User {
 
 
 message UpdateUserReq {
-    int64 user_id = 1 [(api.path) = "user_id", (api.vd) = "$>0"];
-    string email = 2 [(api.form)="email"];
-    string signature = 3 [(api.form)= "signature"];
-    Gender gender = 4 [(api.form)= "gender"];
-    string password = 5  [(api.form)= "password"];
-    string nickname = 6  [(api.form)= "nickname"];
+    string username = 1;
+    string avator = 2;
 }
 
 message UpdateUserResp {
@@ -47,7 +43,6 @@ message QueryUserResp {
 
 
 message DeleteUserReq {
-    int64 user_id = 1 [(api.path) = "user_id", (api.vd) = "$>0"];
 }
 
 message DeleteUserResp {

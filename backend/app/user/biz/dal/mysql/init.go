@@ -37,7 +37,7 @@ func Init() {
 			&model.User{},
 		)
 		if needDemoData {
-			DB.Exec("INSERT INTO `user` (`id`,`created_at`,`updated_at`,`email`,`password_hashed`) VALUES (1,'2023-12-26 09:46:19.852','2023-12-26 09:46:19.852','root@example.com','$2a$10$jTvUFh7Z8Kw0hLV8WrAws.PRQTeuH4gopJ7ZMoiFvwhhz5Vw.bj7C', 'root')")
+			DB.Exec("INSERT INTO `user` (`id`,`created_at`,`updated_at`,`email`,`password_hashed`, `username`) VALUES (1,'2023-12-26 09:46:19.852','2023-12-26 09:46:19.852','root@example.com','$2a$10$gnw261yJ8zF1qyh/lBUnU.IX1w3j1xFA3sxf4QvlVpwfEU69ivuqK', 'root')")
 		}
 	}
 }

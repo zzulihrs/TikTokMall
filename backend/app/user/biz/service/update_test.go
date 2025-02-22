@@ -2,7 +2,9 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"testing"
+
 	user "github.com/tiktokmall/backend/rpc_gen/kitex_gen/user"
 )
 
@@ -18,4 +20,13 @@ func TestUpdate_Run(t *testing.T) {
 
 	// todo: edit your unit test
 
+}
+
+func TestCrypt(t *testing.T) {
+	// Test case 1: Normal password
+	password1 := "123456"
+	hashedPassword1, _ := crypt(password1)
+	// assert.NoError(t, err1)
+	// assert.NotEmpty(t, hashedPassword1)
+	fmt.Println(hashedPassword1)
 }

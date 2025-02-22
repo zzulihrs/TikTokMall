@@ -7,6 +7,7 @@ import (
 	"github.com/hertz-contrib/sessions"
 	user "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/user"
 	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
+	frontendUtils "github.com/tiktokmall/backend/app/frontend/utils"
 	user2 "github.com/tiktokmall/backend/rpc_gen/kitex_gen/user"
 )
 
@@ -25,8 +26,9 @@ func (h *DeleteUserService) Run(req *user.DeleteUserReq) (resp map[string]any, e
 	// hlog.CtxInfof(h.Context, "resp = %+v", resp)
 	//}()
 	// todo edit your code
+	uid := frontendUtils.GetUserIdFromCtx(h.Context)
 	_, err = rpc.UserClient.Delete(h.Context, &user2.DeleteUserReq{
-		UserId: req.UserId,
+		UserId: int64(uid),
 	})
 	if err != nil {
 		return nil, err

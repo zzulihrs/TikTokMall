@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/tiktokmall/backend/app/user/biz/dal/mysql"
 	"github.com/tiktokmall/backend/app/user/biz/model"
@@ -19,19 +20,21 @@ func NewUpdateService(ctx context.Context) *UpdateService {
 // Run create note info
 func (s *UpdateService) Run(req *user.UpdateUserReq) (resp *user.UpdateUserResp, err error) {
 	// Finish your business logic.
-	_, err = model.GetById(mysql.DB, s.ctx, (req.UserId))
+	u1, err := model.GetById(mysql.DB, s.ctx, (req.UserId))
 	if err != nil {
 		return nil, err
 	}
-	u := &model.User{}
-	u.ID = uint(req.UserId)
-	u.Email = req.Email
-	u.PasswordHashed, err = crypt(req.Password)
+	if req.Username == "" {
+		return nil, fmt.Errorf("username 不能为空")
+	}
+	if req.Username == u1.Username && req.Avator == u1.Avator {
+		return
+	}
 
-	if err != nil {
-		return nil, err
-	}
-	if err = model.UpdateUser(mysql.DB, s.ctx, u); err != nil {
+	u1.Username = req.Username
+	u1.Avator = req.Avator
+
+	if err = model.UpdateUser(mysql.DB, s.ctx, u1); err != nil {
 		return nil, err
 	}
 	return &user.UpdateUserResp{UserId: req.UserId}, nil
