@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"github.com/cloudwego/kitex/pkg/kerrors"
@@ -27,7 +28,7 @@ func (s *ProductDetailService) Run(req *merchant.ProductDetailReq) (resp *mercha
 	if req.GetPid() <= 0 {
 		return nil, kerrors.NewBizStatusError(2004001, "product id must be > 0")
 	}
-	product, err := model.NewProductQuery(s.ctx, mysql.DB).GetById(int(req.GetPid()))
+	product, err := model.NewProductQuery(s.ctx, mysql.DB).GetOne(fmt.Sprintf("id = %v and merchant_id = %v", req.GetPid(), req.GetMerchantId()))
 	if err != nil {
 		return nil, err
 	}

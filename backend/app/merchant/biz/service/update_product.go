@@ -30,7 +30,8 @@ func (s *UpdateProductService) Run(req *merchant.UpdateProductReq) (resp *mercha
 	if err != nil {
 		return nil, fmt.Errorf("merchant [%v] not found, err:%w", req.GetMerchantId(), err)
 	}
-	// 3. 检查类别
+	// 3. 检查类别, 目前只有 req.Categories 中的 id 有用。即使类别修改了，也会忽略
+	// TODO: 增加类别的修改
 	reqCategories := req.GetProduct().GetCategory()
 	var categories []model.Category
 	if reqCategories == nil {

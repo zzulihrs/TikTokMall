@@ -8,9 +8,9 @@ import (
 
 type Merchant struct {
 	Base
-	UserId   int    `json:"user_id" gorm:"unique_index"`
+	UserId   int    `json:"user_id" gorm:"unique"`
 	Username string `json:"username"`
-	Email    string `json:"email" gorm:"unique_index"`
+	Email    string `json:"email" gorm:"unique"`
 	// 添加反向关联
 	Products []Product `gorm:"foreignKey:merchant_id"`
 }

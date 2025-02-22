@@ -37,6 +37,12 @@ type ProductQuery struct {
 	db  *gorm.DB
 }
 
+func (p *ProductQuery) GetOne(conditions string) (product Product, err error) {
+	conditions = conditions + " and deleted_at IS NULL"
+	err = p.db.WithContext(p.ctx).Model(&Product{}).Where(conditions).First(&product).Error
+	return
+}
+
 func (p *ProductQuery) GetById(productId int) (product Product, err error) {
 	err = p.db.WithContext(p.ctx).Model(&Product{}).Preload("Categories").Where("id = ? and deleted_at IS NULL", productId).First(&product).Error
 	return
