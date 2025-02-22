@@ -137,6 +137,35 @@ const actions = {
       ElMessage.error('获取商品详情失败：' + error.message);
     }
   },
+
+  // 添加商品
+  async MerchantAddProduct({ commit, product }) {
+    const config = {
+      headers: {
+        'Authorization': 'Hello World'
+      }
+    }
+    const data = Object.entries({
+      mid: 100,
+      name: product.name,
+      price: product.price,
+      stock: product.stock,
+      description: product.description,
+      img_url: product.img_url,
+      slider_imgs: product.slider_imgs,
+      categories: product.categories
+    })
+    try {
+      const response = await axios.post('/api/merchant/product/add', data, config);
+      console.log('merchant/product/add: ', response.data)
+      if (+response.data.code !== 200) {
+        ElMessage.error('添加商品失败：' + response.data.message);
+        return;
+      }
+    } catch (error) {
+      ElMessage.error('添加商品失败：' + error.message);
+    }
+  },
   searchProducts({ commit, dispatch }) {
     commit('SET_CURRENT_PAGE', 1);
     dispatch('fetchProducts');
