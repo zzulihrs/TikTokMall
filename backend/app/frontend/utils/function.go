@@ -5,11 +5,12 @@ import (
 )
 
 func GetUserIdFromCtx(ctx context.Context) uint32 {
+	// TODO: 需要更改类型信息。目前拿到的 id 使 int64
 	userId := ctx.Value(UserIdKey)
 	if userId == nil {
 		return uint32(0)
 	}
-	a, ok := userId.(int32)
+	a, ok := userId.(int64)
 	if !ok {
 		return uint32(0)
 	}
