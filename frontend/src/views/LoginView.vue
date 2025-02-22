@@ -95,6 +95,11 @@ const handleLogin = async () => {
       await router.push('/');
       await store.dispatch('cart/fetchCart')
 
+      // 获取用户信息
+      const userInfo= await axios.get('/api/user/query')
+      // console.log(userInfo?.data?.data);
+      await store.commit('auth/SET_USER', userInfo?.data?.data)
+
     } else {
       loading.value = false;
       ElMessage.error(response?.data);
