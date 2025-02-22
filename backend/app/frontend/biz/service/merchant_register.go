@@ -5,6 +5,9 @@ import (
 
 	"github.com/cloudwego/hertz/pkg/app"
 	merchant "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/merchant"
+	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
+	frontendUtils "github.com/tiktokmall/backend/app/frontend/utils"
+	rpcmerchant "github.com/tiktokmall/backend/rpc_gen/kitex_gen/merchant"
 )
 
 type MerchantRegisterService struct {
@@ -28,6 +31,20 @@ func (h *MerchantRegisterService) Run(req *merchant.MerchantRegisterReq) (resp m
 			"message": "验证码错误",
 		}, nil
 	}
+
 	// TODO:
-	return
+	userId := frontendUtils.GetUserIdFromCtx(h.Context)
+	// TODO: 获取 username 与 email
+	username, email := "", ""
+	// rpc.UserClient.Query(h.Context, )
+	rpc.MerchantClient.AddMerchant(h.Context, &rpcmerchant.AddMerchantReq{
+		Uid:      int64(userId),
+		Username: username,
+		Email:    email,
+	})
+
+	return map[string]any{
+		"code":    200,
+		"message": "ok",
+	}, nil
 }

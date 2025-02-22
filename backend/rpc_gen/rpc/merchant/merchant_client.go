@@ -13,6 +13,7 @@ type RPCClient interface {
 	KitexClient() merchantservice.Client
 	Service() string
 	GetMerchant(ctx context.Context, Req *merchant.GetMerchantReq, callOptions ...callopt.Option) (r *merchant.GetMerchantResp, err error)
+	AddMerchant(ctx context.Context, Req *merchant.AddMerchantReq, callOptions ...callopt.Option) (r *merchant.AddMerchantResp, err error)
 	AddProduct(ctx context.Context, Req *merchant.AddProductReq, callOptions ...callopt.Option) (r *merchant.AddProductResp, err error)
 	DeleteProduct(ctx context.Context, Req *merchant.DeleteProductReq, callOptions ...callopt.Option) (r *merchant.DeleteProductResp, err error)
 	UpdateProduct(ctx context.Context, Req *merchant.UpdateProductReq, callOptions ...callopt.Option) (r *merchant.UpdateProductResp, err error)
@@ -48,6 +49,10 @@ func (c *clientImpl) KitexClient() merchantservice.Client {
 
 func (c *clientImpl) GetMerchant(ctx context.Context, Req *merchant.GetMerchantReq, callOptions ...callopt.Option) (r *merchant.GetMerchantResp, err error) {
 	return c.kitexClient.GetMerchant(ctx, Req, callOptions...)
+}
+
+func (c *clientImpl) AddMerchant(ctx context.Context, Req *merchant.AddMerchantReq, callOptions ...callopt.Option) (r *merchant.AddMerchantResp, err error) {
+	return c.kitexClient.AddMerchant(ctx, Req, callOptions...)
 }
 
 func (c *clientImpl) AddProduct(ctx context.Context, Req *merchant.AddProductReq, callOptions ...callopt.Option) (r *merchant.AddProductResp, err error) {

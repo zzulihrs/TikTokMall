@@ -25,7 +25,10 @@ func MerchantAuth(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewMerchantAuthService(ctx, c).Run(&req)
 	if err != nil {
-		c.JSON(consts.StatusInternalServerError, utils.WarpResponse(ctx, c, resp))
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
 		// utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
@@ -74,7 +77,10 @@ func MerchantDeleteProduct(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewMerchantDeleteProductService(ctx, c).Run(&req)
 	if err != nil {
-		c.JSON(consts.StatusInternalServerError, utils.WarpResponse(ctx, c, resp))
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
 		// utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
@@ -98,7 +104,10 @@ func MerchantUpdateProduct(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewMerchantUpdateProductService(ctx, c).Run(&req)
 	if err != nil {
-		c.JSON(consts.StatusInternalServerError, utils.WarpResponse(ctx, c, resp))
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
 		// utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
@@ -121,7 +130,10 @@ func MerchantGetProductList(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewMerchantGetProductListService(ctx, c).Run(&req)
 	if err != nil {
-		c.JSON(consts.StatusInternalServerError, utils.WarpResponse(ctx, c, resp))
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
 		// utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
@@ -144,7 +156,10 @@ func MerchantGetProductDetail(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewMerchantGetProductDetailService(ctx, c).Run(&req)
 	if err != nil {
-		c.JSON(consts.StatusInternalServerError, utils.WarpResponse(ctx, c, resp))
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
 		// utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
@@ -160,14 +175,17 @@ func MerchantPing(ctx context.Context, c *app.RequestContext) {
 	var req common.Empty
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusBadRequest, nil)
 		return
 	}
 
 	resp, err := service.NewMerchantPingService(ctx, c).Run(&req)
 
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
 		return
 	}
 	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
@@ -180,14 +198,17 @@ func MerchantRegister(ctx context.Context, c *app.RequestContext) {
 	var req merchant.MerchantRegisterReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusBadRequest, nil)
 		return
 	}
 
 	resp, err := service.NewMerchantRegisterService(ctx, c).Run(&req)
 
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
 		return
 	}
 	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))

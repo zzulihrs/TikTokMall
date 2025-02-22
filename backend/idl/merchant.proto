@@ -7,6 +7,8 @@ option go_package = "/merchant";
 service MerchantService {
     // 获取店家信息（通过 mid）
     rpc GetMerchant(GetMerchantReq) returns (GetMerchantResp) {};
+    // 添加店家
+    rpc AddMerchant(AddMerchantReq) returns (AddMerchantResp) {};
     // 店家添加商品
     rpc AddProduct(AddProductReq) returns (AddProductResp) {};
     // 店家删除商品
@@ -19,6 +21,18 @@ service MerchantService {
     rpc ProductDetail(ProductDetailReq) returns (ProductDetailResp) {};
 }
 
+message AddMerchantReq {
+    int64 uid = 1;
+    string username = 2;
+    string email = 3;
+}
+
+message AddMerchantResp {
+    int64 mid = 1;
+    int64 uid = 2;
+    string username = 3;
+    string email = 4;
+}
 
 
 message Category {

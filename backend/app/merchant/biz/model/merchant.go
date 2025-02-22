@@ -33,7 +33,7 @@ func (m *MerchantQuery) GetManyById(ids []int) (merchants []*Merchant, err error
 	err = m.db.WithContext(m.ctx).Model(&Merchant{}).Find(&merchants, "id in (?)", ids).Error
 	return
 }
-func (m *MerchantQuery) InsertOne(merchant Merchant) (err error) {
+func (m *MerchantQuery) InsertOne(merchant *Merchant) (err error) {
 	err = m.db.WithContext(m.ctx).Model(&Merchant{}).Create(&merchant).Error
 	return
 }

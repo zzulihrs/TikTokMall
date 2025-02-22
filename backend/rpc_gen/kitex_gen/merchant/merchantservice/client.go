@@ -12,6 +12,7 @@ import (
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
 	GetMerchant(ctx context.Context, Req *merchant.GetMerchantReq, callOptions ...callopt.Option) (r *merchant.GetMerchantResp, err error)
+	AddMerchant(ctx context.Context, Req *merchant.AddMerchantReq, callOptions ...callopt.Option) (r *merchant.AddMerchantResp, err error)
 	AddProduct(ctx context.Context, Req *merchant.AddProductReq, callOptions ...callopt.Option) (r *merchant.AddProductResp, err error)
 	DeleteProduct(ctx context.Context, Req *merchant.DeleteProductReq, callOptions ...callopt.Option) (r *merchant.DeleteProductResp, err error)
 	UpdateProduct(ctx context.Context, Req *merchant.UpdateProductReq, callOptions ...callopt.Option) (r *merchant.UpdateProductResp, err error)
@@ -51,6 +52,11 @@ type kMerchantServiceClient struct {
 func (p *kMerchantServiceClient) GetMerchant(ctx context.Context, Req *merchant.GetMerchantReq, callOptions ...callopt.Option) (r *merchant.GetMerchantResp, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.GetMerchant(ctx, Req)
+}
+
+func (p *kMerchantServiceClient) AddMerchant(ctx context.Context, Req *merchant.AddMerchantReq, callOptions ...callopt.Option) (r *merchant.AddMerchantResp, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.AddMerchant(ctx, Req)
 }
 
 func (p *kMerchantServiceClient) AddProduct(ctx context.Context, Req *merchant.AddProductReq, callOptions ...callopt.Option) (r *merchant.AddProductResp, err error) {
