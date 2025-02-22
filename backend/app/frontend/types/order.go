@@ -9,6 +9,7 @@ type OrderItem struct {
 
 type Order struct {
 	OrderId     string
+	OrderStatus uint32
 	CreatedDate string
 	Cost        float32
 	Items       []OrderItem
