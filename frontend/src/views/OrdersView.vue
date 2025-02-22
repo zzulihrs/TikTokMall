@@ -25,17 +25,32 @@
               ¥{{ row.totalAmount.toFixed(2) }}
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="120">
+          <el-table-column label="订单状态" width="120">
             <template #default="{ row }">
-              <el-button
-                  type="text"
-                  size="small"
-                  @click="viewDetail(row)"
-              >
-                查看详情
-              </el-button>
+              <el-tag :type="getStatusType(row.status)">
+                {{ getStatusText(row.status) }}
+              </el-tag>
             </template>
           </el-table-column>
+          <el-table-column label="操作" width="200">
+  <template #default="{ row }">
+    <el-button
+        type="primary"
+        size="small"
+        @click="viewDetail(row)"
+    >
+      查看详情
+    </el-button>
+    <el-button
+        v-if="row.status === 0"
+        type="success"
+        size="small"
+        @click="handlePay(row)"
+    >
+      去支付
+    </el-button>
+  </template>
+</el-table-column>
         </el-table>
       </el-card>
     </el-main>
@@ -95,6 +110,19 @@ const orders = ref([])
 const dialogVisible = ref(false) // 控制弹窗显示
 const currentOrder = ref(null) // 当前选中的订单
 
+// 处理支付
+const handlePay = (order) => {
+  // 这里添加跳转到支付页面的逻辑
+  // router.push({
+  //   path: '/payment',
+  //   query: {
+  //     orderId: order.orderNumber,
+  //     amount: order.totalAmount
+  //   }
+  // })
+}
+
+
 // 格式化订单号
 const formatOrderNumber = (orderNumber) => {
   const firstDashIndex = orderNumber.indexOf('-')
@@ -110,6 +138,28 @@ const viewDetail = (order) => {
   dialogVisible.value = true
 }
 
+// 获取订单状态对应的标签类型
+const getStatusType = (status) => {
+  const statusMap = {
+    0: 'warning',   // 待支付
+    1: 'success',   // 支付成功
+    2: 'danger',    // 支付失败
+    3: 'info'       // 取消订单
+  }
+  return statusMap[status] || 'info'
+}
+
+// 获取订单状态对应的文字
+const getStatusText = (status) => {
+  const statusMap = {
+    0: '待支付',
+    1: '支付成功',
+    2: '支付失败',
+    3: '已取消'
+  }
+  return statusMap[status] || '未知状态'
+}
+
 onMounted(async () => {
   try {
     const response = await axios.get('/api/order')
@@ -118,6 +168,7 @@ onMounted(async () => {
         orderNumber: order?.OrderId,
         createTime: order?.CreatedDate,
         totalAmount: order?.Cost,
+        status: order?.OrderStatus,  // 添加状态字段
         items: order?.Items // 商品列表
       }))
       // 按照下单时间降序排列
@@ -136,6 +187,13 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+
+.el-button {
+  margin-right: 5px;
+}
+.el-button:last-child {
+  margin-right: 0;
+}
 .card-header {
   font-size: 18px;
   font-weight: bold;
