@@ -35,8 +35,10 @@ func (h *QueryUserService) Run(req *user.QueryUserReq) (resp *user.QueryUserResp
 	resp.StatusCode = consts.StatusOK
 	resp.Msg = "query successfully"
 	resp.User = &user.User{
-		Email:    userResp.Email,
-		Password: userResp.Password,
+		Email:     userResp.User.Email,
+		Gender:    user.Gender(userResp.User.Gender),
+		Signature: userResp.User.Signature,
+		Nickname:  userResp.User.Nickname,
 	}
-	return
+	return resp, nil
 }

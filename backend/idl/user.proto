@@ -3,6 +3,20 @@ syntax="proto3";
 package user;
 
 option go_package="/user";
+enum Gender {
+    Unknown = 0;
+    Male    = 1;
+    Female  = 2;
+}
+
+message User {
+    int64 user_id = 1;
+    string email = 2;
+    string password = 3;
+    string signature = 4;
+    Gender gender = 5;
+    string nickname = 6;
+}
 
 
 service UserService {
@@ -35,7 +49,10 @@ message LoginResp {
 message UpdateUserReq {
     int64 user_id = 1;
     string email = 2; 
-    string password = 3; 
+    string signature = 3;
+    Gender gender = 4;
+    string password = 5;
+    string nickname = 6;
 }
 
 message UpdateUserResp {
@@ -55,7 +72,5 @@ message QueryUserReq {
 }
 
 message QueryUserResp {
-    int64 user_id = 1;
-    string email = 2;
-    string password = 3;
+     User user = 1;
 }

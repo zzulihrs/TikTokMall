@@ -27,6 +27,9 @@ func (s *UpdateService) Run(req *user.UpdateUserReq) (resp *user.UpdateUserResp,
 	u.ID = uint(req.UserId)
 	u.Email = req.Email
 	u.PasswordHashed, err = Crypt(req.Password)
+	u.Gender = int32(req.Gender)
+	u.Nickname = req.Nickname
+	u.Signature = req.Signature
 	if err != nil {
 		return nil, err
 	}

@@ -138,6 +138,8 @@ github.com/go-sql-driver/mysql v1.7.0/go.mod h1:OXbVy3sEdcQ2Doequ6Z5BW6fXNQTmx+9
 github.com/go-test/deep v1.0.8 h1:TDsG77qcSprGbC6vTN8OuXp5g+J+b5Pcguhf7Zt61VM=
 github.com/go-test/deep v1.0.8/go.mod h1:5C2ZWiW0ErCdrYzpqxLbTX7MG14M9iiw8DgHncVwcsE=
 github.com/gofrs/uuid v3.2.0+incompatible/go.mod h1:b2aQJv3Z4Fp6yNu3cdSllBxTCLRxnplIgP/c0N/04lM=
+github.com/golang-jwt/jwt/v4 v4.4.1 h1:pC5DB52sCeK48Wlb9oPcdhnjkz1TKt1D/P7WKJ0kUcQ=
+github.com/golang-jwt/jwt/v4 v4.4.1/go.mod h1:m21LjoU+eqJr34lmDMbreY2eSTRJ1cv77w39/MY0Ch0=
 github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b/go.mod h1:SBH7ygxi8pfUlaOkMMuAQtPIUF8ecWP5IEl/CR7VP2Q=
 github.com/golang/mock v1.1.1/go.mod h1:oTYuIxOrZwtPieC+H1uAHpcLFnEyAGVDL/k47Jfbm0A=
 github.com/golang/mock v1.6.0 h1:ErTB+efbowRARo13NNdxyJji2egdxLGQhRaY+DUumQc=
@@ -239,6 +241,8 @@ github.com/hertz-contrib/cors v0.1.0 h1:PQ5mATygSMzTlYtfyMyHjobYoJeHKe2Qt3tcAOgb
 github.com/hertz-contrib/cors v0.1.0/go.mod h1:VPReoq+Rvu/lZOfpp5CcX3x4mpZUc3EpSXBcVDcbvOc=
 github.com/hertz-contrib/gzip v0.0.3 h1:x+XamFkUYhPPqMzGWejPh1wdDiwkIpHkgRVIg74Xvt4=
 github.com/hertz-contrib/gzip v0.0.3/go.mod h1:5rQsvQp1qBmt2TYATbbofNAJBSws2Wwst4EdiHLbx4w=
+github.com/hertz-contrib/jwt v1.0.2 h1:sAW3wqgBDsbPKr5JWJRObY61jg1NqYkUCg+o8UXLsaI=
+github.com/hertz-contrib/jwt v1.0.2/go.mod h1:3zUSK+44dcw/9z/89JZ+mA0FoyhmVN7Hx+f46ucVV4I=
 github.com/hertz-contrib/logger/accesslog v0.0.0-20241107070745-e4ce8c54dd97 h1:7sVi9PFkcVRtL9kbW+8htABmtyCNr/hPxEZ5PMgGIUo=
 github.com/hertz-contrib/logger/accesslog v0.0.0-20241107070745-e4ce8c54dd97/go.mod h1:vB3TNAD0IvvDhfY1SWSeCaAVbWleDKEuQ4zOK70hb64=
 github.com/hertz-contrib/logger/logrus v1.0.1 h1:1iFu/L92QlFSDXUn77WJL32dk/5HBzAUziG1OqcNMeE=

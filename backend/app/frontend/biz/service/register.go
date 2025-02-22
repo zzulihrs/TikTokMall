@@ -4,7 +4,6 @@ import (
 	"context"
 
 	auth "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/auth"
-	common "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/common"
 	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
 	"github.com/tiktokmall/backend/rpc_gen/kitex_gen/user"
 
@@ -21,7 +20,7 @@ func NewRegisterService(Context context.Context, RequestContext *app.RequestCont
 	return &RegisterService{RequestContext: RequestContext, Context: Context}
 }
 
-func (h *RegisterService) Run(req *auth.RegisterReq) (resp *common.Empty, err error) {
+func (h *RegisterService) Run(req *auth.RegisterReq) (user_id int64, err error) {
 	//defer func() {
 	// hlog.CtxInfof(h.Context, "req = %+v", req)
 	// hlog.CtxInfof(h.Context, "resp = %+v", resp)
@@ -34,7 +33,7 @@ func (h *RegisterService) Run(req *auth.RegisterReq) (resp *common.Empty, err er
 		ConfirmPassword: req.ConfirmPassword,
 	})
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
 	session := sessions.Default(h.RequestContext)
@@ -42,7 +41,7 @@ func (h *RegisterService) Run(req *auth.RegisterReq) (resp *common.Empty, err er
 	session.Set("user_id", userResp.UserId)
 	err = session.Save()
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return
+	return int64(userResp.UserId), nil
 }

@@ -7,16 +7,29 @@ import "api.proto";
 
 option go_package = "frontend/user";
 
+enum Gender {
+    Unknown = 0;
+    Male    = 1;
+    Female  = 2;
+}
+
 message User {
-    string email = 1;
-    string password = 2;
+    int64 user_id = 1;
+    string email = 2;
+    string password = 3;
+    string signature = 4;
+    Gender gender = 5;
+    string nickname = 6;
 }
 
 
 message UpdateUserReq {
     int64 user_id = 1 [(api.path) = "user_id", (api.vd) = "$>0"];
     string email = 2 [(api.form)="email"];
-    string password = 3 [(api.form)="password"];
+    string signature = 3 [(api.form)= "signature"];
+    Gender gender = 4 [(api.form)= "gender"];
+    string password = 5  [(api.form)= "password"];
+    string nickname = 6  [(api.form)= "nickname"];
 }
 
 message UpdateUserResp {

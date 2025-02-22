@@ -20,33 +20,36 @@ func NewLoginService(Context context.Context, RequestContext *app.RequestContext
 	return &LoginService{RequestContext: RequestContext, Context: Context}
 }
 
-func (h *LoginService) Run(req *auth.LoginReq) (redirect string, err error) {
+func (h *LoginService) Run(req *auth.LoginReq) (resp map[string]any, err error) {
 	//defer func() {
 	// hlog.CtxInfof(h.Context, "req = %+v", req)
 	// hlog.CtxInfof(h.Context, "resp = %+v", resp)
 	//}()
 	// todo edit your code
 
-	resp, err := rpc.UserClient.Login(h.Context, &user.LoginReq{
+	rpc_resp, err := rpc.UserClient.Login(h.Context, &user.LoginReq{
 		Email:    req.Email,
 		Password: req.Password,
 	})
 	// 没有登陆成功
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	// 获取 请求的上下文 得到 session
 	session := sessions.Default(h.RequestContext)
 	// 利用 redis 存储 user_id
-	session.Set("user_id", resp.UserId)
+	session.Set("user_id", rpc_resp.UserId)
 	err = session.Save()
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	// 从 request 中获取 referer ，然后返回上一个 url
-	redirect = "/"
+	redirect := "/"
 	if req.Next != "" {
 		redirect = req.Next
 	}
-	return
+	return map[string]any{
+		"redirect": redirect,
+		"id":       rpc_resp.UserId,
+	}, err
 }

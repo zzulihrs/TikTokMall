@@ -22,10 +22,15 @@ func (s *QueryService) Run(req *user.QueryUserReq) (resp *user.QueryUserResp, er
 	if u, err = model.QueryUser(mysql.DB, s.ctx, req.UserId); err != nil {
 		return nil, err
 	}
+	user_resp := &user.User{
+		UserId:    int64(u.ID),
+		Email:     u.Email,
+		Signature: u.Signature,
+		Nickname:  u.Nickname,
+		Gender:    user.Gender(u.Gender),
+	}
 	resp = &user.QueryUserResp{
-		UserId:   int64(u.ID),
-		Email:    u.Email,
-		Password: u.PasswordHashed,
+		User: user_resp,
 	}
 	return resp, nil
 }
