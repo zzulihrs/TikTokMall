@@ -191,6 +191,27 @@ const actions = {
   handleCurrentChange({ commit, dispatch }, newPage) {
     commit('SET_CURRENT_PAGE', newPage);
     dispatch('fetchProducts');
+  },
+  async updateProduct({ state }, product) {
+    try {
+      const response = await axios.put(`/api/merchant/product/${product.id}`, {
+        mid: state.id,
+        name: product.name,
+        price: product.price,
+        stock: product.stock,
+        description: product.description,
+        img_url: product.img_url,
+        categories: product.categories
+      })
+      
+      if (response.data.code !== 200) {
+        throw new Error(response.data.message)
+      }
+      
+      return response.data
+    } catch (error) {
+      throw new Error(error.message)
+    }
   }
 };
 
