@@ -17,11 +17,9 @@
                 <el-menu-item index="1">首页</el-menu-item>
                 <el-submenu index="2">
                   <template #title>商品分类</template>
+                  
                   <el-menu-item index="2-1">T-Shirt</el-menu-item>
                   <el-menu-item index="2-2">Sticker</el-menu-item>
-                  <el-menu-item index="2-3">家居用品</el-menu-item>
-                  <el-menu-item index="2-4">图书音像</el-menu-item>
-                  <el-menu-item index="2-5">食品饮料</el-menu-item>
                 </el-submenu>
               </el-menu>
             </el-col>
@@ -44,13 +42,13 @@
         <el-col :span="8">
           <div class="header-right">
             <el-menu mode="horizontal" :ellipsis="false">
-            <el-menu-item index="5" v-show="isAuthenticated" @click="goToMerchant">我是店家</el-menu-item>
+            <el-menu-item index="5" v-show="isAuthenticated" @click="goToMerchant">我的商品</el-menu-item>
               <el-menu-item v-if="!isAuthenticated" index="3" @click="goToLogin">登录</el-menu-item>
               <el-menu-item v-else index="4">
                 <UserDropdown></UserDropdown>
               </el-menu-item>
-                  
-              
+
+
               <el-menu-item index="6" @click="goToCart">
                 <el-badge :value="cartCount" :max="99">
                   <el-icon><ShoppingCart /></el-icon>
@@ -69,15 +67,37 @@
     <el-footer>
       <div class="footer-content">
         © 字节跳动青训营后端项目.
+        <el-link type="primary" @click="openMerchantDialog" style="margin-left: 10px">
+          成为商家
+        </el-link>
       </div>
-      
+
     </el-footer>
     <ChatDialog/>
+
+    <!-- 成为商家弹窗 -->
+    <el-dialog
+      v-model="merchantDialogVisible"
+      title="成为商家"
+      width="400px"
+    >
+      <el-form :model="merchantForm" label-width="80px">
+        <el-form-item label="兑换码">
+          <el-input v-model="merchantForm.code" placeholder="请输入商家兑换码" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="merchantDialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="handleBecomeMerchant">确定</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </el-container>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import UserDropdown from './UserDropdown.vue'
@@ -90,6 +110,7 @@ onMounted(() => {
 })
 import { ShoppingCart, Search } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
+import axios from 'axios'
 
 const router = useRouter()
 if (!router) {
@@ -168,6 +189,33 @@ const goToCart = () => {
 const goToMerchant = () => {
   router.push('/merchant')
 }
+
+const merchantDialogVisible = ref(false)
+const merchantForm = reactive({
+  code: ''
+})
+
+// 打开成为商家弹窗
+const openMerchantDialog = () => {
+  merchantDialogVisible.value = true
+}
+
+// 处理成为商家
+const handleBecomeMerchant = async () => {
+  try {
+    const response = await axios.post('/api/merchant/register', {
+      code: merchantForm.code
+    })
+    
+    ElMessage.success('注册成功，您已成为商家！')
+    merchantDialogVisible.value = false
+    
+    // 刷新页面或更新状态
+    window.location.reload()
+  } catch (error) {
+    ElMessage.error('注册失败：' + error.message)
+  }
+}
 </script>
 
 <style scoped>
@@ -237,6 +285,10 @@ const goToMerchant = () => {
 
 .footer-content {
   text-align: center;
-  padding: 1rem 0;
+  padding: 20px 0;
+}
+
+.el-link {
+  font-size: 14px;
 }
 </style>
