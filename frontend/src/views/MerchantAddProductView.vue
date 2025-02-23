@@ -55,7 +55,7 @@
           <el-form-item label="轮播图内容">
             <div class="slider-container">
               <el-row :gutter="20">
-                <el-col :span="12" v-for="(item, index) in product.slider_items" :key="index">
+                <el-col :span="12" v-for="(item, index) in product.slider_imgs" :key="index">
                   <div class="slider-item">
                     <div class="media-upload">
                       <el-upload
@@ -95,12 +95,12 @@
               </el-row>
 
               <el-button
-                v-if="product.slider_items.length < 5"
+                v-if="product.slider_imgs.length < 5"
                 class="add-combination"
                 @click="addCombination"
               >
                 <el-icon><Plus /></el-icon>
-                添加内容组合（剩余 {{ 5 - product.slider_items.length }} 个）
+                添加内容组合（剩余 {{ 5 - product.slider_imgs.length }} 个）
               </el-button>
             </div>
           </el-form-item>
@@ -177,7 +177,7 @@ const product = ref({
   description: '',
   imgUrl: '',
   // 修复初始数据结构不一致问题
-  slider_items: []  // 替换原来的 slider_imgs: [[]]
+  slider_imgs: []  // 替换原来的 slider_imgs: [[]]
 });
 
 
@@ -189,7 +189,7 @@ const resetForm = () => {
     stock: 0,
     description: '',
     imgUrl: '',
-    slider_items: []  // 保持数据结构一致
+    slider_imgs: []  // 保持数据结构一致
   };
   activeSliderIndex.value = 0;
 };
@@ -207,7 +207,8 @@ const addProduct = async () => {
       category: product.value.categories.map(id => ({
         id,
         name: categories.value.find(c => c.id === id)?.name
-      }))
+      })),
+      merchant_id: store?.state?.merchant?.id
     };
 
     await axios.post('/api/merchant/product/add', payload);
@@ -302,32 +303,32 @@ const beforeVideoUpload = (file) => {
 
 // 添加组合条目方法
 const addCombination = () => {
-  if (product.value.slider_items.length < 5) {
-    product.value.slider_items.push({ image: null, video: null });
+  if (product.value.slider_imgs.length < 5) {
+    product.value.slider_imgs.push({ image: null, video: null });
   }
 };
 
 // 修改后的上传处理方法
 const handleImageUpload = (response, index) => {
   if (response.url) {
-    product.value.slider_items[index].image = response.url;
+    product.value.slider_imgs[index].image = response.url;
   }
 };
 
 const handleVideoUpload = (response, index) => {
   if (response.url) {
-    product.value.slider_items[index].video = response.url;
+    product.value.slider_imgs[index].video = response.url;
   }
 };
 
 // 删除媒体内容方法
 const removeMedia = (index, type) => {
-  product.value.slider_items[index][type] = null;
+  product.value.slider_imgs[index][type] = null;
 };
 
 // 删除整个组合
 const removeCombination = (index) => {
-  product.value.slider_items.splice(index, 1);
+  product.value.slider_imgs.splice(index, 1);
 };
 </script>
 
