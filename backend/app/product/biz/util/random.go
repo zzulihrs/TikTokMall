@@ -21,6 +21,7 @@ var emailDomains = []string{
 
 // 生成随机字符串作为邮箱用户名
 func GenerateRandomString(length int) string {
+
 	// 定义可用的字符集
 	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 	seededRand := rand.New(rand.NewSource(time.Now().UnixNano()))
