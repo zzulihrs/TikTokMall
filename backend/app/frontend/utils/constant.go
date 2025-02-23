@@ -7,3 +7,4 @@ type SessionUserIdKey string
 const UserIdKey = SessionUserIdKey("user_id")
 const UsernameKey = SessionUserIdKey("username")
 const EmailKey = SessionUserIdKey("email")
+const MerchantIdKey = SessionUserIdKey("merchant_id")

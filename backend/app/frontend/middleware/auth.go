@@ -34,6 +34,7 @@ func Auth() app.HandlerFunc {
 		userId := session.Get("user_id")
 		username := session.Get("username")
 		email := session.Get("email")
+		merchantId := session.Get("merchant_id")
 		if userId == nil {
 			c.JSON(302, "uid 为空")
 			// c.Redirect(302, []byte("/sign-in?next="+c.FullPath()))
@@ -43,6 +44,7 @@ func Auth() app.HandlerFunc {
 		ctx = context.WithValue(ctx, frontendutils.UserIdKey, userId)
 		ctx = context.WithValue(ctx, frontendutils.UsernameKey, username)
 		ctx = context.WithValue(ctx, frontendutils.EmailKey, email)
+		ctx = context.WithValue(ctx, frontendutils.MerchantIdKey, merchantId)
 		c.Next(ctx)
 
 	}
@@ -72,7 +74,7 @@ func MerchantProduct() app.HandlerFunc {
 		ctx = context.WithValue(ctx, frontendutils.UserIdKey, userId)
 		ctx = context.WithValue(ctx, frontendutils.UsernameKey, username)
 		ctx = context.WithValue(ctx, frontendutils.EmailKey, email)
-		ctx = context.WithValue(ctx, "merchant_id", merchantId)
+		ctx = context.WithValue(ctx, frontendutils.MerchantIdKey, merchantId)
 
 		c.Next(ctx)
 
