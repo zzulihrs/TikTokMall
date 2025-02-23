@@ -11,6 +11,9 @@ module.exports = defineConfig({
           '^/api': '' // 重写路径
         }
       }
-    }
+    },
+    client: {
+      overlay: false // 自适应窗口大小时webpack会报错
+    },
   }
 })

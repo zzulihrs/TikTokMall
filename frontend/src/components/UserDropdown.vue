@@ -37,7 +37,7 @@
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
           >
-            <img v-if="editForm.avatar" :src="editForm.avatar" class="avatar" />
+            <img v-if="editForm.avator" :src="editForm.avator" class="avatar" />
             <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
           </el-upload>
           <div class="avatar-hint">
@@ -75,7 +75,7 @@ const store = useStore()
 const router = useRouter()
 const dialogVisible = ref(false)
 const editForm = reactive({
-  avatar: '',
+  avator: '',
   username: '',
   email: ''
 })
@@ -100,7 +100,7 @@ const handleCommand = (command) => {
 // 打开编辑弹窗
 const openEditDialog = async () => {
 
-  editForm.avatar = user.value?.avator || ''
+  editForm.avator = user.value?.avator || ''
   editForm.username = user.value?.username || ''
   editForm.email = user.value?.email || ''
   dialogVisible.value = true
@@ -124,20 +124,20 @@ const beforeAvatarUpload = (file) => {
 
 // 头像上传成功的回调
 const handleAvatarSuccess = (res) => {
-  editForm.avatar = res.url
+  editForm.avator = res.url
 }
 
 // 保存用户信息
 const handleSave = async () => {
   try {
     await axios.post('/api/user/update', {
-      avator: editForm?.avatar,
+      avator: editForm?.avator,
       username: editForm?.username,
     })
 
     // 更新 store 中的用户信息
     store.commit('auth/SET_USER', {
-      avator: editForm?.avatar,
+      avator: editForm?.avator,
       username: editForm?.username,
       email: store?.state?.auth?.user?.email,
     })

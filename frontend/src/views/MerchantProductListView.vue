@@ -62,7 +62,7 @@
         </el-table-column>
       </el-table>
 
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4"
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="1"
         :page-sizes="[10, 20, 30, 40]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="400">
       </el-pagination>
 
@@ -235,7 +235,7 @@ const handleSubmit = async () => {
     ElMessage.success('商品更新成功')
     closeDialog()
     // 刷新商品列表
-    store.dispatch('merchant/fetchProducts')
+    await store.dispatch('merchant/fetchProducts')
   } catch (error) {
     ElMessage.error('更新失败：' + (error.message || '请检查表单填写是否正确'))
   }
