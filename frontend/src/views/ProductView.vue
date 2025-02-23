@@ -12,9 +12,9 @@
         <el-col :span="12">
           <div class="product-details">
             <h1 class="product-title">{{ product?.name }}</h1>
-            <p class="product-price">${{ product?.price?.toFixed(2) }}</p>
+            <p class="product-price">{{ product?.price }}</p>
             <el-divider />
-            <p class="product-description">{{ product?.description }}</p>
+            <p class="product-description">¥{{ product?.description }}</p>
 
             <div class="product-actions">
               <el-input-number

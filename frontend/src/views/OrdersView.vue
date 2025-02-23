@@ -33,24 +33,24 @@
             </template>
           </el-table-column>
           <el-table-column label="操作" width="200">
-  <template #default="{ row }">
-    <el-button
-        type="primary"
-        size="small"
-        @click="viewDetail(row)"
-    >
-      查看详情
-    </el-button>
-    <el-button
-        v-if="row.status === 0"
-        type="success"
-        size="small"
-        @click="handlePay(row)"
-    >
-      去支付
-    </el-button>
-  </template>
-</el-table-column>
+            <template #default="{ row }">
+              <el-button
+                  type="primary"
+                  size="small"
+                  @click="viewDetail(row)"
+              >
+                查看详情
+              </el-button>
+              <el-button
+                  v-if="row.status === 0"
+                  type="primary"
+                  size="small"
+                  @click="handlePay(row)"
+              >
+                支付
+              </el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </el-card>
     </el-main>
@@ -102,8 +102,11 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 import axios from 'axios'
-import {ElMessage} from "element-plus";
+
+const router = useRouter()
 
 const loading = ref(true)
 const orders = ref([])
@@ -111,17 +114,64 @@ const dialogVisible = ref(false) // 控制弹窗显示
 const currentOrder = ref(null) // 当前选中的订单
 
 // 处理支付
-const handlePay = (order) => {
-  // 这里添加跳转到支付页面的逻辑
-  // router.push({
-  //   path: '/payment',
-  //   query: {
-  //     orderId: order.orderNumber,
-  //     amount: order.totalAmount
-  //   }
-  // })
+const handlePay = async (order) => {
+  try {
+    // 调用支付接口
+    const response = await axios.get('/api/alipay', {
+      transaction_id: "074311fd-59ae-4745-99f8-247b673b3838",
+      total_amount: 0.1
+    })
+
+    if (response?.data?.PayUrl) {
+      // 获取支付表单
+      // 打开PayUrl
+      window.open(response.data?.PayUrl, '_blank')
+
+    } else {
+      ElMessage.error('支付失败：' + response.data.message)
+    }
+  } catch (error) {
+    ElMessage.error('支付发起失败：' + error.message)
+  }
 }
 
+// 处理支付结果
+const handlePayResult = async (event) => {
+  // 移除事件监听
+  window.removeEventListener('message', handlePayResult)
+
+  if (event.data.paid) {
+    // 支付成功，跳转到成功页面
+    router.push('/pay-success')
+  } else {
+    ElMessage.error('支付失败')
+  }
+}
+
+// 支付成功页面组件
+const PaySuccess = {
+  template: `
+    <div class="pay-success">
+      <el-result
+        icon="success"
+        title="支付成功"
+        sub-title="您的订单已支付成功"
+      >
+        <template #extra>
+          <el-button type="primary" @click="$router.push('/orders')">
+            返回订单列表
+          </el-button>
+        </template>
+      </el-result>
+    </div>
+  `
+}
+
+// 在路由配置中添加支付成功页面
+router.addRoute({
+  path: '/pay-success',
+  component: PaySuccess
+})
 
 // 格式化订单号
 const formatOrderNumber = (orderNumber) => {
@@ -187,7 +237,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-
 .el-button {
   margin-right: 5px;
 }
@@ -214,5 +263,10 @@ onMounted(async () => {
 
 .value {
   color: #666;
+}
+
+.pay-success {
+  padding: 40px;
+  text-align: center;
 }
 </style>
