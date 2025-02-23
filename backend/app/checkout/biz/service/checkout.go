@@ -119,7 +119,6 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 		_, err := rpc.OrderClient.ChangeOrderStatus(s.ctx, &order.ChangeOrderStatusReq{
 			OrderId:     orderId,
 			OrderStatus: 1,
-			UserId:      req.GetUserId(),
 		})
 		if err != nil {
 			return nil, fmt.Errorf("change order status failed: %v", err)
