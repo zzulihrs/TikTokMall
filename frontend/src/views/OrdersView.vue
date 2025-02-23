@@ -117,10 +117,11 @@ const currentOrder = ref(null) // 当前选中的订单
 const handlePay = async (order) => {
   try {
     // 调用支付接口
-    const response = await axios.get('/api/alipay', {
-      transaction_id: "074311fd-59ae-4745-99f8-247b673b3838",
-      total_amount: 0.1
+    const response = await axios.post('/api/alipay', {
+      transaction_id: order?.orderNumber,
+      total_amount: order?.totalAmount.toFixed(2),
     })
+    // 把transaction_id, total_amount拼接到alipay上
 
     if (response?.data?.PayUrl) {
       // 获取支付表单
@@ -192,8 +193,8 @@ const viewDetail = (order) => {
 const getStatusType = (status) => {
   const statusMap = {
     0: 'warning',   // 待支付
-    1: 'success',   // 支付成功
-    2: 'danger',    // 支付失败
+    1: 'danger',    // 支付失败
+    2: 'success',   // 支付成功
     3: 'info'       // 取消订单
   }
   return statusMap[status] || 'info'
@@ -203,8 +204,8 @@ const getStatusType = (status) => {
 const getStatusText = (status) => {
   const statusMap = {
     0: '待支付',
-    1: '支付成功',
-    2: '支付失败',
+    1: '支付失败',
+    2: '支付成功',
     3: '已取消'
   }
   return statusMap[status] || '未知状态'
