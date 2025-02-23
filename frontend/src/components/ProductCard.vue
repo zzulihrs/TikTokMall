@@ -10,7 +10,7 @@
         <h3 class="product-name">{{ product?.name }}</h3>
         <p class="product-description">{{ product?.description }}</p>
         <div class="product-footer">
-          <span class="product-price">${{ product?.price.toFixed(2) }}</span>
+          <span class="product-price">¥{{ product?.price?.toFixed(2) }}</span>
           <el-button
             type="primary"
             size="small"
