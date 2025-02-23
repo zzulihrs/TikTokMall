@@ -34,4 +34,5 @@ message AlipayReq{
 // 异步通知，根据结果修改订单状态
 message PayresultReq{
     uint32 transaction_id = 1 [(api.form) = "transaction_id"];
+
 }

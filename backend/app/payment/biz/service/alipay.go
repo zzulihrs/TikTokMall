@@ -6,6 +6,7 @@ import (
 	"github.com/go-pay/gopay"
 	myalipay "github.com/go-pay/gopay/alipay"
 	payment "github.com/tiktokmall/backend/rpc_gen/kitex_gen/payment"
+	"strconv"
 )
 
 const (
@@ -46,7 +47,7 @@ func (s *AlipayService) Run(req *payment.AlipayReq) (resp *payment.AlipayResp, e
 	bm := make(gopay.BodyMap)
 	bm.Set("subject", "网站测试支付")
 	bm.Set("out_trade_no", req.TransactionId)
-	bm.Set("total_amount", req.TotalAmount)
+	bm.Set("total_amount", strconv.FormatFloat(float64(req.TotalAmount), 'f', 2, 64))
 	bm.Set("product_code", "FAST_INSTANT_TRADE_PAY")
 
 	ctx := context.Background()
