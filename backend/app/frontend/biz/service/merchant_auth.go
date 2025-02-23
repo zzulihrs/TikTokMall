@@ -54,11 +54,11 @@ func (h *MerchantAuthService) Run(req *merchant.MerchantAuthReq) (resp utils.H, 
 	// 2. 定义新的 session
 	// 获取 请求的上下文 得到 session
 	session := sessions.Default(h.RequestContext)
+	session.Clear() // 清空 session
 	// 利用 redis 存储 user_id
 	// 设置 Cookie
 	// Cookie
-	session.Delete("merchant_id")
-	session.Set("user_id", uid)
+	session.Set("user_id", int32(uid))
 	session.Set("username", merchantResp.Username)
 	session.Set("email", email)
 	session.Set("merchant_id", merchantResp.Id)
@@ -78,6 +78,7 @@ func (h *MerchantAuthService) Run(req *merchant.MerchantAuthReq) (resp utils.H, 
 			"id":       merchantResp.Id,
 			"username": merchantResp.Username,
 			"email":    merchantResp.Email,
+			"userId":   frontendUtils.GetUserIdFromCtx(h.Context),
 		},
 	}
 	return

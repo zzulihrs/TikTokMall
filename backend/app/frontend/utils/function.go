@@ -10,7 +10,7 @@ func GetUserIdFromCtx(ctx context.Context) uint32 {
 	if userId == nil {
 		return uint32(0)
 	}
-	a, ok := userId.(int64)
+	a, ok := userId.(int32)
 	if !ok {
 		return uint32(0)
 	}

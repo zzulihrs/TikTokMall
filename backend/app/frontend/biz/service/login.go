@@ -41,7 +41,7 @@ func (h *LoginService) Run(req *auth.LoginReq) (resp map[string]any, err error) 
 	// 设置 Cookie
 	// Cookie
 
-	session.Set("user_id", rpc_resp.UserId)
+	session.Set("user_id", int32(rpc_resp.UserId))
 	session.Set("username", rpc_resp.Username)
 	session.Set("email", rpc_resp.Email)
 	err = session.Save()
