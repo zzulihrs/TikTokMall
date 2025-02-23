@@ -165,10 +165,10 @@ const actions = {
   // 权限认证
   async MerchantAuth({commit, state}) {
 
-    if (state.id > 0) {
-      router.push('/merchant');
-      return;
-    }
+    // if (state.id > 0) {
+    //   router.push('/merchant');
+    //   return;
+    // }
     try {
       console.log('merchant_id: ', state.id)
       const response = await axios.get('/api/merchant/auth');
