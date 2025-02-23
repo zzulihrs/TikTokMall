@@ -226,6 +226,8 @@ const getters = {
   getTotalProducts: state => state.totalProducts,
   // 商品详情
   getProductDetail: state => state.productDetail,
+  // 店家id
+  getMerchantId: state => state.id,
 };
 
 export default {
