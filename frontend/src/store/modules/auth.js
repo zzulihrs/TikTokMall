@@ -31,7 +31,7 @@ export default {
   actions: {
     login({ commit }, userData) {
       commit('SET_USER', userData)
-      commit('SET_TOKEN', userData.token)
+      commit('SET_TOKEN', userData?.token)
     },
     logout({ commit }) {
       commit('CLEAR_AUTH')
