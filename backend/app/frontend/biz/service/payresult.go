@@ -35,7 +35,7 @@ func (h *PayresultService) Run(req *http.Request) (resp map[string]any, err erro
 
 	_, err = rpc.OrderClient.ChangeOrderStatus(h.Context, &order.ChangeOrderStatusReq{
 		OrderId:     out_trade_no,
-		OrderStatus: 2, // 订单状态 0 - 创建订单待支付 1 - 支付成功 2 - 支付失败 3 - 取消订单
+		OrderStatus: 1, // 订单状态 0 - 创建订单待支付 1 - 支付成功 2 - 支付失败 3 - 取消订单
 	})
 
 	if err != nil {
