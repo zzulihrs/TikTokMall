@@ -170,16 +170,16 @@ const actions = {
     //   return;
     // }
     try {
-      console.log('merchant_id: ', state.id)
       const response = await axios.get('/api/merchant/auth');
       console.log('merchant/auth: ', response)
       if (+response.data.code !== 200) {
-        ElMessage.error('添加商品失败：' + response?.data?.message);
+        ElMessage.error('店家权限认证' + response?.data?.message);
         return;
       }
       commit('SET_MERCHANT_ID', response?.data?.merchant_info?.id)
     } catch (error) {
-      ElMessage.error('添加商品失败：' + error.message);
+      commit('SET_MERCHANT_ID', 0)
+      ElMessage.error('店家权限认证' + error.message);
     }
   },
   searchProducts({ commit, dispatch }) {

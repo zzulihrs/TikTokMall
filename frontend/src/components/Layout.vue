@@ -193,7 +193,7 @@ const goToMerchant = () => {
   if (id > 0) {
     router.push('merchant')
   } else {
-    ElMessage.message("你还不是店家")
+    ElMessage.warning("你还不是店家")
   }
 }
 
