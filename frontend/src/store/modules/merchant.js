@@ -60,7 +60,7 @@ const state = {
 const mutations = {
   SET_MERCHANT_ID(state, id) {
     state.id = id;
-    localStorage.setItem('merchantId', merchant?.id)
+    localStorage.setItem('merchantId', state.id)
   },
   SET_SEARCH_QUERY(state, query) {
     state.searchQuery = query;
