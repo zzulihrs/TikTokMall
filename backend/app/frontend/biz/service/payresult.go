@@ -2,11 +2,11 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/cloudwego/kitex/pkg/kerrors"
-	"github.com/go-pay/gopay/alipay"
-	"github.com/tiktokmall/backend/rpc_gen/kitex_gen/order"
 	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
+	"github.com/tiktokmall/backend/rpc_gen/kitex_gen/order"
+	"log"
 	http "net/http"
 )
 
@@ -29,15 +29,18 @@ func NewPayresultService(Context context.Context, RequestContext *app.RequestCon
 func (h *PayresultService) Run(req *http.Request) (resp map[string]any, err error) {
 	// 需要修改订单状态---等待提供修改订单状态的接口
 	// 解析异步通知的参数
-	notifyReq, err := alipay.ParseNotifyToBodyMap(req)
-	if err != nil {
-		return nil, kerrors.NewBizStatusError(40005, "ailipayNotify ERROR")
-	}
 
-	rpc.OrderClient.ChangeOrderStatus(h.Context, &order.ChangeOrderStatusReq{
-		OrderId:     notifyReq["out_trade_no"].(string),
+	out_trade_no := h.RequestContext.Query("out_trade_no")
+	log.Println("out_trade_no: ", out_trade_no)
+
+	_, err = rpc.OrderClient.ChangeOrderStatus(h.Context, &order.ChangeOrderStatusReq{
+		OrderId:     out_trade_no,
 		OrderStatus: 2, // 订单状态 0 - 创建订单待支付 1 - 支付成功 2 - 支付失败 3 - 取消订单
 	})
+
+	if err != nil {
+		return nil, fmt.Errorf("change order status failed: %v", err)
+	}
 
 	return map[string]any{
 		"message": "Success",
