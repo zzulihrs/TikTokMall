@@ -4,7 +4,8 @@ import { ElMessage } from 'element-plus';
 
 const state = {
   // 店家 id
-  id: 0,
+  id: localStorage.getItem('merchantId') || '',
+  name: localStorage.getItem('merchantName') || '',
   // 列表页
   searchQuery: { // 搜索条件
     name: '',
@@ -52,12 +53,14 @@ const state = {
       "/static/image/mouse-pad.jpeg"
     ],
     stock: 100000
-  }
+  },
+  categories: []
 };
 
 const mutations = {
   SET_MERCHANT_ID(state, id) {
     state.id = id;
+    localStorage.setItem('merchantId', merchant?.id)
   },
   SET_SEARCH_QUERY(state, query) {
     state.searchQuery = query;
@@ -160,8 +163,8 @@ const actions = {
   },
 
   // 权限认证
-  async MerchantAuth({commit, state}) {    
-    
+  async MerchantAuth({commit, state}) {
+
     if (state.id > 0) {
       router.push('/merchant');
       return;
@@ -171,14 +174,13 @@ const actions = {
       const response = await axios.get('/api/merchant/auth');
       console.log('merchant/auth: ', response)
       if (+response.data.code !== 200) {
-        ElMessage.error('添加商品失败：' + response.data.message);
+        ElMessage.error('添加商品失败：' + response?.data?.message);
         return;
       }
-      commit('SET_MERCHANT_ID', response.data.merchant_info.id)
+      commit('SET_MERCHANT_ID', response?.data?.merchant_info?.id)
     } catch (error) {
       ElMessage.error('添加商品失败：' + error.message);
     }
-    router.push('/merchant');
   },
   searchProducts({ commit, dispatch }) {
     commit('SET_CURRENT_PAGE', 1);
@@ -203,11 +205,11 @@ const actions = {
         img_url: product.img_url,
         categories: product.categories
       })
-      
+
       if (response.data.code !== 200) {
         throw new Error(response.data.message)
       }
-      
+
       return response.data
     } catch (error) {
       throw new Error(error.message)
