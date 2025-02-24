@@ -40,7 +40,7 @@ func (h *CheckoutWaitingService) Run(req *checkout.CheckoutReq) (resp map[string
 			StreetAddress: req.GetStreet(),
 		},
 		CreditCard: &rpcpayment.CreditCardInfo{
-			CreditCartNumber:          "4242424242424242", // 这里写死是因为是card.Validate(true)验证的，不然监测不通过
+			CreditCartNumber:          req.GetCardNum(), // 这里写死是因为是card.Validate(true)验证的，不然监测不通过
 			CreditCardExpirationYear:  req.GetExpirationYear(),
 			CreditCardExpirationMonth: req.GetExpirationMonth(),
 			CreditCardCvv:             req.GetCvv(),
