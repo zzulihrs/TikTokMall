@@ -28,7 +28,7 @@
                 size="large"
                 @click="addToCart"
               >
-                Add to Cart
+                加入购物车
               </el-button>
             </div>
           </div>

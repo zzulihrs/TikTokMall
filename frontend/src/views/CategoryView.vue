@@ -3,7 +3,7 @@
     <el-main>
       <el-row>
         <el-col :span="24">
-          <h2>{{ category }} 类别商品</h2>
+          <h2>{{ store?.state?.category?.category }} 类别商品</h2>
           <el-empty v-if="categoryItems?.length==0" description="暂无商品" />
           <el-row v-else>
             <el-col
