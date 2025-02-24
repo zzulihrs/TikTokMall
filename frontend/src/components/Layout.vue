@@ -8,22 +8,21 @@
 
         <el-col :span="12">
           <el-row align="middle">
-            <el-col :span="6">
+            <el-col :span="12">
               <el-menu
                 mode="horizontal"
                 :default-active="activeIndex"
                 @select="handleSelect"
               >
                 <el-menu-item index="1">首页</el-menu-item>
-                <el-submenu index="2">
-                  <template #title>商品分类</template>
-                  
+                <el-sub-menu index="category">
+                  <template #title>商品类别</template>
                   <el-menu-item index="2-1">T-Shirt</el-menu-item>
                   <el-menu-item index="2-2">Sticker</el-menu-item>
-                </el-submenu>
+                </el-sub-menu>
               </el-menu>
             </el-col>
-            <el-col :span="18">
+            <el-col :span="12">
               <el-input
                 v-model="searchQuery"
                 placeholder="搜索商品..."
@@ -213,10 +212,10 @@ const handleBecomeMerchant = async () => {
     const response = await axios.post('/api/merchant/register', {
       code: merchantForm.code
     })
-    
+
     ElMessage.success('注册成功，您已成为商家！')
     merchantDialogVisible.value = false
-    
+
     // 刷新页面或更新状态
     window.location.reload()
   } catch (error) {
