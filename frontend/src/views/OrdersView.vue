@@ -193,8 +193,8 @@ const viewDetail = (order) => {
 const getStatusType = (status) => {
   const statusMap = {
     0: 'warning',   // 待支付
-    1: 'danger',    // 支付失败
-    2: 'success',   // 支付成功
+    1: 'success',   // 支付成功
+    2: 'danger',    // 支付失败
     3: 'info'       // 取消订单
   }
   return statusMap[status] || 'info'
@@ -204,8 +204,8 @@ const getStatusType = (status) => {
 const getStatusText = (status) => {
   const statusMap = {
     0: '待支付',
-    1: '支付失败',
-    2: '支付成功',
+    1: '支付成功',
+    2: '支付失败',
     3: '已取消'
   }
   return statusMap[status] || '未知状态'
