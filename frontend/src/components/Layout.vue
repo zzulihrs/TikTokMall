@@ -143,28 +143,30 @@ const cartCount = computed(() => store.getters['cart/totalQuantity'])
 
 const isAuthenticated = computed(() => store.getters['auth/isAuthenticated'])
 
-const handleSelect = (index) => {
+const handleSelect = async (index) => {
   switch (index) {
     case '1':
-      router.push('/')
+      await router.push('/')
       break
     case '2-1':
-      router.push('/category/T-Shirt')
+      await router.push('/category')
+      await store.commit("category/Update_Category", "T-Shirt")
       break
     case '2-2':
-      router.push('/category/Sticker')
+      await  router.push('/category')
+      await store.commit("category/Update_Category", "Sticker")
       break
     case '2-3':
-      router.push('/category/home')
+      await router.push('/category/home')
       break
     case '2-4':
-      router.push('/category/books')
+      await router.push('/category/books')
       break
     case '2-5':
-      router.push('/category/food')
+      await router.push('/category/food')
       break
     case '4-1':
-      router.push('/orders')
+      await router.push('/orders')
       break
   }
 }

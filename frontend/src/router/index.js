@@ -25,7 +25,7 @@ const routes = [
     meta: { requiresGuest: true }
   },
   {
-    path: '/category/:type',
+    path: '/category',
     name: 'category',
     component: () => import('../views/CategoryView.vue'),
     props: true
