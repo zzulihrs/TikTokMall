@@ -25,6 +25,7 @@ import (
 	"github.com/tiktokmall/backend/app/agent/pkg/tool/gitclone"
 	"github.com/tiktokmall/backend/app/agent/pkg/tool/open"
 	"github.com/tiktokmall/backend/app/agent/pkg/tool/orderlookup"
+	"github.com/tiktokmall/backend/app/agent/pkg/tool/productlist"
 	"github.com/tiktokmall/backend/app/agent/pkg/tool/task"
 )
 
@@ -58,6 +59,11 @@ func GetTools(ctx context.Context) ([]tool.BaseTool, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	toolProductList, err := NewProdcutListTool(ctx)
+	if err != nil {
+		return nil, err
+	}
 	return []tool.BaseTool{
 		einoAssistantTool,
 		toolTask,
@@ -65,6 +71,7 @@ func GetTools(ctx context.Context) ([]tool.BaseTool, error) {
 		toolGitClone,
 		// toolDDGSearch,
 		toolOrderLookUp,
+		toolProductList,
 	}, nil
 }
 
@@ -105,4 +112,8 @@ func NewTaskTool(ctx context.Context) (tn tool.BaseTool, err error) {
 
 func NewOrderLookUpTool(ctx context.Context) (tn tool.BaseTool, err error) {
 	return orderlookup.NewOrderLookup(ctx, nil)
+}
+
+func NewProdcutListTool(ctx context.Context) (tn tool.BaseTool, err error) {
+	return productlist.NewProduct(ctx, nil)
 }
