@@ -7,7 +7,9 @@ import (
 	"github.com/cloudwego/eino/components/tool"
 	"github.com/cloudwego/eino/components/tool/utils"
 	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
+	frontendUtils "github.com/tiktokmall/backend/app/frontend/utils"
 	rpccart "github.com/tiktokmall/backend/rpc_gen/kitex_gen/cart"
+	rpcproduct "github.com/tiktokmall/backend/rpc_gen/kitex_gen/product"
 )
 
 // Action 定义购物车操作类型
@@ -25,7 +27,7 @@ type CartRequest struct {
 	Action   Action `json:"action" jsonschema:"description=Cart action to perform"`
 	UserID   uint32 `json:"user_id" jsonschema:"description=User ID"`
 	ItemID   uint32 `json:"item_id,omitempty" jsonschema:"description=Item ID for add/update actions"`
-	Quantity int32  `json:"quantity,omitempty" jsonschema:"description=Quantity for add/update actions"`
+	Quantity uint32 `json:"quantity,omitempty" jsonschema:"description=Quantity for add/update actions"`
 }
 
 // CartItem 购物车项目
@@ -34,7 +36,7 @@ type CartItem struct {
 	ProductName string  `json:"product_name"`
 	Picture     string  `json:"picture"`
 	Price       float32 `json:"price"`
-	Quantity    int32   `json:"quantity"`
+	Quantity    uint32  `json:"quantity"`
 }
 
 // CartResponse 响应结构体
@@ -55,7 +57,7 @@ type CartImpl struct {
 type CartConfig struct{}
 
 // NewCart 创建新的购物车工具
-func NewCart(ctx context.Context, config *CartConfig) (tool.BaseTool, error) {
+func NewCartTool(ctx context.Context, config *CartConfig) (tool.BaseTool, error) {
 	t := &CartImpl{config: config}
 	return t.ToEinoTool()
 }
@@ -71,16 +73,16 @@ func (c *CartImpl) ToEinoTool() (tool.BaseTool, error) {
 
 // Invoke 实际执行购物车操作
 func (c *CartImpl) Invoke(ctx context.Context, req *CartRequest) (*CartResponse, error) {
+	req.UserID = frontendUtils.GetUserIdFromCtx(ctx)
 	res := &CartResponse{
 		Title: "Cart",
 	}
-
+	fmt.Printf("--------------------------------Cart Add request: %+v\n", req)
 	switch req.Action {
 	case ActionAdd:
-		_, err := rpc.CartClient.AddToCart(ctx, &rpccart.AddToCartReq{
-			UserId:    req.UserID,
-			ProductId: req.ItemID,
-			Quantity:  req.Quantity,
+		_, err := rpc.CartClient.AddItem(ctx, &rpccart.AddItemReq{
+			UserId: req.UserID,
+			Item:   &rpccart.CartItem{ProductId: req.ItemID, Quantity: req.Quantity},
 		})
 		if err != nil {
 			res.Error = fmt.Sprintf("Failed to add item: %v", err)
@@ -107,10 +109,9 @@ func (c *CartImpl) Invoke(ctx context.Context, req *CartRequest) (*CartResponse,
 		}
 
 	case ActionUpdate:
-		_, err := rpc.CartClient.UpdateCart(ctx, &rpccart.UpdateCartReq{
-			UserId:    req.UserID,
-			ProductId: req.ItemID,
-			Quantity:  req.Quantity,
+		_, err := rpc.CartClient.ChangeQty(ctx, &rpccart.ChangeQtyReq{
+			UserId: req.UserID,
+			Item:   &rpccart.CartItem{ProductId: req.ItemID, Quantity: req.Quantity},
 		})
 		if err != nil {
 			res.Error = fmt.Sprintf("Failed to update quantity: %v", err)

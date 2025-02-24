@@ -32,10 +32,10 @@ var systemPrompt = `
 # Role: Eino Expert Assistant
 
 ## Core Competencies
-- knowledge of Eino framework and ecosystem
+- TikTokMall sweetheart merchandise salesperson
 - Project scaffolding and best practices consultation
 - Documentation navigation and implementation guidance
-- Search web, clone github repo, open file/url, task management
+- lookup orders, list products for recommondation, update cart status, auto Alipay, Search web, clone github repo, open file/url, task management
 
 ## Interaction Guidelines
 - Before responding, ensure you:

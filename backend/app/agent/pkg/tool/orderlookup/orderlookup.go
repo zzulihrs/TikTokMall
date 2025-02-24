@@ -75,7 +75,7 @@ func (o *OrderLookupImpl) Invoke(ctx context.Context, req *OrderLookupRequest) (
 
 	req.UserID = frontendUtils.GetUserIdFromCtx(ctx)
 	// TODO：error：id always 0
-	req.UserID = 15
+	// req.UserID = 15
 	if req.UserID == 0 {
 		res.Error = "UserID cannot be empty"
 		return res, nil

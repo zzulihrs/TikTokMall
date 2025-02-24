@@ -12,17 +12,22 @@ import (
 
 // Action 定义产品操作类型
 type Action string
+type Category string
 
 const (
 	ActionList Action = "list" // 列出所有产品
 	ActionGet  Action = "get"  // 获取单个产品
 )
+const (
+	Tshit   Category = "T-Shirt"
+	Sticker Category = "Sticker"
+)
 
 // ProductRequest 请求结构体
 type ProductRequest struct {
-	Action  Action `json:"action" jsonschema:"description=Product action to perform"`
-	ID      uint32 `json:"id,omitempty" jsonschema:"description=Product ID for get action"`
-	Keyword string `json:"keyword,omitempty" jsonschema:"description=catorgory for product list"`
+	Action   Action `json:"action" jsonschema:"description=Product action to perform"`
+	ID       uint32 `json:"id,omitempty" jsonschema:"description=Product ID for get action"`
+	Category string `json:"category,omitempty" jsonschema:"description=Catorgory for product list"`
 }
 
 // Product 产品信息
@@ -30,7 +35,6 @@ type Product struct {
 	ID          uint32  `json:"id"`
 	Name        string  `json:"name"`
 	Description string  `json:"description"`
-	Picture     string  `json:"picture"`
 	Price       float32 `json:"price"`
 	Category    string  `json:"category"`
 }
@@ -60,8 +64,8 @@ func NewProduct(ctx context.Context, config *ProductConfig) (tool.BaseTool, erro
 // ToEinoTool 转换为 Eino 工具
 func (p *ProductImpl) ToEinoTool() (tool.BaseTool, error) {
 	return utils.InferTool(
-		"product",
-		"Query and search products by one of these catogories: T-Shirt, Sticker, 家居用品, 食品, 汽车用品, 其他",
+		"products",
+		"Query and search products by Sticker or T-Shit catagory, response should with ID",
 		p.Invoke,
 	)
 }
@@ -75,8 +79,9 @@ func (p *ProductImpl) Invoke(ctx context.Context, req *ProductRequest) (*Product
 	switch req.Action {
 	case ActionList:
 		// 获取所有产品
+		fmt.Printf("--------------------------------Product list request: %+v\n", req)
 		productsResp, err := rpc.ProductClient.ListProducts(ctx, &rpcproduct.ListProductsReq{
-			CategoryName: req.Keyword,
+			CategoryName: req.Category,
 		})
 		if err != nil {
 			res.Error = fmt.Sprintf("Failed to list products: %v", err)
@@ -112,11 +117,11 @@ func (p *ProductImpl) buildProductsResponse(products []*rpcproduct.Product) (*Pr
 			ID:          prod.Id,
 			Name:        prod.Name,
 			Description: prod.Description,
-			Picture:     prod.Picture,
 			Price:       prod.Price,
 		})
 	}
 
+	fmt.Printf("--------------------------------Product list response: %+v\n", productList)
 	return &ProductResponse{
 		Title:    "Products",
 		Products: productList,
@@ -132,7 +137,6 @@ func (p *ProductImpl) buildSingleProductResponse(prod *rpcproduct.Product) (*Pro
 			ID:          prod.Id,
 			Name:        prod.Name,
 			Description: prod.Description,
-			Picture:     prod.Picture,
 			Price:       prod.Price,
 		}},
 		Total: 1,

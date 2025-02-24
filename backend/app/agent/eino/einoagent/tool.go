@@ -21,6 +21,7 @@ import (
 
 	"github.com/cloudwego/eino-ext/components/tool/duckduckgo"
 	"github.com/cloudwego/eino/components/tool"
+	"github.com/tiktokmall/backend/app/agent/pkg/tool/cart"
 	"github.com/tiktokmall/backend/app/agent/pkg/tool/einotool"
 	"github.com/tiktokmall/backend/app/agent/pkg/tool/gitclone"
 	"github.com/tiktokmall/backend/app/agent/pkg/tool/open"
@@ -64,6 +65,12 @@ func GetTools(ctx context.Context) ([]tool.BaseTool, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	toolCart, err := NewCartTool(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return []tool.BaseTool{
 		einoAssistantTool,
 		toolTask,
@@ -72,6 +79,7 @@ func GetTools(ctx context.Context) ([]tool.BaseTool, error) {
 		// toolDDGSearch,
 		toolOrderLookUp,
 		toolProductList,
+		toolCart,
 	}, nil
 }
 
@@ -116,4 +124,8 @@ func NewOrderLookUpTool(ctx context.Context) (tn tool.BaseTool, err error) {
 
 func NewProdcutListTool(ctx context.Context) (tn tool.BaseTool, err error) {
 	return productlist.NewProduct(ctx, nil)
+}
+
+func NewCartTool(ctx context.Context) (tn tool.BaseTool, err error) {
+	return cart.NewCartTool(ctx, nil)
 }

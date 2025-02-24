@@ -5,12 +5,14 @@ import (
 	"errors"
 	"io"
 	"log"
+	"strconv"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/hertz-contrib/sse"
 	"github.com/tiktokmall/backend/app/agent/cmd/einoagent/agent"
 	common "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/common"
+	frontendUtils "github.com/tiktokmall/backend/app/frontend/utils"
 )
 
 type HandleChatService struct {
@@ -28,7 +30,7 @@ func (h *HandleChatService) Run(req *common.Empty) (resp *common.Empty, err erro
 	// hlog.CtxInfof(h.Context, "resp = %+v", resp)
 	//}()
 	// todo edit your code
-	id := h.RequestContext.Query("id")
+	id := strconv.Itoa(int(frontendUtils.GetUserIdFromCtx(h.Context)))
 	message := h.RequestContext.Query("message")
 	if id == "" || message == "" {
 		h.RequestContext.JSON(consts.StatusBadRequest, map[string]string{
