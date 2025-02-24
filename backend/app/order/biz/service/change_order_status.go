@@ -16,6 +16,6 @@ func NewChangeOrderStatusService(ctx context.Context) *ChangeOrderStatusService 
 
 // Run create note info
 func (s *ChangeOrderStatusService) Run(req *order.ChangeOrderStatusReq) (resp *order.ChangeOrderStatusResp, err error) {
-	err = model.ChangeOrderStatus(mysql.DB, s.ctx, req.OrderId, req.OrderStatus, req.UserId)
+	err = model.ChangeOrderStatus(mysql.DB, s.ctx, req.OrderId, req.OrderStatus)
 	return &order.ChangeOrderStatusResp{}, err
 }

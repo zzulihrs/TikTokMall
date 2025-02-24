@@ -183,7 +183,7 @@ func (x *AlipayReq) fastReadField1(buf []byte, _type int8) (offset int, err erro
 }
 
 func (x *AlipayReq) fastReadField2(buf []byte, _type int8) (offset int, err error) {
-	x.TotalAmount, offset, err = fastpb.ReadFloat(buf, _type)
+	x.TotalAmount, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
@@ -332,10 +332,10 @@ func (x *AlipayReq) fastWriteField1(buf []byte) (offset int) {
 }
 
 func (x *AlipayReq) fastWriteField2(buf []byte) (offset int) {
-	if x.TotalAmount == 0 {
+	if x.TotalAmount == "" {
 		return offset
 	}
-	offset += fastpb.WriteFloat(buf[offset:], 2, x.GetTotalAmount())
+	offset += fastpb.WriteString(buf[offset:], 2, x.GetTotalAmount())
 	return offset
 }
 
@@ -475,10 +475,10 @@ func (x *AlipayReq) sizeField1() (n int) {
 }
 
 func (x *AlipayReq) sizeField2() (n int) {
-	if x.TotalAmount == 0 {
+	if x.TotalAmount == "" {
 		return n
 	}
-	n += fastpb.SizeFloat(2, x.GetTotalAmount())
+	n += fastpb.SizeString(2, x.GetTotalAmount())
 	return n
 }
 

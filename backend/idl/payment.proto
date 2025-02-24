@@ -29,7 +29,7 @@ message ChargeResp {
 
 message AlipayReq{
     string transaction_id = 1;
-    float total_amount = 2;
+    string total_amount = 2;
 }
 
 message AlipayResp{

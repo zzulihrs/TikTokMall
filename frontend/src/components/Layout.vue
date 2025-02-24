@@ -188,7 +188,13 @@ const goToCart = () => {
 }
 const goToMerchant = () => {
   // 商家权限认证，无误后，去 merchant 页面
-  store.dispatch('merchant/MerchantAuth');
+  const id = computed(() => store.getters['merchant/getMerchantId']).value
+  console.log('merchantId:', id)
+  if (id > 0) {
+    router.push('merchant')
+  } else {
+    ElMessage.warning("你还不是店家")
+  }
 }
 
 const merchantDialogVisible = ref(false)

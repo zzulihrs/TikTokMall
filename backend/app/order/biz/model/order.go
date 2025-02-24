@@ -35,6 +35,6 @@ func ListOrder(db *gorm.DB, ctx context.Context, userId uint32) (orders []Order,
 	return
 }
 
-func ChangeOrderStatus(db *gorm.DB, ctx context.Context, orderId string, status uint32, userId uint32) error {
-	return db.WithContext(ctx).Model(&Order{}).Where(&Order{OrderId: orderId, UserId: userId}).Update("order_status", status).Error
+func ChangeOrderStatus(db *gorm.DB, ctx context.Context, orderId string, status uint32) error {
+	return db.WithContext(ctx).Model(&Order{}).Where(&Order{OrderId: orderId}).Update("order_status", status).Error
 }

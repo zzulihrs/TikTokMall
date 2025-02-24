@@ -36,7 +36,7 @@
                 :on-success="handleMainUpload"
                 :before-upload="beforeAvatarUpload"
               >
-                <img v-if="product.imgUrl" :src="product.imgUrl" class="product-image">
+                <img v-if="product.img_url" :src="product.img_url" class="product-image">
                 <div v-else class="upload-placeholder">
                   <el-icon class="upload-icon"><Plus /></el-icon>
                   <span>点击上传</span>
@@ -52,7 +52,7 @@
             </div>
           </el-form-item>
 
-          <el-form-item label="轮播图内容">
+          <!-- <el-form-item label="轮播图内容">
             <div class="slider-container">
               <el-row :gutter="20">
                 <el-col :span="12" v-for="(item, index) in product.slider_imgs" :key="index">
@@ -103,7 +103,7 @@
                 添加内容组合（剩余 {{ 5 - product.slider_imgs.length }} 个）
               </el-button>
             </div>
-          </el-form-item>
+          </el-form-item> -->
 
           <el-row :gutter="20">
             <el-col :span="12">
@@ -175,7 +175,7 @@ const product = ref({
   price: 0,
   stock: 0,
   description: '',
-  imgUrl: '',
+  img_url: '',
   // 修复初始数据结构不一致问题
   slider_imgs: []  // 替换原来的 slider_imgs: [[]]
 });
@@ -188,7 +188,7 @@ const resetForm = () => {
     price: 0,
     stock: 0,
     description: '',
-    imgUrl: '',
+    img_url: '',
     slider_imgs: []  // 保持数据结构一致
   };
   activeSliderIndex.value = 0;
@@ -201,19 +201,19 @@ const isVideo = (url) => {
 
 const addProduct = async () => {
   try {
-    console.log('ProductDetail:', product)
+    console.log('AddProductForm:', product.value)
     const payload = {
       ...product.value,
-      category: product.value.categories.map(id => ({
-        id,
-        name: categories.value.find(c => c.id === id)?.name
-      })),
       merchant_id: store?.state?.merchant?.id
     };
-
+    payload.categories = product.value.categories.map(id => {
+      const found = categories.value.find(c => c.id === id)
+      return found || { id: 0, name: '未知分类' }
+    }),
+    console.log('AddProduct, args:', payload)
     await axios.post('/api/merchant/product/add', payload);
     ElMessage.success('商品添加成功');
-    router.push('/merchant/products');
+    // router.push('/merchant/product/list');
   } catch (error) {
     ElMessage.error('商品添加失败：' + error.message);
   }
@@ -261,7 +261,7 @@ const beforeSliderUpload = () => {
 // 修正后的 handleMainUpload 方法
 const handleMainUpload = (response) => {
   if (response.url) {
-    product.value.imgUrl = response.url
+    product.value.img_url = response.url
     // 自动插入到轮播图首位并去重
     product.value.slider_imgs = [
       response.url,

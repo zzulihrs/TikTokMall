@@ -130,6 +130,7 @@ import { computed, reactive, ref, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { ElMessage } from 'element-plus'
+import axios from "axios";
 
 const store = useStore();
 const router = useRouter();
@@ -169,7 +170,7 @@ const clearSearchQuery = () => store.dispatch('merchant/SET_SEARCH_QUERY', { // 
   min_price: '',
   max_price: '',
   page: 1,
-  page_size: 10,
+  page_size: 20,
 });
 
 const searchProducts = () => {
@@ -179,6 +180,18 @@ const searchProducts = () => {
 // 分页处理
 const handleSizeChange = (newSize) => store.dispatch('merchant/handleSizeChange', newSize);
 const handleCurrentChange = (newPage) => store.dispatch('merchant/handleCurrentChange', newPage);
+
+
+// 删除商品
+const deleteProduct = async (row) => {
+  await axios.post('/api/merchant/product/delete', {
+   mid: store.state.merchant.id,
+   pid: row.id,
+  });
+  ElMessage.success('删除成功');
+
+  resetForm()
+}
 
 // 处理编辑按钮点击
 const editProduct = async (row) => {

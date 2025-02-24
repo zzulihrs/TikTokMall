@@ -17,7 +17,7 @@ import (
 func Register(r *server.Hertz) {
 
 	root := r.Group("/", rootMw()...)
-	root.GET("/alipay", append(_alipayMw(), payment.Alipay)...)
+	root.POST("/alipay", append(_alipayMw(), payment.Alipay)...)
 	root.POST("/payresult", append(_payresultMw(), payment.Payresult)...)
 	root.GET("/paysuccess", append(_paysuccessMw(), payment.Paysuccess)...)
 }

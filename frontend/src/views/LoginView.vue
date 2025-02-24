@@ -107,6 +107,9 @@ const handleLogin = async () => {
       // console.log(userInfo?.data?.data);
       await store.commit('auth/SET_USER', userInfo?.data?.data)
 
+      await store.dispatch('merchant/MerchantAuth');
+
+
     } else {
       loading.value = false;
       ElMessage.error(response?.data);

@@ -113,13 +113,17 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 	if req.GetPaymentMethod() == "card" { // 银行卡支付
 		paymentResult, err = rpc.PaymentClient.Charge(s.ctx, &payReq)
 		if err != nil {
+			// 修改订单状态为支付失败
+			_, err := rpc.OrderClient.ChangeOrderStatus(s.ctx, &order.ChangeOrderStatusReq{
+				OrderId:     orderId,
+				OrderStatus: 2,
+			})
 			return nil, fmt.Errorf("charge failed: %v", err)
 		}
 		// 修改订单状态为支付成功
 		_, err := rpc.OrderClient.ChangeOrderStatus(s.ctx, &order.ChangeOrderStatusReq{
 			OrderId:     orderId,
 			OrderStatus: 1,
-			UserId:      req.GetUserId(),
 		})
 		if err != nil {
 			return nil, fmt.Errorf("change order status failed: %v", err)

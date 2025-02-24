@@ -25,11 +25,6 @@ func (x *ChangeOrderStatusReq) FastRead(buf []byte, _type int8, number int32) (o
 		if err != nil {
 			goto ReadFieldError
 		}
-	case 3:
-		offset, err = x.fastReadField3(buf, _type)
-		if err != nil {
-			goto ReadFieldError
-		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -50,11 +45,6 @@ func (x *ChangeOrderStatusReq) fastReadField1(buf []byte, _type int8) (offset in
 
 func (x *ChangeOrderStatusReq) fastReadField2(buf []byte, _type int8) (offset int, err error) {
 	x.OrderStatus, offset, err = fastpb.ReadUint32(buf, _type)
-	return offset, err
-}
-
-func (x *ChangeOrderStatusReq) fastReadField3(buf []byte, _type int8) (offset int, err error) {
-	x.UserId, offset, err = fastpb.ReadUint32(buf, _type)
 	return offset, err
 }
 
@@ -472,7 +462,6 @@ func (x *ChangeOrderStatusReq) FastWrite(buf []byte) (offset int) {
 	}
 	offset += x.fastWriteField1(buf[offset:])
 	offset += x.fastWriteField2(buf[offset:])
-	offset += x.fastWriteField3(buf[offset:])
 	return offset
 }
 
@@ -489,14 +478,6 @@ func (x *ChangeOrderStatusReq) fastWriteField2(buf []byte) (offset int) {
 		return offset
 	}
 	offset += fastpb.WriteUint32(buf[offset:], 2, x.GetOrderStatus())
-	return offset
-}
-
-func (x *ChangeOrderStatusReq) fastWriteField3(buf []byte) (offset int) {
-	if x.UserId == 0 {
-		return offset
-	}
-	offset += fastpb.WriteUint32(buf[offset:], 3, x.GetUserId())
 	return offset
 }
 
@@ -791,7 +772,6 @@ func (x *ChangeOrderStatusReq) Size() (n int) {
 	}
 	n += x.sizeField1()
 	n += x.sizeField2()
-	n += x.sizeField3()
 	return n
 }
 
@@ -808,14 +788,6 @@ func (x *ChangeOrderStatusReq) sizeField2() (n int) {
 		return n
 	}
 	n += fastpb.SizeUint32(2, x.GetOrderStatus())
-	return n
-}
-
-func (x *ChangeOrderStatusReq) sizeField3() (n int) {
-	if x.UserId == 0 {
-		return n
-	}
-	n += fastpb.SizeUint32(3, x.GetUserId())
 	return n
 }
 
@@ -1107,7 +1079,6 @@ func (x *ListOrderResp) sizeField1() (n int) {
 var fieldIDToName_ChangeOrderStatusReq = map[int32]string{
 	1: "OrderId",
 	2: "OrderStatus",
-	3: "UserId",
 }
 
 var fieldIDToName_ChangeOrderStatusResp = map[int32]string{}

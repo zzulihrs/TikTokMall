@@ -16,7 +16,6 @@ service OrderService {
 message ChangeOrderStatusReq {
     string order_id = 1;
     uint32 order_status = 2;
-    uint32 user_id = 3;
 }
 
 message ChangeOrderStatusResp {}
