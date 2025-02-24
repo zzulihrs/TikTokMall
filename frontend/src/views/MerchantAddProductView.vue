@@ -213,7 +213,7 @@ const addProduct = async () => {
     console.log('AddProduct, args:', payload)
     await axios.post('/api/merchant/product/add', payload);
     ElMessage.success('商品添加成功');
-    router.push('/merchant/product/list');
+    // router.push('/merchant/product/list');
   } catch (error) {
     ElMessage.error('商品添加失败：' + error.message);
   }
