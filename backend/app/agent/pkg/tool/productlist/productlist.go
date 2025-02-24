@@ -65,7 +65,7 @@ func NewProduct(ctx context.Context, config *ProductConfig) (tool.BaseTool, erro
 func (p *ProductImpl) ToEinoTool() (tool.BaseTool, error) {
 	return utils.InferTool(
 		"products",
-		"Query and search products by Sticker or T-Shit catagory, response should with ID",
+		"Query and search products by Sticker or T-Shit catagory, respond with IDss",
 		p.Invoke,
 	)
 }

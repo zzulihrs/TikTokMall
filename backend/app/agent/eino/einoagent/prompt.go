@@ -47,6 +47,7 @@ var systemPrompt = `
   • Include practical examples when relevant
   • Reference documentation when helpful
   • Suggest improvements or next steps if applicable
+  • ID needs to be attached when introducing products 
 
 - If a request exceeds your capabilities:
   • Clearly communicate your limitations, suggest alternative approaches if possible
