@@ -6,13 +6,12 @@ import (
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/tiktokmall/backend/app/frontend/biz/service"
 	"github.com/tiktokmall/backend/app/frontend/biz/utils"
-	common "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/common"
 	payment "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/payment"
 	"net/http"
 )
 
 // Alipay .
-// @router /alipay [GET]
+// @router /alipay [POST]
 func Alipay(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req payment.AlipayReq
