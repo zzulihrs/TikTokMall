@@ -3,7 +3,7 @@
     <el-main>
       <el-row>
         <el-col :span="24">
-          <h2>{{ category }} 类别商品</h2>
+          <h2>{{ store?.state?.category?.category }} 类别商品</h2>
           <el-empty v-if="categoryItems?.length==0" description="暂无商品" />
           <el-row v-else>
             <el-col
@@ -40,9 +40,10 @@ const fetchCategoryItems = async () => {
 
     // 获取到    /category/T-Shirt的T-Shirt
 
-    category.value = route?.params?.type // Get category from route params
-    console.log(route?.params?.type);
-    const response = await axios.get(`/api/category/${category.value}`)
+    // category.value = route?.params?.type // Get category from route params
+    // console.log(route?.params?.type);
+
+    const response = await axios.get(`/api/category/${store?.state?.category?.category}`)
     categoryItems.value = response?.data?.items || []
   } catch (err) {
     categoryItems.value = null
@@ -51,7 +52,7 @@ const fetchCategoryItems = async () => {
 }
 
 // vue3监听route?.params?.type
-watch(() => route.params.type, (newType, oldType) => {
+watch(() => store?.state?.category?.category, (newType, oldType) => {
   console.log('路由参数 type 变化了', newType, oldType);
   // 在这里执行相关操作，比如重新获取数据
   fetchCategoryItems()
