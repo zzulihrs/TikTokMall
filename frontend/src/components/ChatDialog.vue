@@ -33,7 +33,7 @@
         <div v-for="(message, index) in messages" :key="index" 
           :class="['message', message.role === 'assistant' ? 'message-left' : 'message-right']">
           <div class="message-avatar">
-            <el-avatar :size="36" :src="message.role === 'assistant' ? '/bot-avatar.png' : '/user-avatar.png'" />
+            <el-avatar :size="36" :src="message.role === 'assistant' ? 'static/image/logo.jpg' : 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'" />
           </div>
           <div class="message-content">
             {{ message.content }}
@@ -123,10 +123,6 @@ const sendMessage = async () => {
       'Connection': 'keep-alive',
       'Cookie': 'cloudwego-shop=' + document.cookie.split('cloudwego-shop=')[1]?.split(';')[0]
     },
-    body: JSON.stringify({
-      message: userMessage
-    }),
-    // 确保包含凭证
     credentials: 'include'
   })
 
@@ -164,9 +160,9 @@ const sendMessage = async () => {
 
 <style scoped>
 /* 添加打字机光标效果 */
-.message-left .message-content {
+/* .message-left .message-content {
   position: relative;
-}
+} */
 
 .message-left .message-content::after {
   content: '';
