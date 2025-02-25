@@ -97,7 +97,7 @@ export default {
       try {
         commit('SET_LOADING', true)
         commit('CLEAR_CART')
-        await axios.get(`/api/emptyCart`)
+        await axios.get(`/api/emptycart`)
         commit('SET_ERROR', null)
       } catch (error) {
         commit('SET_ERROR', error.message)
