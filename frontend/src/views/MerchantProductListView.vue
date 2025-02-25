@@ -62,8 +62,14 @@
         </el-table-column>
       </el-table>
 
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="1"
-        :page-sizes="[10, 20, 30, 40]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="totalCount">
+      <el-pagination 
+        @size-change="handleSizeChange" 
+        @current-change="handleCurrentChange" 
+        :current-page="currentPage"
+        :page-sizes="[10, 20, 30, 40]" 
+        :page-size="pageSize"  
+        layout="total, sizes, prev, pager, next, jumper" 
+        :total="totalCount">
       </el-pagination>
 
       <!-- 编辑弹窗 -->
@@ -178,8 +184,18 @@ const searchProducts = () => {
 };
 
 // 分页处理
-const handleSizeChange = (newSize) => store.dispatch('merchant/handleSizeChange', newSize);
-const handleCurrentChange = (newPage) => store.dispatch('merchant/handleCurrentChange', newPage);
+const handleSizeChange = (newSize) => {
+  store.dispatch('merchant/handleSizeChange', newSize);
+  store.dispatch('merchant/handleCurrentChange', 1);
+  console.log('pageSize', pageSize.value);
+  console.log('currentPage', currentPage.value);
+  store.dispatch('merchant/ProductList');
+}
+const handleCurrentChange = (newPage) => {
+  store.dispatch('merchant/handleCurrentChange', newPage);
+  console.log('currentPage', currentPage.value);
+  store.dispatch('merchant/ProductList');
+}
 
 
 // 删除商品

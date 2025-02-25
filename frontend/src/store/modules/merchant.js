@@ -13,30 +13,12 @@ const state = {
     max_stock: '',
     min_price: '',
     max_price: '',
-    page: 1,
-    page_size: 10,
   },
   products: [], // 商品列表
   currentPage: 1,
   pageSize: 10,
   totalCount: 0, // 符合条件的商品总数
   // 详情页
-  aproductDetail: {
-    id: '',
-    name: '',
-    description: "",
-    stock: '',
-    price: '',
-    img_url: '',
-    catetory: [
-      {
-        id: '',
-        name: '',
-        description: '',
-      }
-    ],
-    slider_img: []
-  },
   productDetail: {
     category: [
       {
@@ -89,6 +71,12 @@ const mutations = {
 };
 
 const actions = {
+  handleCurrentChange({ commit }, page) {
+    commit('SET_CURRENT_PAGE', page);
+  },
+  handleSizeChange({ commit }, size) {
+    commit('SET_PAGE_SIZE', size);
+  },
   // 列表
   async ProductList({ commit, state }) {
     const data = Object.entries({
