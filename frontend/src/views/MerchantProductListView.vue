@@ -63,7 +63,7 @@
       </el-table>
 
       <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="1"
-        :page-sizes="[10, 20, 30, 40]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="400">
+        :page-sizes="[10, 20, 30, 40]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="totalCount">
       </el-pagination>
 
       <!-- 编辑弹窗 -->
@@ -160,7 +160,7 @@ const goToProductDetail = (product) => router.push(`/products/${product.id}`);
 const searchQuery = computed(() => store.getters['merchant/getSearchQuery']);
 const currentPage = computed(() => store.getters['merchant/getCurrentPage']);
 const pageSize = computed(() => store.getters['merchant/getPageSize']);
-const totalProducts = computed(() => store.getters['merchant/getTotalProducts']);
+const totalCount = computed(() => store.getters['merchant/gettotalCount']);
 
 // 操作方法
 const clearSearchQuery = () => store.dispatch('merchant/SET_SEARCH_QUERY', { // 搜索条件

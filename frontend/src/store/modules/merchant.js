@@ -19,6 +19,7 @@ const state = {
   products: [], // 商品列表
   currentPage: 1,
   pageSize: 10,
+  totalCount: 0, // 符合条件的商品总数
   // 详情页
   aproductDetail: {
     id: '',
@@ -68,6 +69,9 @@ const mutations = {
   SET_CATEGORY_FILTER(state, filter) {
     state.categoryFilter = filter;
   },
+  SET_TOTAL_COUNT(state, count) {
+    state.totalCount = count;
+  },
   SET_PRODUCTS(state, products) {
     state.products = products;
   },
@@ -112,7 +116,8 @@ const actions = {
         ElMessage.error('获取商品列表失败：' + response.data.message);
         return;
       }
-      commit('SET_PRODUCTS', response.data.data);
+      commit('SET_PRODUCTS', response.data.data.items);
+      commit('SET_TOTAL_COUNT', response.data.data.total);
     } catch (error) {
       ElMessage.error('获取商品列表失败：' + error.message);
     }
@@ -228,6 +233,7 @@ const getters = {
   getProductDetail: state => state.productDetail,
   // 店家id
   getMerchantId: state => state.id,
+  gettotalCount: state => state.totalCount
 };
 
 export default {

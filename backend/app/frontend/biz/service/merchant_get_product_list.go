@@ -56,8 +56,10 @@ func (h *MerchantGetProductListService) Run(req *merchant.MerchantGetProductList
 	return map[string]any{
 		"code":    200,
 		"message": "OK",
-		"data":    products,
-		"total":   psResp.Count,
+		"data": map[string]any{
+			"items": products,
+			"total": psResp.Count,
+		},
 	}, nil
 }
 
