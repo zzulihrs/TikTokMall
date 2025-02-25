@@ -7,6 +7,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/utils"
 	merchant "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/merchant"
 	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
+	frontendUtils "github.com/tiktokmall/backend/app/frontend/utils"
 	rpcmerchant "github.com/tiktokmall/backend/rpc_gen/kitex_gen/merchant"
 )
 
@@ -26,8 +27,8 @@ func (h *MerchantGetProductDetailService) Run(req *merchant.MerchantGetProductDe
 	//}()
 	// todo edit your code
 	pResp, err := rpc.MerchantClient.ProductDetail(h.Context, &rpcmerchant.ProductDetailReq{
-		MerchantId: req.Mid,
-		Pid:        req.Pid,
+		MerchantId: frontendUtils.GetMerchantIdFromCtx(h.Context),
+		Pid:        req.Id,
 	})
 	if err != nil {
 		return utils.H{

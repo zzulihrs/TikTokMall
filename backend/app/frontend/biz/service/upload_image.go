@@ -3,12 +3,13 @@ package service
 import (
 	"bytes"
 	"context"
-	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/tiktokmall/backend/app/frontend/biz/utils"
-	oss "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/oss"
 	"io"
 	"log"
 	"os"
+
+	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/tiktokmall/backend/app/frontend/biz/utils"
+	oss "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/oss"
 )
 
 type UploadImageService struct {
@@ -47,13 +48,13 @@ func (h *UploadImageService) Run(req *oss.UploadFileRequest) (resp *oss.UploadRe
 	// 初始化 OSS 工具类
 	ossUtils, err := utils.NewOssUtils()
 	if err != nil {
-		log.Println("初始化 OSS 工具失败: %v", err)
+		log.Printf("初始化 OSS 工具失败: %v", err)
 	}
 	temp, err := ossUtils.UploadImage(h.Context, buffer, fileName)
 	if err != nil {
 		id := os.Getenv("OSS_ACCESS_KEY_ID")
 		secret := os.Getenv("OSS_ACCESS_KEY_SECRET")
-		log.Println("上传图片失败: %v", err)
+		log.Printf("上传图片失败: %v", err)
 		log.Println("id: ", id)
 		log.Println("secret: ", secret)
 		return nil, err

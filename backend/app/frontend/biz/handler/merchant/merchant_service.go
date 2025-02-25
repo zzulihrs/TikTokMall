@@ -116,32 +116,6 @@ func MerchantGetProductList(ctx context.Context, c *app.RequestContext) {
 	// utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
 }
 
-// MerchantGetProductDetail .
-// @router /merchant/product/detail [POST]
-func MerchantGetProductDetail(ctx context.Context, c *app.RequestContext) {
-	var err error
-	var req merchant.MerchantGetProductDetailReq
-	err = c.BindAndValidate(&req)
-	if err != nil {
-		c.JSON(consts.StatusBadRequest, nil)
-		// utils.SendErrResponse(ctx, c, consts.StatusOK, err)
-		return
-	}
-
-	resp, err := service.NewMerchantGetProductDetailService(ctx, c).Run(&req)
-	if err != nil {
-		c.JSON(consts.StatusInternalServerError, map[string]any{
-			"code":    500,
-			"message": err.Error(),
-		})
-		// utils.SendErrResponse(ctx, c, consts.StatusOK, err)
-		return
-	}
-
-	c.JSON(consts.StatusOK, resp)
-	// utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
-}
-
 // MerchantPing .
 // @router /merchant/ping [GET]
 func MerchantPing(ctx context.Context, c *app.RequestContext) {
@@ -212,4 +186,30 @@ func MerchantRegister(ctx context.Context, c *app.RequestContext) {
 		return
 	}
 	c.JSON(consts.StatusOK, resp)
+}
+
+// MerchantGetProductDetail .
+// @router /merchant/product/:id [GET]
+func MerchantGetProductDetail(ctx context.Context, c *app.RequestContext) {
+	var err error
+	var req merchant.MerchantGetProductDetailReq
+	err = c.BindAndValidate(&req)
+	if err != nil {
+		c.JSON(consts.StatusBadRequest, nil)
+		// utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		return
+	}
+
+	resp, err := service.NewMerchantGetProductDetailService(ctx, c).Run(&req)
+	if err != nil {
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
+		// utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		return
+	}
+
+	c.JSON(consts.StatusOK, resp)
+	// utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
 }

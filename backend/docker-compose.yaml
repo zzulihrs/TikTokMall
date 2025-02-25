@@ -38,8 +38,6 @@ services:
       - ./data/redis:/data
     environment:
       - REDIS_ARGS=--dir /data --appendonly no --save 1800 1
-      - HTTP_PROXY=http://192.168.217.1:8891
-      - HTTPS_PROXY=http://192.168.217.1:8891
     restart: unless-stopped
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
