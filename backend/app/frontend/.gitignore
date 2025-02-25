@@ -23,6 +23,7 @@ _testmain.go
 *.cfg
 *.pptx
 *.log
+*.jsonl
 *nohup.out
 *settings.pyc
 *.sublime-project

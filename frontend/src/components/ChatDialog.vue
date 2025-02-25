@@ -33,10 +33,10 @@
         <div v-for="(message, index) in messages" :key="index" 
           :class="['message', message.role === 'assistant' ? 'message-left' : 'message-right']">
           <div class="message-avatar">
-            <el-avatar :size="36" :src="message.role === 'assistant' ? '/bot-avatar.png' : '/user-avatar.png'" />
+            <el-avatar :size="36" :src="message.role === 'assistant' ? 'static/image/logo.jpg' : 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'" />
           </div>
           <div class="message-content">
-            {{ message.content }}
+            <div v-html="marked(message.content)"></div>
           </div>
         </div>
       </div>
@@ -60,6 +60,7 @@
 <script setup>
 import { ref, watch, nextTick } from 'vue'
 import { ChatDotRound, Close } from '@element-plus/icons-vue'
+import {marked} from 'marked';
 
 const visible = ref(false)
 const showHint = ref(false)
@@ -77,7 +78,21 @@ const toggleChat = () => {
   visible.value = !visible.value
 }
 
-// 发送消息
+// 在 script setup 中添加
+const typewriterEffect = (text, callback) => {
+  let index = 0
+  const interval = setInterval(() => {
+    if (index < text.length) {
+      callback(text.slice(0, index + 1))
+      index++
+    } else {
+      clearInterval(interval)
+    }
+  }, 50) // 控制打字速度，可以调整
+  return interval
+}
+
+// 修改 sendMessage 函数中的数据处理部分
 const sendMessage = async () => {
   if (!inputMessage.value.trim() || loading.value) return
 
@@ -92,37 +107,102 @@ const sendMessage = async () => {
   inputMessage.value = ''
 
   try {
-    // 保持原有的发送逻辑
-    const response = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: userMessage })
-    })
-    const data = await response.json()
-
-    // 添加助手回复
-    messages.value.push({
+    // 创建一个新的消息对象用于存储助手的回复
+    const assistantMessage = {
       role: 'assistant',
-      content: data.message
-    })
+      content: ''
+    }
+    messages.value.push(assistantMessage)
+
+    // 使用 fetch 发送 POST 请求
+    const response = await fetch(`agent/api/chat?message=${encodeURIComponent(userMessage)}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+      'Cookie': 'cloudwego-shop=' + document.cookie.split('cloudwego-shop=')[1]?.split(';')[0]
+    },
+    credentials: 'include'
+  })
+
+    // 创建 reader 来读取流数据
+    const reader = response.body.getReader()
+    const decoder = new TextDecoder()
+
+    const readChunk = () => {
+      reader.read().then(({ value, done }) => {
+        if (done) {
+          loading.value = false
+          return
+        }
+
+        const chunk = decoder.decode(value)
+        const lines = chunk.split('\n')
+        assistantMessage.content += chunk.replaceAll('data:', '').replaceAll('\n\n', '')
+        // 确保滚动到底部
+        nextTick(() => {
+          if (messageContainer.value) {
+            messageContainer.value.scrollTop = messageContainer.value.scrollHeight
+          }
+        })
+        // for (const line of lines) {
+        //   if (line.startsWith('data:')) {
+        //     const content = line.slice(5) 
+        //     if (content) {
+        //       // 累积内容并更新消息
+        //       console.log("content: " + content)
+        //       const formattedContent = content.includes("- ") 
+        // ? content.replace(/- /g, '\n- ') // 在每个 "- " 前添加换行符
+        // : content
+              
+        //     }
+        //   }
+        // }
+
+        // 递归继续读取
+        readChunk()
+        console.log('assistantMessage:', assistantMessage)
+      }).catch(error => {
+        console.error('读取流错误:', error)
+        loading.value = false
+      })
+    }
+
+    // 开始读取流
+    readChunk()
   } catch (error) {
     console.error('发送消息失败:', error)
-  } finally {
     loading.value = false
   }
 }
-
-// 监听消息变化，自动滚动到底部
-watch(messages, () => {
-  nextTick(() => {
-    if (messageContainer.value) {
-      messageContainer.value.scrollTop = messageContainer.value.scrollHeight
-    }
-  })
-})
 </script>
 
 <style scoped>
+
+.message-left .message-content::after {
+  content: '';
+  position: absolute;
+  right: -2px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 16px;
+  background-color: var(--el-color-primary);
+  animation: cursor-blink 0.8s steps(2) infinite;
+  opacity: 0;
+}
+
+.message-left:last-child .message-content::after {
+  opacity: 1;
+}
+
+@keyframes cursor-blink {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
 .chat-container {
   position: fixed;
   right: 20px;
