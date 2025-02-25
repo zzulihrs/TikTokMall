@@ -12,7 +12,7 @@ services:
     container_name: mysql
     image: "mysql:8"
     environment:
-      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_ROOT_PASSWORD: "K8#tP2@y!mL9"
     restart: always #  设置重启策略为always
     mem_limit: 2g   # 增加内存限制
     cpus: 2         # 增加CPU数量
