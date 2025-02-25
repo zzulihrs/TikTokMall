@@ -77,7 +77,21 @@ const toggleChat = () => {
   visible.value = !visible.value
 }
 
-// 发送消息
+// 在 script setup 中添加
+const typewriterEffect = (text, callback) => {
+  let index = 0
+  const interval = setInterval(() => {
+    if (index < text.length) {
+      callback(text.slice(0, index + 1))
+      index++
+    } else {
+      clearInterval(interval)
+    }
+  }, 50) // 控制打字速度，可以调整
+  return interval
+}
+
+// 修改 sendMessage 函数中的数据处理部分
 const sendMessage = async () => {
   if (!inputMessage.value.trim() || loading.value) return
 
@@ -92,37 +106,90 @@ const sendMessage = async () => {
   inputMessage.value = ''
 
   try {
-    // 保持原有的发送逻辑
-    const response = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: userMessage })
-    })
-    const data = await response.json()
-
-    // 添加助手回复
-    messages.value.push({
+    // 创建一个新的消息对象用于存储助手的回复
+    const assistantMessage = {
       role: 'assistant',
-      content: data.message
-    })
+      content: ''
+    }
+    messages.value.push(assistantMessage)
+
+    // 使用 fetch 发送 POST 请求
+    const response = await fetch(`agent/api/chat?message=${encodeURIComponent(userMessage)}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+      'Cookie': 'cloudwego-shop=' + document.cookie.split('cloudwego-shop=')[1]?.split(';')[0]
+    },
+    body: JSON.stringify({
+      message: userMessage
+    }),
+    // 确保包含凭证
+    credentials: 'include'
+  })
+
+    // 创建 reader 来读取流数据
+    const reader = response.body.getReader()
+    const decoder = new TextDecoder()
+
+    let accumulatedText = ''
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+      
+      const chunk = decoder.decode(value)
+      // 处理数据格式
+      const lines = chunk.split('\n')
+      for (const line of lines) {
+        if (line.startsWith('data:')) {
+          const content = line.slice(5).trim() // 移除 'data:' 前缀
+          if (content) {
+            accumulatedText += content
+            // 更新消息内容
+            assistantMessage.content = accumulatedText
+          }
+        }
+      }
+    }
+
+    loading.value = false
   } catch (error) {
     console.error('发送消息失败:', error)
-  } finally {
     loading.value = false
   }
 }
-
-// 监听消息变化，自动滚动到底部
-watch(messages, () => {
-  nextTick(() => {
-    if (messageContainer.value) {
-      messageContainer.value.scrollTop = messageContainer.value.scrollHeight
-    }
-  })
-})
 </script>
 
 <style scoped>
+/* 添加打字机光标效果 */
+.message-left .message-content {
+  position: relative;
+}
+
+.message-left .message-content::after {
+  content: '';
+  position: absolute;
+  right: -2px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 16px;
+  background-color: var(--el-color-primary);
+  animation: cursor-blink 0.8s steps(2) infinite;
+  opacity: 0;
+}
+
+.message-left:last-child .message-content::after {
+  opacity: 1;
+}
+
+@keyframes cursor-blink {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
 .chat-container {
   position: fixed;
   right: 20px;

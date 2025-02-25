@@ -11,7 +11,7 @@ option go_package = "frontend/agent";
 service AgentService {
     // 发送聊天消息
     rpc HandleChat(common.Empty) returns (common.Empty) {
-        option (api.get) = "agent/api/chat";
+        option (api.post) = "agent/api/chat";
     }
     
 }
