@@ -12,7 +12,7 @@ hertz:
   log_max_backups: 50
   registry_addr: "127.0.0.1:8500"
 
-# 下面的没用
+# mysql 没用
 mysql:
   dsn: "gorm:gorm@tcp(127.0.0.1:3306)/gorm?charset=utf8mb4&parseTime=True&loc=Local"
 

@@ -6,7 +6,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	merchant "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/merchant"
 	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
-	"github.com/tiktokmall/backend/app/frontend/utils"
+	frontendUtils "github.com/tiktokmall/backend/app/frontend/utils"
 	rpcmerchant "github.com/tiktokmall/backend/rpc_gen/kitex_gen/merchant"
 )
 
@@ -19,7 +19,7 @@ func NewMerchantGetProductListService(Context context.Context, RequestContext *a
 	return &MerchantGetProductListService{RequestContext: RequestContext, Context: Context}
 }
 
-func (h *MerchantGetProductListService) Run(req *merchant.MerchantGetProductListReq) (resp utils.H, err error) {
+func (h *MerchantGetProductListService) Run(req *merchant.MerchantGetProductListReq) (resp map[string]any, err error) {
 	//defer func() {
 	// hlog.CtxInfof(h.Context, "req = %+v", req)
 	// hlog.CtxInfof(h.Context, "resp = %+v", resp)
@@ -34,17 +34,17 @@ func (h *MerchantGetProductListService) Run(req *merchant.MerchantGetProductList
 		MinPrice:   req.MinPrice,
 		PageNo:     req.PageNo,
 		PageSize:   req.PageSize,
-		MerchantId: req.MerchantId,
+		MerchantId: frontendUtils.GetMerchantIdFromCtx(h.Context),
 	})
 	if err != nil {
-		return utils.H{
+		return map[string]any{
 			"code":    500,
 			"message": "获取商品列表失败",
 		}, err
 	}
-	products := make([]utils.H, len(psResp.Products))
+	products := make([]map[string]any, len(psResp.Products))
 	for i, p := range psResp.Products {
-		products[i] = utils.H{
+		products[i] = map[string]any{
 			"id":          p.Id,
 			"name":        p.Name,
 			"description": p.Description,
@@ -53,7 +53,7 @@ func (h *MerchantGetProductListService) Run(req *merchant.MerchantGetProductList
 			"img_url":     p.ImgUrl,
 		}
 	}
-	return utils.H{
+	return map[string]any{
 		"code":    200,
 		"message": "OK",
 		"data":    products,

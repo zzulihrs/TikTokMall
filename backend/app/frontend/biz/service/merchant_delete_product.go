@@ -7,6 +7,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/utils"
 	merchant "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/merchant"
 	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
+	frontendUtils "github.com/tiktokmall/backend/app/frontend/utils"
 	rpcmerchant "github.com/tiktokmall/backend/rpc_gen/kitex_gen/merchant"
 )
 
@@ -26,7 +27,7 @@ func (h *MerchantDeleteProductService) Run(req *merchant.MerchantDeleteProductRe
 	//}()
 	// todo edit your code
 	_, err = rpc.MerchantClient.DeleteProduct(h.Context, &rpcmerchant.DeleteProductReq{
-		MerchantId: req.Mid,
+		MerchantId: frontendUtils.GetMerchantIdFromCtx(h.Context),
 		Pid:        req.Pid,
 	})
 	if err != nil {

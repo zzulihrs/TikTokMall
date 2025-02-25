@@ -24,9 +24,9 @@ func Register(r *server.Hertz) {
 		_merchant.POST("/register", append(_merchantregisterMw(), merchant.MerchantRegister)...)
 		{
 			_product := _merchant.Group("/product", _productMw()...)
+			_product.GET("/:id", append(_merchantgetproductdetailMw(), merchant.MerchantGetProductDetail)...)
 			_product.POST("/add", append(_merchantaddproductMw(), merchant.MerchantAddProduct)...)
 			_product.POST("/delete", append(_merchantdeleteproductMw(), merchant.MerchantDeleteProduct)...)
-			_product.POST("/detail", append(_merchantgetproductdetailMw(), merchant.MerchantGetProductDetail)...)
 			_product.POST("/list", append(_merchantgetproductlistMw(), merchant.MerchantGetProductList)...)
 			_product.POST("/update", append(_merchantupdateproductMw(), merchant.MerchantUpdateProduct)...)
 		}
