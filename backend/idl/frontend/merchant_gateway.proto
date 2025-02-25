@@ -34,7 +34,7 @@ service MerchantService {
     }
     // 商品详情 （可加轮播图）
     rpc MerchantGetProductDetail(MerchantGetProductDetailReq) returns(common.Empty) {
-        option (api.post) = "/merchant/product/detail";
+        option (api.get) = "/merchant/product/:id";
     }
 
     // 成为店家
@@ -89,23 +89,19 @@ message MerchantAddProductReq {
     repeated Category categories = 4 [(api.body) = "categories"];
     string img_url = 5 [(api.body) = "img_url"];
     repeated string slider_imgs = 6 [(api.body) = "slider_imgs"];
-    int64 mid = 7 [(api.body) = "mid"];
-    int32 stock = 8 [(api.body) = "stock"];
+    int32 stock = 7 [(api.body) = "stock"];
 }
 /*
 {
-    "mid": 1,
-    "pid": 2
+    "pid": 1
 }
 */
 message MerchantDeleteProductReq {
-    int64 mid = 1 [(api.body) = "mid"];
-    int64 pid = 2 [(api.body) = "pid"];
+    int64 pid = 1 [(api.body) = "pid"];
 }
 
 /*
 {
-    "mid": 100,
     "pid": 100,
     "name": "电视",
     "price": 19.2,
@@ -138,8 +134,7 @@ message MerchantUpdateProductReq {
     repeated Category categories = 5 [(api.body) = "categories"];
     string img_url = 6 [(api.body) = "img_url"];
     repeated string slider_imgs = 7 [(api.body) = "slider_imgs"];
-    int64 mid = 8 [(api.body) = "mid"];
-    int32 stock = 9 [(api.body) = "stock"];
+    int32 stock = 8 [(api.body) = "stock"];
 }
 /*
 {
@@ -150,7 +145,6 @@ message MerchantUpdateProductReq {
     "max_price": 20,
     "page_size": 10,
     "page_no": 1,
-    "merchant_id": 1
 }
 */
 message MerchantGetProductListReq {
@@ -161,16 +155,11 @@ message MerchantGetProductListReq {
     float max_price = 5 [(api.body) = "max_price"];
     int32 page_size = 6 [(api.body) = "page_size"];
     int32 page_no = 7 [(api.body) = "page_no"];
-    int64 merchant_id = 8 [(api.body) = "merchant_id"];
 }
 
 /*
-{
-    "mid": 1,
-    "pid": 2
-}
+:id
 */
 message MerchantGetProductDetailReq {
-    int64 mid = 1 [(api.body) = "mid"];
-    int64 pid = 2 [(api.body) = "pid"];
+    int64 id = 1 [(api.path) = "id"];
 }

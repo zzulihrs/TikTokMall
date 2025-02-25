@@ -1,7 +1,8 @@
 export default {
     namespaced: true,
-  
+
     state: () => ({
+        category: 'All',
       categories: [
         {
           id: 0,
@@ -20,16 +21,20 @@ export default {
         }
       ]
     }),
-  
+
     getters: {
         // 获取搜索结果
         categories: state => state.categories,
+        category: state => state.category
     },
-  
+
     mutations: {
+        Update_Category(state, payload) {
+            state.category = payload;
+        }
     },
-  
+
     actions: {
+
     }
   }
-  

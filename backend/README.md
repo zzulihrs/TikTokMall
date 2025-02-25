@@ -16,7 +16,8 @@ Docker Images
 ```bash
 docker pull consul:1.15.4
 docker pull mysql:8
-docker pull redis:7.2.4-alpine
+# docker pull redis:7.2.4-alpine
+docker pull redis/redis-stack:7.4.0-v3
 docker pull nats:2.10.24-alpine
 docker pull prom/prometheus:v3.0.0
 docker pull grafana/grafana:11.4.0

@@ -6,7 +6,7 @@
 import { onMounted } from 'vue'
 import { useStore } from 'vuex'
 import Layout from './components/Layout.vue'
-
+import marked from 'marked';
 const store = useStore()
 
 // 初始化用户状态
