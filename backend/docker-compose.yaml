@@ -29,7 +29,7 @@ services:
       retries: 5
       start_period: 30s
   redis:
-    image: redis/redis-stack:latest
+    image: redis/redis-stack:7.4.0-v3
     container_name: redis-st
     ports:
       - "6379:6379"  # Redis port
@@ -38,6 +38,8 @@ services:
       - ./data/redis:/data
     environment:
       - REDIS_ARGS=--dir /data --appendonly no --save 1800 1
+      - HTTP_PROXY=http://192.168.217.1:8891
+      - HTTPS_PROXY=http://192.168.217.1:8891
     restart: unless-stopped
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
