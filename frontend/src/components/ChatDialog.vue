@@ -36,7 +36,7 @@
             <el-avatar :size="36" :src="message.role === 'assistant' ? 'static/image/logo.jpg' : 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'" />
           </div>
           <div class="message-content">
-            {{ message.content }}
+            <div v-html="marked(message.content)"></div>
           </div>
         </div>
       </div>
@@ -60,6 +60,7 @@
 <script setup>
 import { ref, watch, nextTick } from 'vue'
 import { ChatDotRound, Close } from '@element-plus/icons-vue'
+import {marked} from 'marked';
 
 const visible = ref(false)
 const showHint = ref(false)
@@ -130,27 +131,47 @@ const sendMessage = async () => {
     const reader = response.body.getReader()
     const decoder = new TextDecoder()
 
-    let accumulatedText = ''
-    while (true) {
-      const { done, value } = await reader.read()
-      if (done) break
-      
-      const chunk = decoder.decode(value)
-      // 处理数据格式
-      const lines = chunk.split('\n')
-      for (const line of lines) {
-        if (line.startsWith('data:')) {
-          const content = line.slice(5).trim() // 移除 'data:' 前缀
-          if (content) {
-            accumulatedText += content
-            // 更新消息内容
-            assistantMessage.content = accumulatedText
-          }
+    const readChunk = () => {
+      reader.read().then(({ value, done }) => {
+        if (done) {
+          loading.value = false
+          return
         }
-      }
+
+        const chunk = decoder.decode(value)
+        const lines = chunk.split('\n')
+        assistantMessage.content += chunk.replaceAll('data:', '').replaceAll('\n\n', '')
+        // 确保滚动到底部
+        nextTick(() => {
+          if (messageContainer.value) {
+            messageContainer.value.scrollTop = messageContainer.value.scrollHeight
+          }
+        })
+        // for (const line of lines) {
+        //   if (line.startsWith('data:')) {
+        //     const content = line.slice(5) 
+        //     if (content) {
+        //       // 累积内容并更新消息
+        //       console.log("content: " + content)
+        //       const formattedContent = content.includes("- ") 
+        // ? content.replace(/- /g, '\n- ') // 在每个 "- " 前添加换行符
+        // : content
+              
+        //     }
+        //   }
+        // }
+
+        // 递归继续读取
+        readChunk()
+        console.log('assistantMessage:', assistantMessage)
+      }).catch(error => {
+        console.error('读取流错误:', error)
+        loading.value = false
+      })
     }
 
-    loading.value = false
+    // 开始读取流
+    readChunk()
   } catch (error) {
     console.error('发送消息失败:', error)
     loading.value = false
@@ -159,10 +180,6 @@ const sendMessage = async () => {
 </script>
 
 <style scoped>
-/* 添加打字机光标效果 */
-/* .message-left .message-content {
-  position: relative;
-} */
 
 .message-left .message-content::after {
   content: '';
