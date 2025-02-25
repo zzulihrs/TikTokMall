@@ -63,8 +63,23 @@ func (p *ProductQuery) GetProductListByCondition(condition string, pageNo, pageS
 	err = p.db.WithContext(p.ctx).Model(&Product{}).Where(condition).Offset((pageNo - 1) * pageSize).Limit(pageSize).Find(&products).Error
 	return
 }
-func (p *ProductQuery) InsertMany(products []Product) (err error) {
-	err = p.db.WithContext(p.ctx).Model(&Product{}).Create(&products).Error
+func (p *ProductQuery) InsertMany(products []Product) (lastId int64, err error) {
+
+	tsErr := p.db.WithContext(p.ctx).Transaction(func(tx *gorm.DB) error {
+		result := p.db.WithContext(p.ctx).Model(&Product{}).Create(&products)
+		if err = result.Error; err != nil {
+			return err
+		}
+		var product Product
+		if err = result.Last(&product).Error; err != nil {
+			return err
+		}
+		lastId = int64(product.ID)
+		return nil
+	})
+	if tsErr != nil {
+		err = tsErr
+	}
 	return
 }
 

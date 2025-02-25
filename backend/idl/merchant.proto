@@ -77,7 +77,7 @@ message AddProductReq {
 }
 
 message AddProductResp {
-    
+    int64 pid = 1;
 }
 
 

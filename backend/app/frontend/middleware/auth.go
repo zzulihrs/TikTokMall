@@ -18,9 +18,9 @@ func GlobalAuth() app.HandlerFunc {
 		userId := session.Get("user_id")
 		username := session.Get("username")
 		email := session.Get("email")
-		log.Printf("GlobalAuth get from session, userId: %v", userId)
-		log.Printf("GlobalAuth get from session, username: %v", username)
-		log.Printf("GlobalAuth get from session, email: %v", email)
+		// log.Printf("GlobalAuth get from session, userId: %v", userId)
+		// log.Printf("GlobalAuth get from session, username: %v", username)
+		// log.Printf("GlobalAuth get from session, email: %v", email)
 		if userId == nil {
 			c.Next(ctx)
 			return

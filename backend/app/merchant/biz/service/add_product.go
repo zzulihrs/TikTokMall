@@ -24,9 +24,9 @@ func (s *AddProductService) Run(req *merchant.AddProductReq) (resp *merchant.Add
 	// Finish your business logic.
 
 	// 1. 检查参数
-	//if err = checkAddProductReq(req); err != nil {
-	//	return nil, kerrors.NewGRPCBizStatusError(2004001, "product is invalid")
-	//}
+	if err = checkAddProductReq(req); err != nil {
+		return nil, kerrors.NewGRPCBizStatusError(2004001, "product is invalid")
+	}
 	// 2. 检查商户
 	_, err = model.NewMerchantQuery(s.ctx, mysql.DB).GetById(int(req.GetMerchantId()))
 	if err != nil {
@@ -57,11 +57,14 @@ func (s *AddProductService) Run(req *merchant.AddProductReq) (resp *merchant.Add
 			UpdatedAt: time.Now(),
 		},
 	}
-	err = model.NewProductQuery(s.ctx, mysql.DB).InsertMany([]model.Product{*newProduct})
+	lastId, err := model.NewProductQuery(s.ctx, mysql.DB).InsertMany([]model.Product{*newProduct})
 	if err != nil {
 		return nil, fmt.Errorf("insert product failed, err:%w", err)
 	}
 
+	resp = &merchant.AddProductResp{
+		Pid: lastId,
+	}
 	return
 }
 

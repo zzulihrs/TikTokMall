@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"log"
+	"strconv"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/utils"
@@ -26,9 +28,17 @@ func (h *MerchantGetProductDetailService) Run(req *merchant.MerchantGetProductDe
 	// hlog.CtxInfof(h.Context, "resp = %+v", resp)
 	//}()
 	// todo edit your code
+	log.Printf("merchant get product detail, pid: %v", req.Id)
+	pid, err := strconv.Atoi(req.Id)
+	if err != nil {
+		return utils.H{
+			"code":    500,
+			"message": err.Error(),
+		}, err
+	}
 	pResp, err := rpc.MerchantClient.ProductDetail(h.Context, &rpcmerchant.ProductDetailReq{
 		MerchantId: frontendUtils.GetMerchantIdFromCtx(h.Context),
-		Pid:        req.Id,
+		Pid:        int64(pid),
 	})
 	if err != nil {
 		return utils.H{

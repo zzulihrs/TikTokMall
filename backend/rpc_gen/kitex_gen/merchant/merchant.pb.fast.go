@@ -449,6 +449,11 @@ func (x *AddProductReq) fastReadField2(buf []byte, _type int8) (offset int, err 
 
 func (x *AddProductResp) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
 	switch number {
+	case 1:
+		offset, err = x.fastReadField1(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -458,6 +463,13 @@ func (x *AddProductResp) FastRead(buf []byte, _type int8, number int32) (offset 
 	return offset, nil
 SkipFieldError:
 	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+ReadFieldError:
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_AddProductResp[number], err)
+}
+
+func (x *AddProductResp) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	x.Pid, offset, err = fastpb.ReadInt64(buf, _type)
+	return offset, err
 }
 
 func (x *DeleteProductReq) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
@@ -1095,6 +1107,15 @@ func (x *AddProductResp) FastWrite(buf []byte) (offset int) {
 	if x == nil {
 		return offset
 	}
+	offset += x.fastWriteField1(buf[offset:])
+	return offset
+}
+
+func (x *AddProductResp) fastWriteField1(buf []byte) (offset int) {
+	if x.Pid == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt64(buf[offset:], 1, x.GetPid())
 	return offset
 }
 
@@ -1643,6 +1664,15 @@ func (x *AddProductResp) Size() (n int) {
 	if x == nil {
 		return n
 	}
+	n += x.sizeField1()
+	return n
+}
+
+func (x *AddProductResp) sizeField1() (n int) {
+	if x.Pid == 0 {
+		return n
+	}
+	n += fastpb.SizeInt64(1, x.GetPid())
 	return n
 }
 
@@ -1911,7 +1941,9 @@ var fieldIDToName_AddProductReq = map[int32]string{
 	2: "Product",
 }
 
-var fieldIDToName_AddProductResp = map[int32]string{}
+var fieldIDToName_AddProductResp = map[int32]string{
+	1: "Pid",
+}
 
 var fieldIDToName_DeleteProductReq = map[int32]string{
 	1: "MerchantId",
