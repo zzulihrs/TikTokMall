@@ -9,7 +9,6 @@ import (
 	"github.com/tiktokmall/backend/app/frontend/biz/utils"
 	auth "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/auth"
 	common "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/common"
-	mw "github.com/tiktokmall/backend/app/frontend/middleware"
 )
 
 // Login .
@@ -42,26 +41,35 @@ func Register(ctx context.Context, c *app.RequestContext) {
 	var req auth.RegisterReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusBadRequest, map[string]any{
+			"code":    400,
+			"message": err.Error(),
+		})
 		return
 	}
 
-	user_id, err := service.NewRegisterService(ctx, c).Run(&req)
+	_, err = service.NewRegisterService(ctx, c).Run(&req)
 
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
 		return
 	}
 
-	token, _, err := mw.JwtMiddleware.TokenGenerator(user_id)
-	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
-		return
-	}
+	// token, _, err := mw.JwtMiddleware.TokenGenerator(user_id)
+	// if err != nil {
+	// 	utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+	// 	return
+	// }
 
-	c.JSON(consts.StatusOK, &utils.H{
-		"redirect": "login",
-		"token":    token,
+	c.JSON(consts.StatusOK, map[string]any{
+		"code":    200,
+		"message": "OK",
+		"data": map[string]any{
+			"email": req.Email,
+		},
 	})
 
 	//c.Redirect(consts.StatusOK, []byte("/"))
