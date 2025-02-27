@@ -62,13 +62,13 @@
         </el-table-column>
       </el-table>
 
-      <el-pagination 
-        @size-change="handleSizeChange" 
-        @current-change="handleCurrentChange" 
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[10, 20, 30, 40]" 
-        :page-size="pageSize"  
-        layout="total, sizes, prev, pager, next, jumper" 
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
         :total="totalCount">
       </el-pagination>
 
@@ -159,7 +159,7 @@ const products = computed(() => store.state.merchant.products || [])
 const categories = computed(() => store.state.category.categories || [])
 
 // 路由跳转
-const goToProductDetail = (product) => router.push(`/products/${product.id}`);
+const goToProductDetail = (product) => router.push(`/products?id=${product.id}`);
 
 
 // Vuex 数据
