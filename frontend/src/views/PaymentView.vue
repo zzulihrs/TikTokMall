@@ -306,6 +306,8 @@ const handlePayment = async () => {
     // 如果支付提交成功，开始轮询结果
     if (response.data.redirect) {
       const result = await pollCheckoutResult()
+    } else {
+      ElMessage.error('支付失败，请仔细检查您的信用卡信息')
     }
   } catch (err) {
     ElMessage.error('支付失败：' + err.message)
