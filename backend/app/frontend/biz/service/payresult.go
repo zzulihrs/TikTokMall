@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/kitex/pkg/kerrors"
+	"github.com/go-pay/gopay/alipay"
 	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
 	"github.com/tiktokmall/backend/rpc_gen/kitex_gen/order"
 	"log"
@@ -29,14 +31,45 @@ func NewPayresultService(Context context.Context, RequestContext *app.RequestCon
 func (h *PayresultService) Run(req *http.Request) (resp map[string]any, err error) {
 	// 需要修改订单状态---等待提供修改订单状态的接口
 	// 解析异步通知的参数
+	// 解析异步请求的参数
+	notifyReq, err := alipay.ParseNotifyToBodyMap(req)
+	if err != nil {
+		return nil, kerrors.NewBizStatusError(40005, "ailipayNotify ERROR")
+	}
 
-	out_trade_no := h.RequestContext.Query("out_trade_no")
-	log.Println("out_trade_no: ", out_trade_no)
+	// 以下是业务逻辑
+	// 更新订单状态
+	orderSn := notifyReq["out_trade_no"].(string)
+	tradeStatus := notifyReq["trade_status"].(string)
 
-	_, err = rpc.OrderClient.ChangeOrderStatus(h.Context, &order.ChangeOrderStatusReq{
-		OrderId:     out_trade_no,
-		OrderStatus: 2, // 订单状态 0 - 创建订单待支付 1 - 支付成功 2 - 支付失败 3 - 取消订单
+	/*
+		‌WAIT_BUYER_PAY‌：表示交易创建，等待买家付款‌
+		‌TRADE_CLOSED‌：表示未付款交易超时关闭，或支付完成后全额退款‌
+		‌TRADE_SUCCESS‌：表示交易支付成功‌
+		‌TRADE_FINISHED‌：表示交易结束，不可退款‌
+	*/
+	orderStatus := 0
+	switch tradeStatus {
+	case "WAIT_BUYER_PAY":
+		orderStatus = 0
+	case "TRADE_CLOSED":
+		orderStatus = 2
+	case "TRADE_SUCCESS":
+		orderStatus = 1
+	case "TRADE_FINISHED":
+		orderStatus = 1
+	default:
+		log.Println("trade_status:", tradeStatus)
+		orderStatus = 2
+	}
+
+	rpc.OrderClient.ChangeOrderStatus(h.Context, &order.ChangeOrderStatusReq{
+		OrderId:     orderSn,
+		OrderStatus: uint32(orderStatus), // 订单状态 0 - 创建订单待支付 1 - 支付成功 2 - 支付失败 3 - 取消订单
 	})
+	if err != nil {
+		return nil, kerrors.NewBizStatusError(40005, "ailipayNotify ERROR")
+	}
 
 	if err != nil {
 		return nil, fmt.Errorf("change order status failed: %v", err)
