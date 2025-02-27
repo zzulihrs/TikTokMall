@@ -146,7 +146,7 @@ const isAuthenticated = computed(() => store.getters['auth/isAuthenticated'])
 const handleSelect = async (index) => {
   switch (index) {
     case '1':
-      await router.push('/')
+      await router.push('/home')
       break
     case '2-1':
       await router.push('/category')
