@@ -4,7 +4,7 @@
       <el-row :gutter="20">
         <el-col :span="24">
           <el-breadcrumb separator="/">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item>搜索结果</el-breadcrumb-item>
           </el-breadcrumb>
         </el-col>

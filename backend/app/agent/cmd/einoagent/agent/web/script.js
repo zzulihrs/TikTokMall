@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', () => {
             abortController = new AbortController();
 
             // 使用 fetch 替代 EventSource，添加 signal
-            const response = await fetch(`/agent/api/chat?id=${chatId}&message=${encodeURIComponent(message)}`, {
+            const response = await fetch(`/api/agent/api/chat?id=${chatId}&message=${encodeURIComponent(message)}`, {
                 signal: abortController.signal
             });
 
