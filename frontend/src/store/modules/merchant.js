@@ -71,11 +71,14 @@ const mutations = {
 };
 
 const actions = {
-  handleCurrentChange({ commit }, page) {
+  handleCurrentChange({ commit, dispatch}, page) {
     commit('SET_CURRENT_PAGE', page);
+    dispatch('ProductList');
   },
-  handleSizeChange({ commit }, size) {
+  handleSizeChange({ commit, dispatch }, size) {
+    commit('SET_PAGE_SIZE', 0);
     commit('SET_PAGE_SIZE', size);
+    dispatch('ProductList');
   },
   // 列表
   async ProductList({ commit, state }) {
@@ -174,18 +177,6 @@ const actions = {
       commit('SET_MERCHANT_ID', 0)
       ElMessage.error('店家权限认证' + error.message);
     }
-  },
-  searchProducts({ commit, dispatch }) {
-    commit('SET_CURRENT_PAGE', 1);
-    dispatch('fetchProducts');
-  },
-  handleSizeChange({ commit, dispatch }, newSize) {
-    commit('SET_PAGE_SIZE', newSize);
-    dispatch('fetchProducts');
-  },
-  handleCurrentChange({ commit, dispatch }, newPage) {
-    commit('SET_CURRENT_PAGE', newPage);
-    dispatch('fetchProducts');
   },
   async updateProduct({ state }, product) {
     try {

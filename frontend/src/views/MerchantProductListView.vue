@@ -186,15 +186,9 @@ const searchProducts = () => {
 // 分页处理
 const handleSizeChange = (newSize) => {
   store.dispatch('merchant/handleSizeChange', newSize);
-  store.dispatch('merchant/handleCurrentChange', 1);
-  console.log('pageSize', pageSize.value);
-  console.log('currentPage', currentPage.value);
-  store.dispatch('merchant/ProductList');
 }
 const handleCurrentChange = (newPage) => {
   store.dispatch('merchant/handleCurrentChange', newPage);
-  console.log('currentPage', currentPage.value);
-  store.dispatch('merchant/ProductList');
 }
 
 
