@@ -2,7 +2,10 @@ package model
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 
+	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 )
 
@@ -23,8 +26,34 @@ func GetByEmail(db *gorm.DB, ctx context.Context, email string) (user *User, err
 	return
 }
 
+func GetByEmailWithCache(db *gorm.DB, redisCli *redis.Client, ctx context.Context, email string) (user *User, err error) {
+	cachedKey := fmt.Sprintf("user_%v", email)
+	cachedResult := redisCli.Get(ctx, cachedKey)
+	err = func() error {
+		err1 := cachedResult.Err()
+		if err1 != nil {
+			return err1
+		}
+		bytes, err1 := cachedResult.Bytes()
+		if err1 != nil {
+			return err1
+		}
+		err1 = json.Unmarshal(bytes, &user)
+		if err1 != nil {
+			return err1
+		}
+		return nil
+	}()
+	if err == nil {
+		return
+	}
+	// 缓存穿透
+	err = db.WithContext(ctx).Model(&User{}).Where(&User{Email: email}).First(&user).Error
+	return
+}
+
 func GetById(db *gorm.DB, ctx context.Context, user_id int64) (user *User, err error) {
-	err = db.WithContext(ctx).Model(&User{}).Where("id = ?", user_id).First(&user).Error
+	err = db.WithContext(ctx).Model(&User{}).Where("id = ? ", user_id).First(&user).Error
 	return
 }
 
@@ -33,13 +62,27 @@ func Create(db *gorm.DB, ctx context.Context, user *User) error {
 }
 
 func UpdateUser(db *gorm.DB, ctx context.Context, user *User) error {
-	updates := map[string]interface{}{
-		"username": user.Username,
-		"avator":   user.Avator,
+	updates := map[string]interface{}{}
+	f := false
+	if user.Username != "" {
+		updates["username"] = user.Username
+		f = true
 	}
+	if user.Avator != "" {
+		updates["avator"] = user.Avator
+		f = true
+	}
+	if user.PasswordHashed != "" {
+		updates["password_hashed"] = user.PasswordHashed
+		f = true
+	}
+	if !f {
+		return fmt.Errorf("no update")
+	}
+	updates["updated_at"] = gorm.Expr("now()")
 	return db.WithContext(ctx).
 		Model(&User{}).
-		Where("id = ?", user.ID).
+		Where("id = ? and deleted_at IS NULL", user.ID).
 		Updates(updates).Error
 }
 
