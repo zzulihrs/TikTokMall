@@ -85,7 +85,7 @@
                   <el-radio-group v-model="form.paymentMethod">
                     <el-radio label="card">银行卡</el-radio>
                     <el-radio label="alipay">支付宝</el-radio>
-                    <el-radio label="wechat">微信支付</el-radio>
+<!--                    <el-radio label="wechat">微信支付</el-radio>-->
                   </el-radio-group>
                 </el-form-item>
 
@@ -302,10 +302,17 @@ const handlePayment = async () => {
       expiration_month: parseInt(form?.expMonth),
       cvv: parseInt(form?.cvv)
     })
+    if (paymentMethod.value === 'alipay') {
+      // 跳转到订单页面
+      await router.push('/orders')
+      return
+    }
 
     // 如果支付提交成功，开始轮询结果
     if (response.data.redirect) {
       const result = await pollCheckoutResult()
+    } else {
+      ElMessage.error('支付失败，请仔细检查您的信用卡信息')
     }
   } catch (err) {
     ElMessage.error('支付失败：' + err.message)
