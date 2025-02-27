@@ -18,7 +18,10 @@ func MerchantAddProduct(ctx context.Context, c *app.RequestContext) {
 	var req merchant.MerchantAddProductReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.JSON(consts.StatusBadRequest, nil)
+		c.JSON(consts.StatusBadRequest, map[string]any{
+			"code":    400,
+			"message": err.Error(),
+		})
 		// utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
@@ -44,7 +47,10 @@ func MerchantDeleteProduct(ctx context.Context, c *app.RequestContext) {
 	var req merchant.MerchantDeleteProductReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.JSON(consts.StatusBadRequest, nil)
+		c.JSON(consts.StatusBadRequest, map[string]any{
+			"code":    400,
+			"message": err.Error(),
+		})
 		// utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
@@ -68,10 +74,13 @@ func MerchantDeleteProduct(ctx context.Context, c *app.RequestContext) {
 func MerchantUpdateProduct(ctx context.Context, c *app.RequestContext) {
 	var err error
 	var req merchant.MerchantUpdateProductReq
-	// BUG: 无法修改类别
+	// TODO: 目前无法修改类别
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.JSON(consts.StatusBadRequest, nil)
+		c.JSON(consts.StatusBadRequest, map[string]any{
+			"code":    400,
+			"message": err.Error(),
+		})
 		// utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
@@ -97,7 +106,10 @@ func MerchantGetProductList(ctx context.Context, c *app.RequestContext) {
 	var req merchant.MerchantGetProductListReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.JSON(consts.StatusBadRequest, nil)
+		c.JSON(consts.StatusBadRequest, map[string]any{
+			"code":    400,
+			"message": err.Error(),
+		})
 		// utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
@@ -123,7 +135,10 @@ func MerchantPing(ctx context.Context, c *app.RequestContext) {
 	var req common.Empty
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.JSON(consts.StatusBadRequest, nil)
+		c.JSON(consts.StatusBadRequest, map[string]any{
+			"code":    400,
+			"message": err.Error(),
+		})
 		return
 	}
 
@@ -146,7 +161,10 @@ func MerchantAuth(ctx context.Context, c *app.RequestContext) {
 	var req merchant.MerchantAuthReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.JSON(consts.StatusBadRequest, nil)
+		c.JSON(consts.StatusBadRequest, map[string]any{
+			"code":    400,
+			"message": err.Error(),
+		})
 		// utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
@@ -172,7 +190,10 @@ func MerchantRegister(ctx context.Context, c *app.RequestContext) {
 	var req merchant.MerchantRegisterReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.JSON(consts.StatusBadRequest, nil)
+		c.JSON(consts.StatusBadRequest, map[string]any{
+			"code":    400,
+			"message": err.Error(),
+		})
 		return
 	}
 
@@ -195,7 +216,10 @@ func MerchantGetProductDetail(ctx context.Context, c *app.RequestContext) {
 	var req merchant.MerchantGetProductDetailReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		c.JSON(consts.StatusBadRequest, nil)
+		c.JSON(consts.StatusBadRequest, map[string]any{
+			"code":    400,
+			"message": err.Error(),
+		})
 		// utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
