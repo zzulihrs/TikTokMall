@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"github.com/tiktokmall/backend/app/user/biz/dal/mysql"
+	"github.com/tiktokmall/backend/app/user/biz/dal/redis"
 	"github.com/tiktokmall/backend/app/user/biz/model"
 	user "github.com/tiktokmall/backend/rpc_gen/kitex_gen/user"
 
@@ -36,8 +37,13 @@ func (s *RegisterService) Run(req *user.RegisterReq) (resp *user.RegisterResp, e
 		// TODO: email 当做 username
 		Username: req.Email,
 	}
-	if err = model.Create(mysql.DB, s.ctx, newUser); err != nil {
-		return
+
+	// if err = model.Create(mysql.DB, s.ctx, newUser); err != nil {
+	// 	return
+	// }
+
+	if err = model.NewUserDAO(s.ctx, mysql.DB, redis.RedisClient).Create(newUser); err != nil {
+		return nil, err
 	}
 
 	return &user.RegisterResp{UserId: int32(newUser.ID)}, nil

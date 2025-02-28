@@ -197,7 +197,7 @@ const goToMerchant = () => {
   const id = computed(() => store.getters['merchant/getMerchantId']).value
   console.log('merchantId:', id)
   if (id > 0) {
-    router.push('merchant')
+    router.push('/merchant/product/list')
   } else {
     ElMessage.warning("你还不是店家")
   }
