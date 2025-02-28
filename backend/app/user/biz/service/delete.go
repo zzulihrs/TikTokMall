@@ -4,7 +4,9 @@ import (
 	"context"
 
 	"github.com/tiktokmall/backend/app/user/biz/dal/mysql"
+	"github.com/tiktokmall/backend/app/user/biz/dal/redis"
 	"github.com/tiktokmall/backend/app/user/biz/model"
+
 	user "github.com/tiktokmall/backend/rpc_gen/kitex_gen/user"
 )
 
@@ -21,5 +23,7 @@ func (s *DeleteService) Run(req *user.DeleteUserReq) (resp *user.DeleteUserResp,
 	if err = model.DeleteUser(mysql.DB, s.ctx, req.UserId); err != nil {
 		return nil, err
 	}
+	err = model.NewUserDAO(s.ctx, mysql.DB, redis.RedisClient).DeleteByID(int(req.UserId))
+
 	return
 }

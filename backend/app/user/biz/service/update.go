@@ -20,6 +20,8 @@ func NewUpdateService(ctx context.Context) *UpdateService {
 // Run create note info
 func (s *UpdateService) Run(req *user.UpdateUserReq) (resp *user.UpdateUserResp, err error) {
 	// Finish your business logic.
+
+	// TODO：这里可以使用缓存优化，防止恶意通过此接口，导致数据库压力过大
 	u1, err := model.GetById(mysql.DB, s.ctx, (req.UserId))
 	if err != nil {
 		return nil, err

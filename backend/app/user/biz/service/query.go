@@ -18,6 +18,7 @@ func NewQueryService(ctx context.Context) *QueryService {
 // Run create note info
 func (s *QueryService) Run(req *user.QueryUserReq) (resp *user.QueryUserResp, err error) {
 	// Finish your business logic.
+	// TODO: 暂无缓存逻辑
 	u := &model.User{}
 	if u, err = model.QueryUser(mysql.DB, s.ctx, req.UserId); err != nil {
 		return nil, err

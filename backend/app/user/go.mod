@@ -11,6 +11,7 @@ replace (
 )
 
 require (
+	github.com/cloudwego/hertz v0.9.6
 	github.com/cloudwego/kitex v0.12.1
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
@@ -20,7 +21,6 @@ require (
 	github.com/redis/go-redis/v9 v9.7.0
 	github.com/tiktokmall/backend/common v0.0.0-00010101000000-000000000000
 	github.com/tiktokmall/backend/rpc_gen v0.0.0-00010101000000-000000000000
-	go.opentelemetry.io/otel v1.32.0
 	go.uber.org/zap v1.27.0
 	golang.org/x/crypto v0.32.0
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
@@ -103,6 +103,7 @@ require (
 	go.opentelemetry.io/contrib/instrumentation/runtime v0.45.0 // indirect
 	go.opentelemetry.io/contrib/propagators/b3 v1.20.0 // indirect
 	go.opentelemetry.io/contrib/propagators/ot v1.25.0 // indirect
+	go.opentelemetry.io/otel v1.32.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlpmetric v0.42.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc v0.42.0 // indirect
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.25.0 // indirect
