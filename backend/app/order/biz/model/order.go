@@ -31,6 +31,11 @@ type Order struct {
 func (Order) TableName() string {
 	return "order"
 }
+func GetAllOrder(db *gorm.DB, ctx context.Context) (orders []Order, err error) {
+	// 获取所有order
+	err = db.WithContext(ctx).Model(&Order{}).Preload("OrderItem").Find(&orders).Error
+	return
+}
 
 func ListOrder(db *gorm.DB, ctx context.Context, userId uint32) (orders []Order, err error) {
 	err = db.WithContext(ctx).Model(&Order{}).Where(&Order{UserId: userId}).Preload("OrderItem").Find(&orders).Error
