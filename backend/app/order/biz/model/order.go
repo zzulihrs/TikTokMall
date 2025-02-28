@@ -2,6 +2,8 @@ package model
 
 import (
 	"context"
+	"fmt"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -35,6 +37,40 @@ func ListOrder(db *gorm.DB, ctx context.Context, userId uint32) (orders []Order,
 	return
 }
 
+func GetOrderStatus(db *gorm.DB, ctx context.Context, orderId string) (status uint32, err error) {
+	err = db.WithContext(ctx).Model(&Order{}).Where(&Order{OrderId: orderId}).Select("order_status").Find(&status).Error
+	return status, err
+}
+
 func ChangeOrderStatus(db *gorm.DB, ctx context.Context, orderId string, status uint32) error {
-	return db.WithContext(ctx).Model(&Order{}).Where(&Order{OrderId: orderId}).Update("order_status", status).Error
+	// 使用GORM事务封装操作
+	return db.Transaction(func(tx *gorm.DB) error {
+		// 最佳实践：在事务中创建新的上下文副本
+		// 防止外部上下文取消影响事务完整性
+		txCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+
+		// 订单状态不为0，说明订单状态已经修改，不能随意变更
+		if currentStatus, err := GetOrderStatus(tx, txCtx, orderId); err != nil {
+			return fmt.Errorf("get order status failed: %v", err)
+		} else {
+			if currentStatus != 0 {
+				return fmt.Errorf("order %s already in target status %d", orderId, status)
+			}
+		}
+
+		// 使用结构体验证确保字段映射正确
+		// 建议改用明确WHERE条件避免零值陷阱
+		query := tx.WithContext(txCtx).
+			Model(&Order{}).
+			Where("order_id = ?", orderId). // 明确查询条件
+			Update("order_status", status)
+
+		// 处理找不到记录的特殊情况
+		if query.Error == gorm.ErrRecordNotFound {
+			return fmt.Errorf("order %s not found", orderId)
+		}
+
+		return query.Error
+	})
 }
