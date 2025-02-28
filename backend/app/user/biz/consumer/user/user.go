@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 	"encoding/json"
+	"log"
 
 	"github.com/tiktokmall/backend/app/user/infra/mq"
 
@@ -33,9 +34,13 @@ func ConsumerInit() {
 		defer span.End()
 
 		// 根据 msg 更新 redis 中的 user 数据。目前仅删除
-		// log.Printf("subscribe msg, %v", req)
-		// noopEmail := notify.NewNoopEmail()
-		// _ = noopEmail.Send(&req)
+		method := userMsg.Method
+		handler, ok := handlers[method]
+		if ok {
+			handler(&userMsg)
+		} else {
+			log.Printf("unknown method, %s", method)
+		}
 	})
 	if err != nil {
 		panic(err)
@@ -49,7 +54,6 @@ func ConsumerInit() {
 
 func handleUserMsg(usermsg *mq.UserMsg) {
 	if usermsg.Method == "Delete" {
-
 	}
 }
 

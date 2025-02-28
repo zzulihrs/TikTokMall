@@ -2,12 +2,13 @@ package payment
 
 import (
 	"context"
+	"net/http"
+
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/tiktokmall/backend/app/frontend/biz/service"
 	"github.com/tiktokmall/backend/app/frontend/biz/utils"
 	payment "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/payment"
-	"net/http"
 )
 
 // Alipay .
@@ -17,13 +18,19 @@ func Alipay(ctx context.Context, c *app.RequestContext) {
 	var req payment.AlipayReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusBadRequest, map[string]any{
+			"code":    400,
+			"message": err.Error(),
+		})
 		return
 	}
 
 	resp, err := service.NewAlipayService(ctx, c).Run(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
 		return
 	}
 
@@ -50,7 +57,10 @@ func Payresult(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewPayresultService(ctx, c).Run(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
 		return
 	}
 
@@ -71,7 +81,10 @@ func Paysuccess(ctx context.Context, c *app.RequestContext) {
 
 	resp, err := service.NewPaysuccessService(ctx, c).Run(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
 		return
 	}
 

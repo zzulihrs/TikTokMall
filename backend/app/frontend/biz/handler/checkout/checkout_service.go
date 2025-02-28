@@ -19,17 +19,24 @@ func Checkout(ctx context.Context, c *app.RequestContext) {
 	var req common.Empty
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusBadRequest, map[string]any{
+			"code":    400,
+			"message": err.Error(),
+		})
 		return
 	}
 
 	resp, err := service.NewCheckoutService(ctx, c).Run(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
 		return
 	}
 
-	// c.HTML(consts.StatusOK, "checkout", utils.WarpResponse(ctx, c, resp))
+	resp["code"] = 200
+	resp["message"] = "ok"
 	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
 }
 
@@ -40,19 +47,24 @@ func CheckoutWaiting(ctx context.Context, c *app.RequestContext) {
 	var req checkout.CheckoutReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusBadRequest, map[string]any{
+			"code":    400,
+			"message": err.Error(),
+		})
 		return
 	}
 
 	resp, err := service.NewCheckoutWaitingService(ctx, c).Run(&req)
 	if err != nil {
-		// hlog.Info("checkout waiting, err:", err)
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
 		return
 	}
-	// hlog.Info("checkout waiting")
 
-	// c.HTML(consts.StatusOK, "waiting", utils.WarpResponse(ctx, c, resp))
+	resp["code"] = 200
+	resp["message"] = "ok"
 	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
 }
 
@@ -63,16 +75,23 @@ func CheckoutResult(ctx context.Context, c *app.RequestContext) {
 	var req common.Empty
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusBadRequest, map[string]any{
+			"code":    400,
+			"message": err.Error(),
+		})
 		return
 	}
 
 	resp, err := service.NewCheckoutResultService(ctx, c).Run(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
 		return
 	}
 
-	// c.HTML(consts.StatusOK, "result", utils.WarpResponse(ctx, c, resp))
+	resp["code"] = 200
+	resp["message"] = "ok"
 	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
 }

@@ -1,7 +1,7 @@
 package mq
 
 import (
-	"github.com/tiktokmall/backend/app/email/conf"
+	"github.com/tiktokmall/backend/app/user/conf"
 
 	"github.com/nats-io/nats.go"
 )
