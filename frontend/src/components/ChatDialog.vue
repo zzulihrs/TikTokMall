@@ -115,7 +115,7 @@ const sendMessage = async () => {
     messages.value.push(assistantMessage)
 
     // 使用 fetch 发送 POST 请求
-    const response = await fetch(`agent/api/chat?message=${encodeURIComponent(userMessage)}`, {
+    const response = await fetch(`/api/agent/api/chat?message=${encodeURIComponent(userMessage)}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

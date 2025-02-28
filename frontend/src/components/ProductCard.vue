@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="`/products/${product.id}`" class="product-link">
+  <router-link :to="`/products?id=${product.id}`" class="product-link">
     <el-card class="product-card">
       <el-image
         :src="product?.picture"
