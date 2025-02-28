@@ -60,7 +60,7 @@ func ChangeOrderStatus(db *gorm.DB, ctx context.Context, orderId string, status 
 			return fmt.Errorf("get order status failed: %v", err)
 		} else {
 			if currentStatus != 0 {
-				return fmt.Errorf("order %s already in target status %d", orderId, status)
+				return fmt.Errorf("order %s already in target status %d", orderId, currentStatus)
 			}
 		}
 

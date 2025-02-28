@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
-	"github.com/tiktokmall/backend/app/frontend/utils"
+	"github.com/tiktokmall/backend/app/order/biz/consumer"
 	"github.com/tiktokmall/backend/app/order/biz/dal/mysql"
 	"github.com/tiktokmall/backend/app/order/biz/model"
+	"github.com/tiktokmall/backend/app/order/infra/mq"
+	"github.com/tiktokmall/backend/app/order/utils"
 	"log"
 	"net"
 	"time"
@@ -37,6 +39,8 @@ func main() {
 	p := mtl.InitTracing(ServiceName)
 	defer p.Shutdown(context.Background())
 	dal.Init()
+	mq.Init()
+	consumer.Init()
 
 	opts := kitexInit()
 
