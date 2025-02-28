@@ -12,7 +12,7 @@ require (
 	github.com/cloudwego/kitex v0.12.1
 	github.com/kitex-contrib/obs-opentelemetry/logging/logrus v0.0.0-20241120035129-55da83caab1b
 	github.com/kr/pretty v0.3.1
-	github.com/nats-io/nats.go v1.38.0
+	github.com/nats-io/nats.go v1.39.1
 	github.com/redis/go-redis/v9 v9.7.0
 	github.com/tiktokmall/backend/common v0.0.0-00010101000000-000000000000
 	github.com/tiktokmall/backend/rpc_gen v0.0.0-00010101000000-000000000000
