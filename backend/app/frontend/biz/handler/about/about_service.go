@@ -18,13 +18,19 @@ func About(ctx context.Context, c *app.RequestContext) {
 	var req common.Empty
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusBadRequest, map[string]any{
+			"code":    400,
+			"message": err.Error(),
+		})
 		return
 	}
 
 	resp, err := service.NewAboutService(ctx, c).Run(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
 		return
 	}
 

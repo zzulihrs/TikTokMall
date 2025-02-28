@@ -2,6 +2,7 @@ package oss
 
 import (
 	"context"
+
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/tiktokmall/backend/app/frontend/biz/service"
@@ -17,7 +18,10 @@ func UploadImage(ctx context.Context, c *app.RequestContext) {
 	resp, err := service.NewUploadImageService(ctx, c).Run(&req)
 
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusBadRequest, err)
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
 		return
 	}
 	utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
@@ -32,7 +36,10 @@ func UploadVideo(ctx context.Context, c *app.RequestContext) {
 	resp, err := service.NewUploadVideoService(ctx, c).Run(&req)
 
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
 		return
 	}
 	utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)

@@ -18,19 +18,24 @@ func Home(ctx context.Context, c *app.RequestContext) {
 	var req common.Empty
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusBadRequest, map[string]any{
+			"code":    400,
+			"message": err.Error(),
+		})
 		return
 	}
 
 	// resp := &home.Empty{}
 	resp, err := service.NewHomeService(ctx, c).Run(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
 		return
 	}
 
-	// c.HTML(consts.StatusOK, "home", utils.WarpResponse(ctx, c, resp))
+	resp["code"] = 200
+	resp["message"] = "ok"
 	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
-
-	// utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
 }

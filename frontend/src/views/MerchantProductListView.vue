@@ -62,13 +62,13 @@
         </el-table-column>
       </el-table>
 
-      <el-pagination 
-        @size-change="handleSizeChange" 
-        @current-change="handleCurrentChange" 
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[10, 20, 30, 40]" 
-        :page-size="pageSize"  
-        layout="total, sizes, prev, pager, next, jumper" 
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
         :total="totalCount">
       </el-pagination>
 
@@ -159,7 +159,7 @@ const products = computed(() => store.state.merchant.products || [])
 const categories = computed(() => store.state.category.categories || [])
 
 // 路由跳转
-const goToProductDetail = (product) => router.push(`/products/${product.id}`);
+const goToProductDetail = (product) => router.push(`/products?id=${product.id}`);
 
 
 // Vuex 数据
@@ -186,15 +186,9 @@ const searchProducts = () => {
 // 分页处理
 const handleSizeChange = (newSize) => {
   store.dispatch('merchant/handleSizeChange', newSize);
-  store.dispatch('merchant/handleCurrentChange', 1);
-  console.log('pageSize', pageSize.value);
-  console.log('currentPage', currentPage.value);
-  store.dispatch('merchant/ProductList');
 }
 const handleCurrentChange = (newPage) => {
   store.dispatch('merchant/handleCurrentChange', newPage);
-  console.log('currentPage', currentPage.value);
-  store.dispatch('merchant/ProductList');
 }
 
 

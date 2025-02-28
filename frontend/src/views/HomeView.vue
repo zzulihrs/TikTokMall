@@ -15,13 +15,30 @@
 </template>
 
 <script setup>
-import {computed, ref} from 'vue'
+import {computed, onMounted, ref} from 'vue'
 import ProductCard from '@/components/ProductCard.vue'
 import store from "@/store";
+import {ElMessage} from "element-plus";
 
 
 // 计算属性products返回store?.state?.search?.searchResults
 const products = computed(() => store?.state?.search?.searchResults)
+
+onMounted(() => {
+  handleSearch()
+})
+
+const handleSearch = async () => {
+  const query = ''
+  if (true) { // 空白也可以搜索
+    try {
+      await store.dispatch('search/searchProducts', query)
+      // router.push({ path: '/search', query: { q: query } })
+    } catch (error) {
+      // ElMessage.error('搜索失败：' + error.message)
+    }
+  }
+}
 
 </script>
 

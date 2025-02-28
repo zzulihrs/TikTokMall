@@ -18,12 +18,18 @@ func GetProduct(ctx context.Context, c *app.RequestContext) {
 	var req product.ProductReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusBadRequest, map[string]any{
+			"code":    400,
+			"message": err.Error(),
+		})
 		return
 	}
 	resp, err := service.NewGetProductService(ctx, c).Run(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusInternalServerError, utils.H{
+			"code":    500,
+			"message": err.Error(),
+		})
 		return
 	}
 
@@ -38,16 +44,21 @@ func SearchProducts(ctx context.Context, c *app.RequestContext) {
 	var req product.SearchProductsReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusBadRequest, map[string]any{
+			"code":    400,
+			"message": err.Error(),
+		})
 		return
 	}
 	resp, err := service.NewSearchProductsService(ctx, c).Run(&req)
 
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusInternalServerError, utils.H{
+			"code":    500,
+			"message": err.Error(),
+		})
 		return
 	}
 
-	// c.HTML(consts.StatusOK, "search", utils.WarpResponse(ctx, c, resp))
 	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
 }
