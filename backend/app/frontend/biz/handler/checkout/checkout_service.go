@@ -40,14 +40,14 @@ func CheckoutWaiting(ctx context.Context, c *app.RequestContext) {
 	var req checkout.CheckoutReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusFound, err)
+		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
 
 	resp, err := service.NewCheckoutWaitingService(ctx, c).Run(&req)
 	if err != nil {
 		// hlog.Info("checkout waiting, err:", err)
-		utils.SendErrResponse(ctx, c, consts.StatusFound, err)
+		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
 		return
 	}
 	// hlog.Info("checkout waiting")

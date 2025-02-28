@@ -102,9 +102,18 @@ import { useStore } from 'vuex'
 import UserDropdown from './UserDropdown.vue'
 import ChatDialog from './ChatDialog.vue'
 // Verify router availability
-onMounted(() => {
+onMounted(async () => {
   if (!router) {
     console.error('Router is not available')
+  }
+  // 获取购物车数据
+  try {
+    console.log('组件已挂载');
+    await store.dispatch('search/searchProducts', "")
+    if(isAuthenticated.value)
+      await store.dispatch('cart/fetchCart')
+  } catch (err) {
+    ElMessage.error('获取购物车数据失败：' + err.message)
   }
 })
 import { ShoppingCart, Search } from '@element-plus/icons-vue'
@@ -117,10 +126,6 @@ if (!router) {
 }
 const searchQuery = ref('')
 
-onMounted(() => { // 最开始执行的，先获取数据
-  console.log('组件已挂载');
-  store.dispatch('search/searchProducts', "")
-});
 
 const handleSearch = async () => {
   const query = searchQuery.value.trim()

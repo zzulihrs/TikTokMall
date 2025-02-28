@@ -8,9 +8,9 @@ import (
 var userSubject = "user"
 
 type UserMsg struct {
-	Method   string         `json:method`
+	Method   string         `json:"method"`
 	UpdateAt time.Time      `json:"update_at"` // 数据更新时间
-	data     map[string]any `json:data`
+	Data     map[string]any `json:"data"`
 }
 
 func SendUserMsg(msg UserMsg) error {

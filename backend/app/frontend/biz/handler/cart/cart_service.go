@@ -3,6 +3,7 @@ package cart
 import (
 	"context"
 	"fmt"
+
 	"github.com/cloudwego/hertz/pkg/app"
 	hertzUtils "github.com/cloudwego/hertz/pkg/common/utils"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
@@ -23,19 +24,25 @@ func AddCartItem(ctx context.Context, c *app.RequestContext) {
 	fmt.Println("Parsed Request Data:", req.GetProductId(), req.GetProductNum())
 
 	if err != nil {
-		// c.HTML(consts.StatusOK, "cart", utils.WarpResponse(ctx, c, hertzUtils.H{"warning": err}))
-		c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, hertzUtils.H{"warning": err}))
+		c.JSON(consts.StatusBadRequest, map[string]any{
+			"code":    400,
+			"message": err.Error(),
+		})
 		return
 	}
 
 	_, err = service.NewAddCartItemService(ctx, c).Run(&req)
 	if err != nil {
-		// c.HTML(constss.StatusOK, "cart", utils.WarpResponse(ctx, c, hertzUtils.H{"warning": err}))
-		c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, hertzUtils.H{"warning": err}))
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
 		return
 	}
-	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, hertzUtils.H{"message": "success"}))
-	//c.Redirect(consts.StatusFound, []byte("/cart"))
+	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, hertzUtils.H{
+		"code":    200,
+		"message": "ok",
+	}))
 }
 
 // GetCart .
@@ -45,17 +52,22 @@ func GetCart(ctx context.Context, c *app.RequestContext) {
 	var req common.Empty
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		// c.HTML(consts.StatusOK, "cart", utils.WarpResponse(ctx, c, map[string]any{"warning": err}))
-		c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, map[string]any{"warning": err}))
+		c.JSON(consts.StatusBadRequest, map[string]any{
+			"code":    400,
+			"message": err.Error(),
+		})
 		return
 	}
 	resp, err := service.NewGetCartService(ctx, c).Run(&req)
 	if err != nil {
-		// c.HTML(consts.StatusOK, "cart", utils.WarpResponse(ctx, c, map[string]any{"warning": err}))
-		c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, map[string]any{"warning": err}))
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
 		return
 	}
-	// c.HTML(consts.StatusOK, "cart", utils.WarpResponse(ctx, c, resp))
+	resp["code"] = 200
+	resp["message"] = "OK"
 	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, resp))
 }
 
@@ -66,19 +78,26 @@ func EmptyCart(ctx context.Context, c *app.RequestContext) {
 	var req common.Empty
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusBadRequest, map[string]any{
+			"code":    400,
+			"message": err.Error(),
+		})
 		return
 	}
 
 	resp, err := service.NewEmptyCartService(ctx, c).Run(&req)
 
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    500,
+			"message": err.Error(),
+		})
 		return
 	}
 
+	resp["code"] = 200
+	resp["message"] = "OK"
 	c.JSON(consts.StatusOK, resp)
-	//utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
 }
 
 // ChangeQty .
@@ -88,17 +107,26 @@ func ChangeQty(ctx context.Context, c *app.RequestContext) {
 	var req cart.ChangeQtyReq
 	err = c.BindAndValidate(&req)
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusBadRequest, map[string]any{
+			"code":    400,
+			"message": err.Error(),
+		})
 		return
 	}
 
 	_, err = service.NewChangeQtyService(ctx, c).Run(&req)
 
 	if err != nil {
-		utils.SendErrResponse(ctx, c, consts.StatusOK, err)
+		c.JSON(consts.StatusInternalServerError, map[string]any{
+			"code":    400,
+			"message": err.Error(),
+		})
 		return
 	}
-	//utils.SendSuccessResponse(ctx, c, consts.StatusOK, resp)
-	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, hertzUtils.H{"message": "success"}))
+
+	c.JSON(consts.StatusOK, utils.WarpResponse(ctx, c, hertzUtils.H{
+		"code":    200,
+		"message": "ok",
+	}))
 
 }
