@@ -259,10 +259,11 @@ const rules = reactive({
 const router = useRouter()
 const store = useStore()
 
-onMounted(() => {
+onMounted(async () => {
+  await new Promise(resolve => setTimeout(resolve, 200))
   if (cartItems.value.length === 0) {
     ElMessage.warning('购物车为空，请先添加商品')
-    router.push('/')
+    await router.push('/')
   }
 })
 
