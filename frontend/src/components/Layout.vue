@@ -158,7 +158,7 @@ const handleSelect = async (index) => {
       await store.commit("category/Update_Category", "T-Shirt")
       break
     case '2-2':
-      await  router.push('/category')
+      await router.push('/category')
       await store.commit("category/Update_Category", "Sticker")
       break
     case '2-3':

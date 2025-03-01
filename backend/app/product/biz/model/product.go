@@ -75,6 +75,10 @@ func (c CachedProductQuery) GetById(productId int) (product Product, err error) 
 			return err1
 		}
 		cachedResultByte, err1 := cachedResult.Bytes()
+		if len(cachedResultByte) == 0 {
+			// 缓存为空，返回空值
+			return fmt.Errorf("product detail not found (cached)")
+		}
 		if err1 != nil {
 			return err1
 		}
@@ -85,20 +89,25 @@ func (c CachedProductQuery) GetById(productId int) (product Product, err error) 
 		return nil
 	}()
 
-	if err != nil {
-		product, err = c.productQuery.GetById(productId)
-		if err != nil {
-			return Product{}, nil
-		}
-		// json encode and cache the result
-		encoded, err := json.Marshal(product)
-		// encode 失败，直接返回商品信息
-		if err != nil {
-			return product, nil
-		}
-		// 缓存商品信息
-		c.cacheClient.Set(c.productQuery.ctx, cachedKey, encoded, time.Hour)
+	// 缓存命中，直接返回
+	if err == nil {
+		return product, nil
 	}
+
+	// 缺少缓存击穿
+	product, err = c.productQuery.GetById(productId)
+	if err != nil {
+		return Product{}, nil
+	}
+	// json encode and cache the result
+	encoded, err := json.Marshal(product)
+	// encode 失败，直接返回商品信息
+	if err != nil {
+		return product, nil
+	}
+	// 缓存商品信息
+	c.cacheClient.Set(c.productQuery.ctx, cachedKey, encoded, time.Hour)
+
 	return
 }
 
