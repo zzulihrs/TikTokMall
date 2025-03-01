@@ -2,13 +2,12 @@ package payment
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/cloudwego/eino/components/tool"
 	"github.com/cloudwego/eino/components/tool/utils"
 	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
 	frontendUtils "github.com/tiktokmall/backend/app/frontend/utils"
-	rpcpayment "github.com/tiktokmall/backend/rpc_gen/kitex_gen/payment"
+	rpcChekcout "github.com/tiktokmall/backend/rpc_gen/kitex_gen/checkout"
 )
 
 // PaymentMethod 定义支付方式
@@ -22,10 +21,10 @@ const (
 
 // PaymentRequest 请求结构体
 type PaymentRequest struct {
-	Method        PaymentMethod `json:"method" jsonschema:"description=Payment method to use"`
-	UserID        uint32        `json:"user_id" jsonschema:"description=User ID"`
-	Amount        float32       `json:"amount" jsonschema:"description=Payment amount"`
-	CardInfo      *CardInfo     `json:"card_info,omitempty" jsonschema:"description=Card payment details"`
+	Method   string    `json:"method" jsonschema:"description=Payment method to use"`
+	UserID   uint32    `json:"user_id" jsonschema:"description=User ID"`
+	Amount   float32   `json:"amount" jsonschema:"description=Payment amount"`
+	CardInfo *CardInfo `json:"card_info,omitempty" jsonschema:"description=Card payment details"`
 }
 
 // CardInfo 银行卡信息
@@ -75,23 +74,23 @@ func (p *PaymentImpl) ToEinoTool() (tool.BaseTool, error) {
 func (p *PaymentImpl) Invoke(ctx context.Context, req *PaymentRequest) (*PaymentResponse, error) {
 	req.UserID = frontendUtils.GetUserIdFromCtx(ctx)
 	// 直接使用alipay，默认地址
-	rpc.CheckoutClient.Checkout(ctx, &rpcpayment.CheckoutReq{
-		UserId: req.UserID,
-		Firstname: "test",
-		Lastname: "test",
-		Email: "root@example.com",
+	rpc.CheckoutClient.Checkout(ctx, &rpcChekcout.CheckoutReq{
+		UserId:        req.UserID,
+		Firstname:     "test",
+		Lastname:      "test",
+		Email:         "root@example.com",
 		PaymentMethod: req.Method,
-		Address: &rpcpayment.Address{
+		Address: &rpcChekcout.Address{
 			Country:       "China",
 			ZipCode:       "200000",
 			City:          "Shanghai",
 			State:         "Shanghai",
 			StreetAddress: "test",
-		},}
+		}},
 	)
-	
+
 	return &PaymentResponse{
-		Success:     true,
-		PaymentURL: "http://tiktokmall.bhclient.cn/orders"，
-	}
+		Success:    true,
+		PaymentURL: "http://tiktokmall.bhclient.cn/orders",
+	}, nil
 }

@@ -17,7 +17,7 @@ require (
 	github.com/cloudwego/eino-ext/components/retriever/redis v0.0.0-20250117061805-cd80d1780d76
 	github.com/cloudwego/eino-ext/components/tool/duckduckgo v0.0.0-20250117061805-cd80d1780d76
 	github.com/cloudwego/eino-ext/devops v0.0.0-20250117061805-cd80d1780d76
-	github.com/cloudwego/hertz v0.9.5
+	github.com/cloudwego/hertz v0.9.6
 	github.com/google/uuid v1.6.0
 	github.com/hertz-contrib/sse v0.0.6-0.20240617114443-10a844794bf3
 	github.com/redis/go-redis/v9 v9.7.0
@@ -63,6 +63,7 @@ require (
 	github.com/mitchellh/mapstructure v1.4.1 // indirect
 	github.com/modern-go/gls v0.0.0-20220109145502-612d0167dce5 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
+	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/rogpeppe/go-internal v1.10.0 // indirect
 	github.com/stretchr/testify v1.10.0 // indirect
 	github.com/tiktokmall/backend/common v0.0.0-00010101000000-000000000000 // indirect
@@ -70,10 +71,10 @@ require (
 	go.opentelemetry.io/otel/metric v1.32.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.32.0 // indirect
 	go.opentelemetry.io/otel/trace v1.32.0 // indirect
-	golang.org/x/crypto v0.32.0 // indirect
+	golang.org/x/crypto v0.33.0 // indirect
 	golang.org/x/net v0.25.0 // indirect
-	golang.org/x/sync v0.10.0 // indirect
-	golang.org/x/text v0.21.0 // indirect
+	golang.org/x/sync v0.11.0 // indirect
+	golang.org/x/text v0.22.0 // indirect
 	google.golang.org/genproto v0.0.0-20240227224415-6ceb2ff114de // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240401170217-c3f982113cda // indirect
 	gopkg.in/validator.v2 v2.0.1 // indirect
@@ -125,7 +126,7 @@ require (
 	github.com/yargevad/filepathx v1.0.0 // indirect
 	golang.org/x/arch v0.12.0 // indirect
 	golang.org/x/exp v0.0.0-20240222234643-814bf88cf225 // indirect
-	golang.org/x/sys v0.29.0 // indirect
+	golang.org/x/sys v0.30.0 // indirect
 	google.golang.org/protobuf v1.36.3 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
