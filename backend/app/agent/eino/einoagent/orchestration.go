@@ -18,6 +18,8 @@ package einoagent
 
 import (
 	"context"
+	"fmt"
+	"sync"
 
 	"github.com/cloudwego/eino-ext/components/retriever/redis"
 	"github.com/cloudwego/eino/compose"
@@ -33,6 +35,31 @@ type EinoAgentBuildConfig struct {
 
 type BuildConfig struct {
 	EinoAgent *EinoAgentBuildConfig
+}
+
+var (
+	once   sync.Once
+	runner compose.Runnable[*UserMessage, *schema.Message]
+	mu     sync.RWMutex
+)
+
+func GetAgent(ctx context.Context, config *BuildConfig) (compose.Runnable[*UserMessage, *schema.Message], error) {
+	mu.RLock()
+	fmt.Printf("hee")
+	if runner != nil {
+		defer mu.RUnlock()
+		return runner, nil
+	}
+	mu.RUnlock()
+
+	mu.Lock()
+	defer mu.Unlock()
+
+	var err error
+	once.Do(func() {
+		runner, err = BuildEinoAgent(ctx, config)
+	})
+	return runner, err
 }
 
 func BuildEinoAgent(ctx context.Context, config *BuildConfig) (r compose.Runnable[*UserMessage, *schema.Message], err error) {
