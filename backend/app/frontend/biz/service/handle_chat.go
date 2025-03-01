@@ -3,13 +3,16 @@ package service
 import (
 	"context"
 	"errors"
+	"fmt"
 	"io"
 	"log"
+	"os"
 	"strconv"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/hertz-contrib/sse"
+	"github.com/joho/godotenv"
 	"github.com/tiktokmall/backend/app/agent/cmd/einoagent/agent"
 	common "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/common"
 	frontendUtils "github.com/tiktokmall/backend/app/frontend/utils"
@@ -30,6 +33,8 @@ func (h *HandleChatService) Run(req *common.Empty) (resp *common.Empty, err erro
 	// hlog.CtxInfof(h.Context, "resp = %+v", resp)
 	//}()
 	// todo edit your code
+	_ = godotenv.Load()
+	fmt.Println("Use langfuse as callback, watch at: https://cloud.langfuse.com: %v", os.Getenv("LANGFUSE_PUBLIC_KEY"))
 	id := strconv.Itoa(int(frontendUtils.GetUserIdFromCtx(h.Context)))
 	message := h.RequestContext.Query("message")
 	if id == "" || message == "" {
