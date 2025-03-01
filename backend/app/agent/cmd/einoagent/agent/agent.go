@@ -81,7 +81,7 @@ func Init() error {
 
 func RunAgent(ctx context.Context, id string, msg string) (*schema.StreamReader[*schema.Message], error) {
 
-	runner, err := einoagent.BuildEinoAgent(ctx, &einoagent.BuildConfig{
+	runner, err := einoagent.GetAgent(ctx, &einoagent.BuildConfig{
 		EinoAgent: &einoagent.EinoAgentBuildConfig{},
 	})
 	if err != nil {
