@@ -40,6 +40,26 @@ func TestGetValueByKeyFromCache(t *testing.T) {
 	require.Equal(t, value1, value2)
 }
 
+func TestGetRedisKeyByPrefix(t *testing.T) {
+	ctx := context.Background()
+	var keys []string
+	var cursor uint64
+	var err error
+	for {
+		result, cursor, err := testRedisClient.Scan(ctx, cursor, "test*", 10).Result()
+		if err != nil {
+			break
+		}
+		keys = append(keys, result...)
+		if cursor == 0 {
+			break
+		}
+	}
+	require.NoError(t, err)
+	require.NotEmpty(t, keys)
+	log.Printf("keys: %v", keys)
+}
+
 func TestAAA(t *testing.T) {
 	var err error
 	require.Nil(t, err)

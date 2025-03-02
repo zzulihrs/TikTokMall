@@ -1,8 +1,8 @@
 package mq
 
 import (
-	"github.com/tiktokmall/backend/app/user/biz/dal/redis"
-	"github.com/tiktokmall/backend/app/user/conf"
+	"github.com/tiktokmall/backend/app/merchant/biz/dal/redis"
+	"github.com/tiktokmall/backend/app/merchant/conf"
 
 	"github.com/nats-io/nats.go"
 )

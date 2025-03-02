@@ -21,9 +21,13 @@ func TestPublishAndScribe(t *testing.T) {
 		}
 	}()
 
-	Nc.Subscribe("testCount", func(msg *nats.Msg) {
-		data := msg.Data
-		fmt.Printf("%v\n", string(data))
-	})
+	go func() {
+
+		Nc.Subscribe("testCount", func(msg *nats.Msg) {
+			data := msg.Data
+			fmt.Printf("%v\n", string(data))
+		})
+
+	}()
 	time.Sleep(5 * time.Second)
 }

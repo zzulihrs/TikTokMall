@@ -43,7 +43,7 @@ func InitNatsCacheProcessor(nc *nats.Conn, redis *redis.Client) *NatsCacheProces
 // 3. 如果删除失败，在当前 goroutine 中进行重试
 // 4. 达到最大重试次数后，记录错误日志
 func (p *NatsCacheProcessor) StartProcessor() {
-	// 订阅 cache.delete 主题
+	// 订阅 cache.user 主题
 	p.nc.Subscribe(cacheUserSubject, func(m *nats.Msg) {
 		// 解析消息
 		var msg CacheMessage
@@ -51,6 +51,7 @@ func (p *NatsCacheProcessor) StartProcessor() {
 			log.Printf("nats: Failed to unmarshal message: %v", err)
 			return
 		}
+		log.Printf("nats: Received cache message: %#v", msg)
 		if msg.Operation == messageQueueCacheUserDeleteKey { // 目前 cache.user 主题，只有一个 delete 操作
 			// 在当前 goroutine 中进行重试
 			// 不需要重新发布消息，因为这会导致消息重复和处理混乱
@@ -103,5 +104,6 @@ func (p *NatsCacheProcessor) AddDeleteCacheMessage(key string) error {
 	if err != nil {
 		return err
 	}
+	log.Printf("nats: Publishing cache message: %#v", msg)
 	return p.nc.Publish(cacheUserSubject, msgBytes)
 }

@@ -11,6 +11,7 @@ import (
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
 	"github.com/tiktokmall/backend/app/merchant/biz/dal"
 	"github.com/tiktokmall/backend/app/merchant/conf"
+	"github.com/tiktokmall/backend/app/merchant/infra/mq"
 	"github.com/tiktokmall/backend/common/mtl"
 	"github.com/tiktokmall/backend/common/serversuite"
 	"github.com/tiktokmall/backend/rpc_gen/kitex_gen/merchant/merchantservice"
@@ -31,6 +32,7 @@ func main() {
 	p := mtl.InitTracing(ServiceName)
 	defer p.Shutdown(context.Background())
 	dal.Init()
+	mq.Init()
 
 	opts := kitexInit()
 

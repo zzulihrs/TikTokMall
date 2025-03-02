@@ -47,6 +47,7 @@ message UpdateUserReq {
     int64 userId = 1;
     string username = 2; 
     string avator = 3;
+    string email = 4;
 }
 
 message UpdateUserResp {
@@ -66,4 +67,5 @@ message QueryUserReq {
 }
 
 message QueryUserResp {
+    User user = 1;
 }
