@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/nats-io/nats.go"
-	"github.com/tiktokmall/backend/app/checkout/conf"
+	"github.com/tiktokmall/backend/app/merchant/conf"
 )
 
 func TestPublishAndScribe(t *testing.T) {
