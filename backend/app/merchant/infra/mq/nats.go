@@ -16,6 +16,7 @@ var (
 func Init() {
 	// 需要提前初始化 redis
 	Nc, err = nats.Connect(conf.GetConf().Nats.Address)
+
 	if err != nil {
 		panic(err)
 	}
