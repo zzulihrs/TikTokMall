@@ -2,36 +2,11 @@ package model
 
 import (
 	"context"
-	"fmt"
 	"log"
-	"os"
 	"testing"
 
-	"github.com/joho/godotenv"
 	"github.com/tiktokmall/backend/app/product/biz/util"
-	"github.com/tiktokmall/backend/app/product/conf"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 )
-
-var testDB *gorm.DB
-
-func TestMain(m *testing.M) {
-	os.Chdir("../../")
-	_ = godotenv.Load()
-	dsn := fmt.Sprintf(conf.GetConf().MySQL.DSN, os.Getenv("MYSQL_USER"), os.Getenv("MYSQL_PASSWORD"), os.Getenv("MYSQL_HOST"))
-	var err error
-	testDB, err = gorm.Open(mysql.Open(dsn),
-		&gorm.Config{
-			PrepareStmt:            true,
-			SkipDefaultTransaction: true,
-		},
-	)
-	if err != nil {
-		panic(err)
-	}
-	os.Exit(m.Run())
-}
 
 func TestAddMerchant(t *testing.T) {
 	var merchants []Merchant

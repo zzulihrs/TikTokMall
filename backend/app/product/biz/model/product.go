@@ -69,29 +69,29 @@ func (c CachedProductQuery) GetById(productId int) (product Product, err error) 
 	cachedKey := fmt.Sprintf("%s_%s_%d", c.prefix, "product_by_id", productId)
 	cachedResult := c.cacheClient.Get(c.productQuery.ctx, cachedKey)
 	// 解析从 redis 中获取的数据
-	err = func() error {
-		err1 := cachedResult.Err()
-		if err1 != nil {
-			return err1
+	err1 := func() error {
+		err2 := cachedResult.Err()
+		if err2 != nil {
+			return err2
 		}
 		cachedResultByte, err1 := cachedResult.Bytes()
+		if err1 != nil {
+			return err2
+		}
 		if len(cachedResultByte) == 0 {
-			// 缓存为空，返回空值
-			return fmt.Errorf("product detail not found (cached)")
+			err = fmt.Errorf("product not found (cached)")
+			return nil
 		}
-		if err1 != nil {
-			return err1
-		}
-		err1 = json.Unmarshal(cachedResultByte, &product)
-		if err1 != nil {
-			return err1
+		err2 = json.Unmarshal(cachedResultByte, &product)
+		if err2 != nil {
+			return err2
 		}
 		return nil
 	}()
 
 	// 缓存命中，直接返回
-	if err == nil {
-		return product, nil
+	if err1 == nil {
+		return product, err
 	}
 
 	// 缺少缓存击穿

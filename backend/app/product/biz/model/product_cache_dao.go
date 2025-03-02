@@ -2,6 +2,7 @@ package model
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"sync"
 	"time"
@@ -131,7 +132,7 @@ func (dao *ProductDAO) GetProductInfoListByQuery(query string) (products []*Prod
 		}
 	}
 	merchants := []Merchant{}
-	err = dao.db.WithContext(dao.ctx).Model(&Merchant{}).Find(&merchants, "id in (?)", merchantIDs).Error
+	err = dao.db.WithContext(dao.ctx).Model(&Merchant{}).Find(&merchants, "id in (?) AND deleted_at IS NULL", merchantIDs).Error
 	if err != nil {
 		return nil, err
 	}
@@ -146,6 +147,11 @@ func (dao *ProductDAO) GetProductInfoListByQuery(query string) (products []*Prod
 			OwnerId:     int64(p.MerchantID),
 			OwnerName:   merchants[merchantSet[p.MerchantID]-1].Username,
 		}
+	}
+
+	// 缓存结果
+	if data, err := json.Marshal(products); err == nil {
+		dao.redis.Set(dao.ctx, cachedKey, string(data), getCachedExpiration(cacheDuration, cacheDuration))
 	}
 
 	return products, nil
@@ -202,7 +208,7 @@ func (dao *ProductDAO) GetProductInfoListByCategory(category string) (products [
 	// 从数据库中获取
 	cs := []*Category{}
 	err = dao.db.WithContext(dao.ctx).Model(Category{}).Where(&Category{Name: category}).
-		Preload("Products").Find(&cs).
+		Preload("Products").Find(&cs, "deleted_at IS NULL").
 		Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
@@ -233,7 +239,7 @@ func (dao *ProductDAO) GetProductInfoListByCategory(category string) (products [
 		}
 	}
 	merchants := []Merchant{}
-	err = dao.db.WithContext(dao.ctx).Model(&Merchant{}).Find(&merchants, "id in (?)", merchantIDs).Error
+	err = dao.db.WithContext(dao.ctx).Model(&Merchant{}).Find(&merchants, "id in (?) and deleted_at IS NULL", merchantIDs).Error
 	if err != nil {
 		return nil, err
 	}
@@ -244,5 +250,105 @@ func (dao *ProductDAO) GetProductInfoListByCategory(category string) (products [
 		}
 	}
 
+	// 缓存结果
+	if data, err := json.Marshal(products); err == nil {
+		dao.redis.Set(dao.ctx, cachedKey, string(data), getCachedExpiration(cacheDuration, cacheDuration))
+	}
+
 	return products, nil
+}
+
+type ProductDetail struct {
+	ID             int64    `json:"id"`
+	Name           string   `json:"name"`
+	Description    string   `json:"description"`
+	Picture        string   `json:"picture"`
+	SliderImgs     string   `json:"slider_imgs"`
+	Price          float32  `json:"price"`
+	Stock          int32    `json:"stock"`
+	OwnerId        int64    `json:"owner_id"`
+	OwnerName      string   `json:"owner_name"`
+	CategorieNames []string `json:"categories"`
+}
+
+func (dao *ProductDAO) GetProductDetailByPid(pid int64) (product *ProductDetail, err error) {
+	// 从缓存中获取
+	cachedKey := getProductDetailCacheKey(pid)
+	err = getValueByKeyFromCache(dao.ctx, dao.redis, cachedKey, &product)
+	if err == nil {
+		return product, nil
+	}
+	if errors.Is(err, cacheEmptyErr) {
+		return nil, fmt.Errorf("product not found (cached)")
+	}
+
+	// 缓存未命中，从数据库中获取
+	// 缓存击穿防护
+	mu, _ := dao.locks.LoadOrStore(cachedKey, &sync.Mutex{})
+	lock := mu.(*sync.Mutex)
+
+	// 使用TryLock实现带超时的锁获取
+	start := time.Now()
+	// TODO: 可以考虑时用 channel，需要注释协程是否正确关闭
+	for {
+		if lock.TryLock() {
+			defer lock.Unlock() // 确保最终解锁
+			break
+		}
+		if time.Since(start) > 10*time.Second {
+			return nil, fmt.Errorf("系统繁忙，请稍后重试")
+		}
+		time.Sleep(100 * time.Millisecond)
+	}
+
+	// 再次检查缓存是否存在
+	err = getValueByKeyFromCache(dao.ctx, dao.redis, cachedKey, &product)
+	if err == nil {
+		return product, nil
+	}
+	if errors.Is(err, cacheEmptyErr) {
+		return nil, fmt.Errorf("product not found (cached)")
+	}
+
+	// 从数据库中获取
+	p := &Product{}
+	err = dao.db.WithContext(dao.ctx).Model(&Product{}).Preload("Categories").Where("id = ? AND deleted_at IS NULL", pid).First(p).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			// 空值查询，缓存空值防止缓存穿透，随机过期时间防雪崩
+			dao.redis.Set(dao.ctx, cachedKey, "", getCachedExpiration(emptyCacheDuration, emptyCacheDuration))
+		}
+		return nil, err
+	}
+
+	merchant := &Merchant{}
+	err = dao.db.WithContext(dao.ctx).Model(&Merchant{}).Where("id = ? AND deleted_at IS NULL", p.MerchantID).First(merchant).Error
+	if err != nil {
+		return nil, err
+	}
+
+	categoryNames := make([]string, len(p.Categories))
+	for i, c := range p.Categories {
+		categoryNames[i] = c.Name
+	}
+
+	product = &ProductDetail{
+		ID:             int64(p.ID),
+		Name:           p.Name,
+		Description:    p.Description,
+		Picture:        p.Picture,
+		SliderImgs:     p.SliderImgs,
+		Price:          p.Price,
+		Stock:          p.Stock,
+		OwnerId:        int64(p.MerchantID),
+		OwnerName:      merchant.Username,
+		CategorieNames: categoryNames,
+	}
+
+	// 缓存结果
+	if data, err := json.Marshal(product); err == nil {
+		dao.redis.Set(dao.ctx, cachedKey, string(data), getCachedExpiration(cacheDuration, cacheDuration))
+	}
+
+	return product, nil
 }
