@@ -6,6 +6,7 @@ import (
 
 	"github.com/cloudwego/kitex/pkg/kerrors"
 	"github.com/tiktokmall/backend/app/merchant/biz/dal/mysql"
+	"github.com/tiktokmall/backend/app/merchant/biz/dal/redis"
 	"github.com/tiktokmall/backend/app/merchant/biz/model"
 	merchant "github.com/tiktokmall/backend/rpc_gen/kitex_gen/merchant"
 )
@@ -38,5 +39,8 @@ func (s *DeleteProductService) Run(req *merchant.DeleteProductReq) (resp *mercha
 	if err != nil {
 		return nil, fmt.Errorf("delete product failed, err:%w", err)
 	}
+
+	// TODO: 删除 product_list 的缓存
+	model.ClearProductListCachedKey(s.ctx, redis.RedisClient)
 	return
 }

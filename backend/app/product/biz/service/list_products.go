@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"log"
 
 	"github.com/tiktokmall/backend/app/product/biz/dal/mysql"
 	"github.com/tiktokmall/backend/app/product/biz/dal/redis"
@@ -76,6 +77,10 @@ func (s *ListProductsService) Run(req *product.ListProductsReq) (resp *product.L
 			OwnerId:     uint32(p.OwnerId),
 			OwnerName:   p.OwnerName,
 		}
+	}
+	log.Printf("category=%v, items=%v", req.CategoryName, results)
+	resp = &product.ListProductsResp{
+		Products: results,
 	}
 	return resp, nil
 }

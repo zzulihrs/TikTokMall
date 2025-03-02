@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"sync"
 	"time"
 
@@ -110,7 +111,7 @@ func (dao *ProductDAO) GetProductInfoListByQuery(query string) (products []*Prod
 	// 从数据库中获取
 	ps := []*Product{}
 	err = dao.db.WithContext(dao.ctx).Model(&Product{}).
-		Find(&ps, "name like ? or description like ? and deleted_at IS NULL", "%"+query+"%", "%"+query+"%").
+		Find(&ps, "(name like ? or description like ?) and deleted_at IS NULL", "%"+query+"%", "%"+query+"%").
 		Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
@@ -207,8 +208,8 @@ func (dao *ProductDAO) GetProductInfoListByCategory(category string) (products [
 	// 缓存未命中，从数据库中获取
 	// 从数据库中获取
 	cs := []*Category{}
-	err = dao.db.WithContext(dao.ctx).Model(Category{}).Where(&Category{Name: category}).
-		Preload("Products").Find(&cs, "deleted_at IS NULL").
+	err = dao.db.WithContext(dao.ctx).Model(Category{}).Where("name = ?", category).
+		Preload("Products", "deleted_at IS NULL").Where("deleted_at IS NULL").Find(&cs).
 		Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
@@ -216,6 +217,11 @@ func (dao *ProductDAO) GetProductInfoListByCategory(category string) (products [
 			dao.redis.Set(dao.ctx, cachedKey, "", getCachedExpiration(emptyCacheDuration, emptyCacheDuration))
 		}
 		return nil, err
+	}
+	if len(cs) == 0 {
+		// 空值查询，缓存空值防止缓存穿透，随机过期时间防雪崩
+		dao.redis.Set(dao.ctx, cachedKey, "", getCachedExpiration(emptyCacheDuration, emptyCacheDuration))
+		return nil, fmt.Errorf("product not found")
 	}
 
 	merchantSet := make(map[int]int)
@@ -238,6 +244,10 @@ func (dao *ProductDAO) GetProductInfoListByCategory(category string) (products [
 			}
 		}
 	}
+	log.Printf("category=%v, get products=%#v", category, products)
+	for _, v := range products {
+		fmt.Printf("product: %#v\n", v)
+	}
 	merchants := []Merchant{}
 	err = dao.db.WithContext(dao.ctx).Model(&Merchant{}).Find(&merchants, "id in (?) and deleted_at IS NULL", merchantIDs).Error
 	if err != nil {
@@ -245,9 +255,7 @@ func (dao *ProductDAO) GetProductInfoListByCategory(category string) (products [
 	}
 
 	for i, p := range products {
-		products[i] = &ProductListItem{
-			OwnerName: merchants[merchantSet[int(p.OwnerId)]-1].Username,
-		}
+		products[i].OwnerName = merchants[merchantSet[int(p.OwnerId)]-1].Username
 	}
 
 	// 缓存结果

@@ -16,10 +16,10 @@ type CacheMessage struct {
 }
 
 const (
-// cacheUserSubject               = "cache.user"
-// maxRetryAttempts               = 3               // 最大重试次数
-// retryDelay                     = time.Second * 2 // 重试间隔
-// messageQueueCacheUserDeleteKey = "delete"        // 消息队列的中删除 Operation
+	cacheProductSubject       = "cache.product"
+	maxRetryAttempts          = 3               // 最大重试次数
+	retryDelay                = time.Second * 2 // 重试间隔
+	messageQueueDeleteListKey = "delete_list"   // 消息队列的中删除 Operation
 )
 
 type NatsCacheProcessor struct {
@@ -35,20 +35,20 @@ func InitNatsCacheProcessor(nc *nats.Conn, redis *redis.Client) *NatsCacheProces
 }
 
 // StartProcessor 启动 NATS 消息处理器
-// 1. 订阅 cache.user 主题
+// 1. 订阅 cache.product 主题
 // 2. 接收到消息后进行缓存删除操作
 // 3. 如果删除失败，在当前 goroutine 中进行重试
 // 4. 达到最大重试次数后，记录错误日志
 func (p *NatsCacheProcessor) StartProcessor() {
 	// 订阅 cache.user 主题
-	// p.nc.Subscribe(cacheUserSubject, func(m *nats.Msg) {
+	// p.nc.Subscribe(cacheProductSubject, func(m *nats.Msg) {
 	// 	// 解析消息
 	// 	var msg CacheMessage
 	// 	if err := json.Unmarshal(m.Data, &msg); err != nil {
 	// 		log.Printf("nats: Failed to unmarshal message: %v", err)
 	// 		return
 	// 	}
-	// 	if msg.Operation == messageQueueCacheUserDeleteKey { // 目前 cache.user 主题，只有一个 delete 操作
+	// 	if msg.Operation == messageQueueDeleteListKey { // 目前 cache.product 主题，只有一个 delete 操作
 	// 		// 在当前 goroutine 中进行重试
 	// 		// 不需要重新发布消息，因为这会导致消息重复和处理混乱
 	// 		var lastErr error
@@ -84,14 +84,14 @@ func (p *NatsCacheProcessor) Close() {
 
 // AddDeleteCacheMessage 添加删除缓存的消息到消息队列
 // key: 缓存的 key
-// Subject: cache.user
-// Operation: delete
+// Subject: cache.product
+// Operation: delete_list
 // Attempts: 0
 // MaxAttempts: 3
 func (p *NatsCacheProcessor) AddDeleteCacheMessage(key string) error {
 	// msg := &CacheMessage{
 	// 	Key:       key,
-	// 	Operation: messageQueueCacheUserDeleteKey,
+	// 	Operation: messageQueueDeleteListKey,
 	// 	Attempts:  0,
 	// 	CreatedAt: time.Now(),
 	// }
@@ -100,6 +100,6 @@ func (p *NatsCacheProcessor) AddDeleteCacheMessage(key string) error {
 	// if err != nil {
 	// 	return err
 	// }
-	// return p.nc.Publish(cacheUserSubject, msgBytes)
+	// return p.nc.Publish(cacheProductSubject, msgBytes)
 	return nil
 }
