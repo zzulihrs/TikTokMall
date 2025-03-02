@@ -38,7 +38,7 @@ func InitNatsCacheProcessor(nc *nats.Conn, redis *redis.Client) *NatsCacheProces
 }
 
 // StartProcessor 启动 NATS 消息处理器
-// 1. 订阅 cache.delete 主题
+// 1. 订阅 cache.user 主题
 // 2. 接收到消息后进行缓存删除操作
 // 3. 如果删除失败，在当前 goroutine 中进行重试
 // 4. 达到最大重试次数后，记录错误日志
