@@ -3,7 +3,6 @@ package middleware
 import (
 	"context"
 
-	"github.com/tiktokmall/backend/app/frontend/utils"
 	frontendutils "github.com/tiktokmall/backend/app/frontend/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
@@ -37,13 +36,13 @@ func GlobalAuth() app.HandlerFunc {
 
 func Auth() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
-		userId := utils.GetUserIdFromCtx(ctx)
+		userId := frontendutils.GetUserIdFromCtx(ctx)
 		if userId == 0 {
 			c.JSON(302, "uid 为空")
 			c.Abort()
 			return
 		}
-		email := utils.GetEmailFromCtx(ctx)
+		email := frontendutils.GetEmailFromCtx(ctx)
 		if email == "" {
 			c.JSON(302, "email 为空")
 			c.Abort()
@@ -55,21 +54,21 @@ func Auth() app.HandlerFunc {
 
 func MerchantProduct() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
-		userId := utils.GetUserIdFromCtx(ctx)
+		userId := frontendutils.GetUserIdFromCtx(ctx)
 		if userId == 0 {
 			c.JSON(302, "uid 为空")
 			c.Abort()
 			return
 		}
 		// log.Printf("userId: %v", userId)
-		email := utils.GetEmailFromCtx(ctx)
+		email := frontendutils.GetEmailFromCtx(ctx)
 		if email == "" {
 			c.JSON(302, "email 为空")
 			c.Abort()
 			return
 		}
 		// log.Printf("email: %v", email)
-		merchantId := utils.GetMerchantIdFromCtx(ctx)
+		merchantId := frontendutils.GetMerchantIdFromCtx(ctx)
 		if merchantId == 0 {
 			c.JSON(302, "merchant_id 为空")
 			c.Abort()
