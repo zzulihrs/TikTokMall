@@ -59,8 +59,10 @@ func (s *CheckoutService) Run(req *checkout.CheckoutReq) (resp *checkout.Checkou
 		if productResp == nil || productResp.Product == nil {
 			continue
 		}
-		cost := productResp.Product.Price
-		total += cost * float32(cartItem.Quantity)
+		p := productResp.Product
+		cost := p.Price * float32(cartItem.Quantity)
+		total += cost
+
 		oi = append(oi, &order.OrderItem{
 			Item: &cart.CartItem{
 				ProductId: cartItem.ProductId,
