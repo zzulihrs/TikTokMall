@@ -3,7 +3,7 @@
 ROOT_PATH=$PWD/app
 # 微服务列表，每个微服务的目录名称
 declare -a SERVICES=("cart" "checkout" "email" "frontend" "order" "payment" "product" "user" "merchant")
-# sleep 10 # 等docker启动完成
+sleep 10 # 等docker启动完成
 # 创建数据文件夹（如果不存在）
 mkdir -p ./data/mysql/ ./data/redis/
 
