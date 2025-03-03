@@ -216,6 +216,13 @@ const openMerchantDialog = () => {
 // 处理成为商家
 const handleBecomeMerchant = async () => {
   try {
+    // TODO:
+    const id = computed(() => store.getters['merchant/getMerchantId']).value
+    // console.log('merchantId:', id)
+    if (id > 0) {
+      ElMessage.info('您已入驻成为商家，无需再次操作。 ')
+      return 
+    }
     const response = await axios.post('/api/merchant/register', {
       code: merchantForm.code
     })
