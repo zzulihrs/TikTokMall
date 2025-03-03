@@ -45,11 +45,11 @@ const fetchCategoryItems = async () => {
     const categoryName = store?.state?.category?.category
     let response;
     if (categoryName == 'All') {
-      response = await axios.get(`/api/search?q=`)
+
     } else {
       response = await axios.get(`/api/category/${store?.state?.category?.category}`)
     }
-    
+
     categoryItems.value = response?.data?.items || []
   } catch (err) {
     categoryItems.value = null

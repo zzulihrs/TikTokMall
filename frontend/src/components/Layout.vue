@@ -132,7 +132,7 @@ const handleSearch = async () => {
   if (true) { // 空白也可以搜索
     try {
       await store.dispatch('search/searchProducts', query)
-      router.push({ path: '/search', query: { q: query } })
+      await router.push({ path: '/search', query: { q: query } })
     } catch (error) {
       ElMessage.error('搜索失败：' + error.message)
     }
