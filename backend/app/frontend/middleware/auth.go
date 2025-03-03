@@ -2,8 +2,8 @@ package middleware
 
 import (
 	"context"
-	"log"
 
+	"github.com/tiktokmall/backend/app/frontend/utils"
 	frontendutils "github.com/tiktokmall/backend/app/frontend/utils"
 
 	"github.com/cloudwego/hertz/pkg/app"
@@ -14,89 +14,68 @@ import (
 func GlobalAuth() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
 		session := sessions.Default(c)
-		log.Printf("GlobalAuth session.ID: %v", session.ID())
+		// log.Printf("GlobalAuth session.ID: %v", session.ID())
 		userId := session.Get("user_id")
-		username := session.Get("username")
-		email := session.Get("email")
-		session.Options(sessions.Options{
-			Path:     "/",
-			Domain:   "localhost",
-			MaxAge:   3600 * 24 * 7,
-			Secure:   false,
-			HttpOnly: true,
-			SameSite: 0,
-		})
-		// log.Printf("GlobalAuth get from session, userId: %v", userId)
-		// log.Printf("GlobalAuth get from session, username: %v", username)
-		// log.Printf("GlobalAuth get from session, email: %v", email)
-		if userId == nil {
-			c.Next(ctx)
-			return
+		if userId != nil {
+			ctx = context.WithValue(ctx, frontendutils.UserIdKey, userId)
 		}
-		ctx = context.WithValue(ctx, frontendutils.UserIdKey, userId)
-		ctx = context.WithValue(ctx, frontendutils.UsernameKey, username)
-		ctx = context.WithValue(ctx, frontendutils.EmailKey, email)
+		username := session.Get("username")
+		if username != nil {
+			ctx = context.WithValue(ctx, frontendutils.UsernameKey, username)
+		}
+		email := session.Get("email")
+		if email != nil {
+			ctx = context.WithValue(ctx, frontendutils.EmailKey, email)
+		}
+		merchantId := session.Get("merchant_id")
+		if merchantId != nil {
+			ctx = context.WithValue(ctx, frontendutils.MerchantIdKey, merchantId)
+		}
 		c.Next(ctx)
-
 	}
 }
 
 func Auth() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
-		session := sessions.Default(c)
-		userId := session.Get("user_id")
-		username := session.Get("username")
-		email := session.Get("email")
-		merchantId := session.Get("merchant_id")
-		// log.Printf("Auth get from session, userId: %v", userId)
-		// log.Printf("Auth get from session, username: %v", username)
-		// log.Printf("Auth get from session, email: %v", email)
-		// log.Printf("Auth get from session, merchantId: %v", merchantId)
-		if userId == nil {
+		userId := utils.GetUserIdFromCtx(ctx)
+		if userId == 0 {
 			c.JSON(302, "uid 为空")
-			// c.Redirect(302, []byte("/sign-in?next="+c.FullPath()))
 			c.Abort()
 			return
 		}
-		ctx = context.WithValue(ctx, frontendutils.UserIdKey, userId)
-		ctx = context.WithValue(ctx, frontendutils.UsernameKey, username)
-		ctx = context.WithValue(ctx, frontendutils.EmailKey, email)
-		ctx = context.WithValue(ctx, frontendutils.MerchantIdKey, merchantId)
+		email := utils.GetEmailFromCtx(ctx)
+		if email == "" {
+			c.JSON(302, "email 为空")
+			c.Abort()
+			return
+		}
 		c.Next(ctx)
-
 	}
 }
 
 func MerchantProduct() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
-		session := sessions.Default(c)
-		userId := session.Get("user_id")
-		username := session.Get("username")
-		email := session.Get("email")
-
-		// log.Printf("Auth get from session, userId: %v", userId)
-		// log.Printf("Auth get from session, username: %v", username)
-		// log.Printf("Auth get from session, email: %v", email)
-
-		if userId == nil {
+		userId := utils.GetUserIdFromCtx(ctx)
+		if userId == 0 {
 			c.JSON(302, "uid 为空")
 			c.Abort()
 			return
 		}
-		merchantId := session.Get("merchant_id")
-
-		log.Printf("Auth get from session, merchantId: %v", merchantId)
-
-		if merchantId == nil {
+		// log.Printf("userId: %v", userId)
+		email := utils.GetEmailFromCtx(ctx)
+		if email == "" {
+			c.JSON(302, "email 为空")
+			c.Abort()
+			return
+		}
+		// log.Printf("email: %v", email)
+		merchantId := utils.GetMerchantIdFromCtx(ctx)
+		if merchantId == 0 {
 			c.JSON(302, "merchant_id 为空")
 			c.Abort()
 			return
 		}
-		ctx = context.WithValue(ctx, frontendutils.UserIdKey, userId)
-		ctx = context.WithValue(ctx, frontendutils.UsernameKey, username)
-		ctx = context.WithValue(ctx, frontendutils.EmailKey, email)
-		ctx = context.WithValue(ctx, frontendutils.MerchantIdKey, merchantId)
-
+		// log.Printf("merchantId: %v", merchantId)
 		c.Next(ctx)
 
 	}
