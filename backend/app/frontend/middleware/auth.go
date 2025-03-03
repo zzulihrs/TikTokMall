@@ -18,6 +18,14 @@ func GlobalAuth() app.HandlerFunc {
 		userId := session.Get("user_id")
 		username := session.Get("username")
 		email := session.Get("email")
+		session.Options(sessions.Options{
+			Path:     "/",
+			Domain:   "localhost",
+			MaxAge:   3600 * 24 * 7,
+			Secure:   false,
+			HttpOnly: true,
+			SameSite: 0,
+		})
 		// log.Printf("GlobalAuth get from session, userId: %v", userId)
 		// log.Printf("GlobalAuth get from session, username: %v", username)
 		// log.Printf("GlobalAuth get from session, email: %v", email)
@@ -40,10 +48,10 @@ func Auth() app.HandlerFunc {
 		username := session.Get("username")
 		email := session.Get("email")
 		merchantId := session.Get("merchant_id")
-		log.Printf("Auth get from session, userId: %v", userId)
-		log.Printf("Auth get from session, username: %v", username)
-		log.Printf("Auth get from session, email: %v", email)
-		log.Printf("Auth get from session, merchantId: %v", merchantId)
+		// log.Printf("Auth get from session, userId: %v", userId)
+		// log.Printf("Auth get from session, username: %v", username)
+		// log.Printf("Auth get from session, email: %v", email)
+		// log.Printf("Auth get from session, merchantId: %v", merchantId)
 		if userId == nil {
 			c.JSON(302, "uid 为空")
 			// c.Redirect(302, []byte("/sign-in?next="+c.FullPath()))
@@ -66,9 +74,9 @@ func MerchantProduct() app.HandlerFunc {
 		username := session.Get("username")
 		email := session.Get("email")
 
-		log.Printf("Auth get from session, userId: %v", userId)
-		log.Printf("Auth get from session, username: %v", username)
-		log.Printf("Auth get from session, email: %v", email)
+		// log.Printf("Auth get from session, userId: %v", userId)
+		// log.Printf("Auth get from session, username: %v", username)
+		// log.Printf("Auth get from session, email: %v", email)
 
 		if userId == nil {
 			c.JSON(302, "uid 为空")

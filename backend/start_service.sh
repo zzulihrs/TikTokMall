@@ -3,10 +3,21 @@
 ROOT_PATH=$PWD/app
 # 微服务列表，每个微服务的目录名称
 declare -a SERVICES=("cart" "checkout" "email" "frontend" "order" "payment" "product" "user" "merchant")
-sleep 10 # 等docker启动完成
+# sleep 10 # 等docker启动完成
 # 创建数据文件夹（如果不存在）
-mkdir -p /backend/db/mysql_data/ /backend/data/redis/
-chmod -R 777 /backend/db/mysql_data/ /backend/data/redis/
+mkdir -p ./data/mysql/ ./data/redis/
+
+# 检查并修改 ./data/mysql/ 目录的权限
+mysql_permissions=$(stat -c "%a" ./data/mysql/)
+if [ "$mysql_permissions" != "777" ]; then
+    sudo chmod -R 777 ./data/mysql/
+fi
+
+# 检查并修改 ./data/redis/ 目录的权限
+redis_permissions=$(stat -c "%a" ./data/redis/)
+if [ "$redis_permissions" != "777" ]; then
+    sudo chmod -R 777 ./data/redis/
+fi
 # 启动所有微服务
 for service in "${SERVICES[@]}"; do
     echo "Starting $service..."
