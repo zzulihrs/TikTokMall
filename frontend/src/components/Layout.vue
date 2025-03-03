@@ -220,11 +220,18 @@ const handleBecomeMerchant = async () => {
       code: merchantForm.code
     })
 
-    ElMessage.success('注册成功，您已成为商家！')
     merchantDialogVisible.value = false
+    merchantForm.code = ''
 
+    // console.log('注册:', response.data)
+    if (+response.data.code == 200) {
+      ElMessage.success('注册成功，您已成为商家！请重新登录')  
+    } else {
+      ElMessage.error('注册失败：' + response.data.message)
+    }
     // 刷新页面或更新状态
-    window.location.reload()
+    // window.location.reload()
+    // ElMessage.success('注册成功，您已成为商家！')
   } catch (error) {
     ElMessage.error('注册失败：' + error.message)
   }
