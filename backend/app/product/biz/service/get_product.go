@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"log"
 
 	"github.com/tiktokmall/backend/app/product/biz/dal/mysql"
 	"github.com/tiktokmall/backend/app/product/biz/dal/redis"
@@ -25,21 +24,39 @@ func (s *GetProductService) Run(req *product.GetProductReq) (resp *product.GetPr
 	if req.Id == 0 {
 		return nil, kerrors.NewGRPCBizStatusError(2004001, "product id is required")
 	}
-	pq := model.NewCachedProductQuery(model.NewProductQuery(s.ctx, mysql.DB), redis.RedisClient, "shop")
-	p, err := pq.GetById(int(req.Id))
+	// pq := model.NewCachedProductQuery(model.NewProductQuery(s.ctx, mysql.DB), redis.RedisClient, "shop")
+	// p, err := pq.GetById(int(req.Id))
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// merchant, err := model.NewMerchantQuery(s.ctx, mysql.DB).GetById(p.MerchantID)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// // 只添加类别名称
+	// var categories []string
+	// for _, c := range p.Categories {
+	// 	categories = append(categories, c.Name)
+	// }
+	// log.Println("merchant: ", merchant)
+	// return &product.GetProductResp{
+	// 	Product: &product.Product{
+	// 		Id:          uint32(p.ID),
+	// 		Picture:     p.Picture,
+	// 		Price:       p.Price,
+	// 		Description: p.Description,
+	// 		Name:        p.Name,
+	// 		Stock:       uint32(p.Stock),
+	// 		OwnerId:     uint32(merchant.ID),
+	// 		OwnerName:   merchant.Username,
+	// 		Categories:  categories,
+	// 	},
+	// }, nil
+
+	p, err := model.NewProductDAO(s.ctx, mysql.DB, redis.RedisClient).GetProductDetailByPid(int64(req.Id))
 	if err != nil {
 		return nil, err
 	}
-	merchant, err := model.NewMerchantQuery(s.ctx, mysql.DB).GetById(p.MerchantID)
-	if err != nil {
-		return nil, err
-	}
-	// TODO: 添加类别信息
-	var categories []string
-	for _, c := range p.Categories {
-		categories = append(categories, c.Name)
-	}
-	log.Println("merchant: ", merchant)
 	return &product.GetProductResp{
 		Product: &product.Product{
 			Id:          uint32(p.ID),
@@ -48,9 +65,9 @@ func (s *GetProductService) Run(req *product.GetProductReq) (resp *product.GetPr
 			Description: p.Description,
 			Name:        p.Name,
 			Stock:       uint32(p.Stock),
-			OwnerId:     uint32(merchant.ID),
-			OwnerName:   merchant.Username,
-			Categories:  categories,
+			OwnerId:     uint32(p.OwnerId),
+			OwnerName:   p.OwnerName,
+			Categories:  p.CategorieNames,
 		},
 	}, nil
 }

@@ -6,5 +6,5 @@ log/
 *.log
 *.exe
 *.so
-/backend/db/mysql_data/
 /backend/data/redis/
+/backend/data/mysql/

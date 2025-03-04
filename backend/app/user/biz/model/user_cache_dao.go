@@ -121,7 +121,7 @@ func (dao *UserDAO) GetByEmail(email string) (*User, error) {
 // 1. 先更新数据库
 // 2. 成功后，将删除缓存的操作加入消息队列
 // 3. 通过消息队列的重试机制确保缓存最终被删除
-func (dao *UserDAO) UpdateUsernameOrAvatorById(user User) (err error) {
+func (dao *UserDAO) UpdateUsernameOrAvatorById(user *User) (err error) {
 	// TODO：可以先根据 email 查询用户，判断是否需要更新。
 	// 更新数据库
 	err = dao.db.WithContext(dao.ctx).Model(&User{}).Where("id = ? and deleted_at IS NULL", user.ID).Updates(map[string]interface{}{
@@ -143,7 +143,7 @@ func (dao *UserDAO) UpdateUsernameOrAvatorById(user User) (err error) {
 func (dao *UserDAO) DeleteByID(id int) (err error) {
 	// TODO: 请实现DeleteByID方法
 	// 查缓存，防止缓存穿透
-	cacheDeleteKey := "delete_user_id:" + fmt.Sprintf("%d", id)
+	cacheDeleteKey := "delete_user_by_id:" + fmt.Sprintf("%d", id)
 	if val, err := dao.redis.Get(dao.ctx, cacheDeleteKey).Result(); err == nil {
 		if val == "" { // 空值表示已删除，缓存穿透保护
 			return nil

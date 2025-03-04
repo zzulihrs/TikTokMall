@@ -9,6 +9,7 @@ import (
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"gorm.io/plugin/opentelemetry/tracing"
 )
 
@@ -24,6 +25,8 @@ func Init() {
 		&gorm.Config{
 			PrepareStmt:            true,
 			SkipDefaultTransaction: true,
+			// 显示 sql
+			Logger: logger.Default.LogMode(logger.Info),
 		},
 	)
 	if err != nil {
