@@ -39,7 +39,6 @@ func (h *HandleChatService) Run(req *common.Empty) (resp *common.Empty, err erro
 		})
 		return
 	}
-
 	log.Printf("[Chat] Starting chat with ID: %s, Message: %s\n", id, message)
 
 	// core function
