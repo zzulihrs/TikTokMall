@@ -6,7 +6,6 @@ import (
 	"github.com/cloudwego/eino/components/tool"
 	"github.com/cloudwego/eino/components/tool/utils"
 	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
-	frontendUtils "github.com/tiktokmall/backend/app/frontend/utils"
 	rpcChekcout "github.com/tiktokmall/backend/rpc_gen/kitex_gen/checkout"
 )
 
@@ -72,8 +71,13 @@ func (p *PaymentImpl) ToEinoTool() (tool.BaseTool, error) {
 
 // Invoke 实际执行支付操作
 func (p *PaymentImpl) Invoke(ctx context.Context, req *PaymentRequest) (*PaymentResponse, error) {
-	req.UserID = frontendUtils.GetUserIdFromCtx(ctx)
 	// 直接使用alipay，默认地址
+	if req.UserID == 0 {
+		return &PaymentResponse{
+			Success:    false,
+			PaymentURL: "user id is required",
+		}, nil
+	}
 	rpc.CheckoutClient.Checkout(ctx, &rpcChekcout.CheckoutReq{
 		UserId:        req.UserID,
 		Firstname:     "test",
