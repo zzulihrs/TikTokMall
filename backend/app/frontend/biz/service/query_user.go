@@ -3,6 +3,8 @@ package service
 import (
 	"context"
 	"fmt"
+	rpcmerchant "github.com/tiktokmall/backend/rpc_gen/kitex_gen/merchant"
+	"log"
 
 	"github.com/cloudwego/hertz/pkg/app"
 	user "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/user"
@@ -38,14 +40,26 @@ func (h *QueryUserService) Run(req *user.QueryUserReq) (resp map[string]any, err
 	if err != nil {
 		return nil, err
 	}
+	merchantResp, err := rpc.MerchantClient.GetMerchant(h.Context, &rpcmerchant.GetMerchantReq{
+		Id: int64(uid),
+	})
+	merchantId := int64(0)
+	if err == nil {
+		merchantId = merchantResp.Id
+	} else {
+		log.Println("err", err)
+	}
+	log.Println("uid", uid)
+	log.Println("merchantId", merchantId)
 	resp = map[string]any{
 		"code":    200,
-		"message": "ok",
+		"message": "ok1",
 		"data": map[string]any{
-			"id":       uid,
-			"username": userResp.User.Username,
-			"email":    userResp.User.Email,
-			"avator":   userResp.User.Avator,
+			"id":         10,
+			"username":   userResp.User.Username,
+			"email":      userResp.User.Email,
+			"avator":     userResp.User.Avator,
+			"merchantId": merchantId,
 		},
 	}
 	return resp, nil

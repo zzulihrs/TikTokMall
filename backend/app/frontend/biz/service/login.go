@@ -2,13 +2,14 @@ package service
 
 import (
 	"context"
+	"github.com/tiktokmall/backend/app/frontend/biz/utils"
+	rpcmerchant "github.com/tiktokmall/backend/rpc_gen/kitex_gen/merchant"
 
 	auth "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/auth"
 	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
 	"github.com/tiktokmall/backend/rpc_gen/kitex_gen/user"
 
 	"github.com/cloudwego/hertz/pkg/app"
-	"github.com/hertz-contrib/sessions"
 )
 
 type LoginService struct {
@@ -35,26 +36,25 @@ func (h *LoginService) Run(req *auth.LoginReq) (resp map[string]any, err error) 
 	if err != nil {
 		return nil, err
 	}
-	// 获取 请求的上下文 得到 session
-	session := sessions.Default(h.RequestContext)
-	// 利用 redis 存储 user_id
-	// 设置 Cookie
-	// Cookie
-
-	session.Set("user_id", int32(rpc_resp.UserId))
-	session.Set("username", rpc_resp.Username)
-	session.Set("email", rpc_resp.Email)
-	err = session.Save()
-	if err != nil {
-		return nil, err
+	merchantResp, err := rpc.MerchantClient.GetMerchant(h.Context, &rpcmerchant.GetMerchantReq{
+		Id: rpc_resp.UserId,
+	})
+	merchantId := int64(0)
+	if err == nil {
+		merchantId = merchantResp.Id
 	}
-	// 从 request 中获取 referer ，然后返回上一个 url
-	// redirect := "/"
-	// if req.Next != "" {
-	// 	redirect = req.Next
-	// }
-	return map[string]any{
-		"status":  200,
-		"message": "OK",
-	}, err
+	tokenString, err := utils.GenerateJWT(rpc_resp.UserId, rpc_resp.Username, rpc_resp.Email, merchantId)
+	if err == nil {
+		return map[string]any{
+			"status":  200,
+			"token":   tokenString,
+			"message": "OK1",
+		}, err
+	} else {
+		return map[string]any{
+			"status":  500,
+			"message": err,
+		}, err
+	}
+
 }

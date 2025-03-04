@@ -10,7 +10,7 @@ import (
 
 func rootMw() []app.HandlerFunc {
 	// your code...
-	return []app.HandlerFunc{middleware.Auth()}
+	return []app.HandlerFunc{middleware.Jwt()}
 }
 
 func _addcartitemMw() []app.HandlerFunc {
