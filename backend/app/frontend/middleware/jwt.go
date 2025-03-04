@@ -10,17 +10,17 @@ import (
 
 func Jwt() app.HandlerFunc {
 	return func(ctx context.Context, c *app.RequestContext) {
-		log.Printf("Jwt")
+		//获取 Token
 		tokenString := c.Request.Header.Get("Authorization")
 
-		log.Println("tokenString: ", tokenString)
+		// 检查 Token 是否存在
 		if tokenString == "" {
 			c.JSON(401, "error request does not contain an access token")
 			c.Abort()
 			return
 		}
-		log.Printf("Jwt1")
 
+		//验证 Token
 		claims, err := utils.ValidateToken(tokenString)
 		if err != nil {
 			c.JSON(401, err.Error())
@@ -29,10 +29,9 @@ func Jwt() app.HandlerFunc {
 		}
 
 		log.Println("frontendutils.UserIdKey", ctx.Value(frontendutils.UserIdKey))
-
-		//log.Printf("Jwt2")
 		log.Println("claims: ", claims.UserId)
 
+		// 将声明信息存储到上下文
 		if claims.UserId != 0 {
 			ctx = context.WithValue(ctx, frontendutils.UserIdKey, claims.UserId)
 		}
