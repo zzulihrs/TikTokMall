@@ -36,6 +36,7 @@
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
+            :headers="uploadHeaders"
           >
             <img v-if="editForm.avator" :src="editForm.avator" class="avatar" />
             <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
@@ -79,6 +80,11 @@ const editForm = reactive({
   username: '',
   email: ''
 })
+
+// 设置上传请求的 headers
+const uploadHeaders = computed(() => ({
+  Authorization: `${store.state.auth.token}`, // 根据你的认证方式调整
+}));
 
 const user = computed(() => store?.state?.auth?.user)
 

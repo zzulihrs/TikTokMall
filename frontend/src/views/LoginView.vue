@@ -87,7 +87,8 @@ const handleLogin = async () => {
         avator: response?.data?.avator || 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
         token: response.data.token || 'test-token',
       };
-
+      localStorage.setItem('token', userData.token)
+      axios.defaults.headers.common['Authorization'] = `${userData.token}`;
 
 
 
@@ -104,8 +105,12 @@ const handleLogin = async () => {
       if(userInfo?.data?.data?.avator == "") {
         userInfo.data.data.avator = 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
       }
+
       // console.log(userInfo?.data?.data);
       await store.commit('auth/SET_USER', userInfo?.data?.data)
+
+      await store.dispatch('merchant/SET_MERCHANT_ID', userInfo?.data?.data?.merchantId);
+
 
       await store.dispatch('merchant/MerchantAuth');
 

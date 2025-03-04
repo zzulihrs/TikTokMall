@@ -71,6 +71,10 @@ const mutations = {
 };
 
 const actions = {
+  SET_MERCHANT_ID({commit, dispatch}, id) {
+    console.log("SET_MERCHANT_ID： ",id);
+    commit('SET_MERCHANT_ID', id);
+  },
   handleCurrentChange({ commit, dispatch}, page) {
     commit('SET_CURRENT_PAGE', page);
     dispatch('ProductList');
@@ -161,22 +165,22 @@ const actions = {
   // 权限认证
   async MerchantAuth({commit, state}) {
 
-    // if (state.id > 0) {
-    //   router.push('/merchant');
-    //   return;
+    // // if (state.id > 0) {
+    // //   router.push('/merchant');
+    // //   return;
+    // // }
+    // try {
+    //   const response = await axios.get('/api/merchant/auth');
+    //   console.log('merchant/auth: ', response)
+    //   if (+response.data.code !== 200) {
+    //     // ElMessage.error('店家权限认证' + response?.data?.message);
+    //     return;
+    //   }
+    //   commit('SET_MERCHANT_ID', response?.data?.merchant_info?.id)
+    // } catch (error) {
+    //   commit('SET_MERCHANT_ID', 0)
+    //   // ElMessage.error('店家权限认证' + error.message);
     // }
-    try {
-      const response = await axios.get('/api/merchant/auth');
-      console.log('merchant/auth: ', response)
-      if (+response.data.code !== 200) {
-        // ElMessage.error('店家权限认证' + response?.data?.message);
-        return;
-      }
-      commit('SET_MERCHANT_ID', response?.data?.merchant_info?.id)
-    } catch (error) {
-      commit('SET_MERCHANT_ID', 0)
-      // ElMessage.error('店家权限认证' + error.message);
-    }
   },
   async updateProduct({ state }, product) {
     try {
