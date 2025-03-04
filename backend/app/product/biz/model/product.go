@@ -69,36 +69,45 @@ func (c CachedProductQuery) GetById(productId int) (product Product, err error) 
 	cachedKey := fmt.Sprintf("%s_%s_%d", c.prefix, "product_by_id", productId)
 	cachedResult := c.cacheClient.Get(c.productQuery.ctx, cachedKey)
 	// 解析从 redis 中获取的数据
-	err = func() error {
-		err1 := cachedResult.Err()
-		if err1 != nil {
-			return err1
+	err1 := func() error {
+		err2 := cachedResult.Err()
+		if err2 != nil {
+			return err2
 		}
 		cachedResultByte, err1 := cachedResult.Bytes()
 		if err1 != nil {
-			return err1
+			return err2
 		}
-		err1 = json.Unmarshal(cachedResultByte, &product)
-		if err1 != nil {
-			return err1
+		if len(cachedResultByte) == 0 {
+			err = fmt.Errorf("product not found (cached)")
+			return nil
+		}
+		err2 = json.Unmarshal(cachedResultByte, &product)
+		if err2 != nil {
+			return err2
 		}
 		return nil
 	}()
 
-	if err != nil {
-		product, err = c.productQuery.GetById(productId)
-		if err != nil {
-			return Product{}, nil
-		}
-		// json encode and cache the result
-		encoded, err := json.Marshal(product)
-		// encode 失败，直接返回商品信息
-		if err != nil {
-			return product, nil
-		}
-		// 缓存商品信息
-		c.cacheClient.Set(c.productQuery.ctx, cachedKey, encoded, time.Hour)
+	// 缓存命中，直接返回
+	if err1 == nil {
+		return product, err
 	}
+
+	// 缺少缓存击穿
+	product, err = c.productQuery.GetById(productId)
+	if err != nil {
+		return Product{}, nil
+	}
+	// json encode and cache the result
+	encoded, err := json.Marshal(product)
+	// encode 失败，直接返回商品信息
+	if err != nil {
+		return product, nil
+	}
+	// 缓存商品信息
+	c.cacheClient.Set(c.productQuery.ctx, cachedKey, encoded, time.Hour)
+
 	return
 }
 

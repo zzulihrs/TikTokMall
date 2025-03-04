@@ -2,13 +2,14 @@ package service
 
 import (
 	"context"
+	"log"
+
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/utils"
 	merchant "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/merchant"
 	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
 	frontendUtils "github.com/tiktokmall/backend/app/frontend/utils"
 	rpcmerchant "github.com/tiktokmall/backend/rpc_gen/kitex_gen/merchant"
-	"log"
 )
 
 type MerchantAddProductService struct {
@@ -35,7 +36,7 @@ func (h *MerchantAddProductService) Run(req *merchant.MerchantAddProductReq) (re
 		}
 	}
 	log.Println("merchant_id", frontendUtils.GetMerchantIdFromCtx(h.Context))
-	_, err = rpc.MerchantClient.AddProduct(h.Context, &rpcmerchant.AddProductReq{
+	addProductResp, err := rpc.MerchantClient.AddProduct(h.Context, &rpcmerchant.AddProductReq{
 		MerchantId: frontendUtils.GetMerchantIdFromCtx(h.Context),
 		Product: &rpcmerchant.MerchantProductDetailInfo{
 			Name:        req.Name,
@@ -56,6 +57,9 @@ func (h *MerchantAddProductService) Run(req *merchant.MerchantAddProductReq) (re
 	return utils.H{
 		"code":    200,
 		"message": "OK",
+		"data": map[string]any{
+			"id": addProductResp.Pid,
+		},
 	}, nil
 }
 

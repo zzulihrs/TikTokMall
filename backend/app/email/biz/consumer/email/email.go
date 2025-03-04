@@ -30,6 +30,7 @@ func ConsumerInit() {
 		_, span := tracer.Start(ctx, "shop-nats-consumer")
 		defer span.End()
 
+		// log.Printf("subscribe msg, %v", req)
 		noopEmail := notify.NewNoopEmail()
 		_ = noopEmail.Send(&req)
 	})

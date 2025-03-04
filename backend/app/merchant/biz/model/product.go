@@ -55,16 +55,31 @@ func (p *ProductQuery) SearchProducts(q string) (products []*Product, err error)
 	return
 }
 func (p *ProductQuery) GetProductListByCondition(condition string, pageNo, pageSize int) (products []*Product, count int64, err error) {
+	condition = condition + " and deleted_at IS NULL"
 	err = p.db.WithContext(p.ctx).Model(&Product{}).Where(condition).Count(&count).Error
 	if err != nil {
 		return
 	}
-	condition = condition + " and deleted_at IS NULL"
 	err = p.db.WithContext(p.ctx).Model(&Product{}).Where(condition).Offset((pageNo - 1) * pageSize).Limit(pageSize).Find(&products).Error
 	return
 }
-func (p *ProductQuery) InsertMany(products []Product) (err error) {
-	err = p.db.WithContext(p.ctx).Model(&Product{}).Create(&products).Error
+func (p *ProductQuery) InsertMany(products []Product) (lastId int64, err error) {
+
+	tsErr := p.db.WithContext(p.ctx).Transaction(func(tx *gorm.DB) error {
+		result := p.db.WithContext(p.ctx).Model(&Product{}).Create(&products)
+		if err = result.Error; err != nil {
+			return err
+		}
+		var product Product
+		if err = result.Last(&product).Error; err != nil {
+			return err
+		}
+		lastId = int64(product.ID)
+		return nil
+	})
+	if tsErr != nil {
+		err = tsErr
+	}
 	return
 }
 

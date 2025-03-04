@@ -62,8 +62,14 @@
         </el-table-column>
       </el-table>
 
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="1"
-        :page-sizes="[10, 20, 30, 40]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="400">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="totalCount">
       </el-pagination>
 
       <!-- 编辑弹窗 -->
@@ -153,14 +159,14 @@ const products = computed(() => store.state.merchant.products || [])
 const categories = computed(() => store.state.category.categories || [])
 
 // 路由跳转
-const goToProductDetail = (product) => router.push(`/products/${product.id}`);
+const goToProductDetail = (product) => router.push(`/products?id=${product.id}`);
 
 
 // Vuex 数据
 const searchQuery = computed(() => store.getters['merchant/getSearchQuery']);
 const currentPage = computed(() => store.getters['merchant/getCurrentPage']);
 const pageSize = computed(() => store.getters['merchant/getPageSize']);
-const totalProducts = computed(() => store.getters['merchant/getTotalProducts']);
+const totalCount = computed(() => store.getters['merchant/gettotalCount']);
 
 // 操作方法
 const clearSearchQuery = () => store.dispatch('merchant/SET_SEARCH_QUERY', { // 搜索条件
@@ -178,8 +184,12 @@ const searchProducts = () => {
 };
 
 // 分页处理
-const handleSizeChange = (newSize) => store.dispatch('merchant/handleSizeChange', newSize);
-const handleCurrentChange = (newPage) => store.dispatch('merchant/handleCurrentChange', newPage);
+const handleSizeChange = (newSize) => {
+  store.dispatch('merchant/handleSizeChange', newSize);
+}
+const handleCurrentChange = (newPage) => {
+  store.dispatch('merchant/handleCurrentChange', newPage);
+}
 
 
 // 删除商品

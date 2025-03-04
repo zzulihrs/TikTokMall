@@ -2,13 +2,13 @@ package service
 
 import (
 	"context"
-
-	"github.com/tiktokmall/backend/app/order/biz/dal/mysql"
-	"github.com/tiktokmall/backend/app/order/biz/model"
-	order "github.com/tiktokmall/backend/rpc_gen/kitex_gen/order"
-
 	"github.com/cloudwego/kitex/pkg/kerrors"
 	"github.com/google/uuid"
+	"github.com/nats-io/nats.go"
+	"github.com/tiktokmall/backend/app/order/biz/dal/mysql"
+	"github.com/tiktokmall/backend/app/order/biz/model"
+	"github.com/tiktokmall/backend/app/order/infra/mq"
+	order "github.com/tiktokmall/backend/rpc_gen/kitex_gen/order"
 	"gorm.io/gorm"
 )
 
@@ -61,6 +61,19 @@ func (s *PlaceOrderService) Run(req *order.PlaceOrderReq) (resp *order.PlaceOrde
 		}
 
 		if err := tx.Create(items).Error; err != nil {
+			return err
+		}
+
+		// 使用nats延迟队列，延迟30分钟执行，id为orderId
+		msg := &nats.Msg{
+			Subject: "ORDER.CREATE",
+			Data:    []byte(orderId.String()),
+			Header: nats.Header{
+				"Nats-Delay": []string{"10"}, // 单位：秒
+			},
+		}
+
+		if err := mq.Nc.PublishMsg(msg); err != nil {
 			return err
 		}
 

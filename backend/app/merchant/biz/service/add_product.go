@@ -8,6 +8,7 @@ import (
 
 	"github.com/cloudwego/kitex/pkg/kerrors"
 	"github.com/tiktokmall/backend/app/merchant/biz/dal/mysql"
+	"github.com/tiktokmall/backend/app/merchant/biz/dal/redis"
 	"github.com/tiktokmall/backend/app/merchant/biz/model"
 	merchant "github.com/tiktokmall/backend/rpc_gen/kitex_gen/merchant"
 )
@@ -24,9 +25,9 @@ func (s *AddProductService) Run(req *merchant.AddProductReq) (resp *merchant.Add
 	// Finish your business logic.
 
 	// 1. 检查参数
-	//if err = checkAddProductReq(req); err != nil {
-	//	return nil, kerrors.NewGRPCBizStatusError(2004001, "product is invalid")
-	//}
+	if err = checkAddProductReq(req); err != nil {
+		return nil, kerrors.NewGRPCBizStatusError(2004001, "product is invalid")
+	}
 	// 2. 检查商户
 	_, err = model.NewMerchantQuery(s.ctx, mysql.DB).GetById(int(req.GetMerchantId()))
 	if err != nil {
@@ -57,11 +58,17 @@ func (s *AddProductService) Run(req *merchant.AddProductReq) (resp *merchant.Add
 			UpdatedAt: time.Now(),
 		},
 	}
-	err = model.NewProductQuery(s.ctx, mysql.DB).InsertMany([]model.Product{*newProduct})
+	lastId, err := model.NewProductQuery(s.ctx, mysql.DB).InsertMany([]model.Product{*newProduct})
 	if err != nil {
 		return nil, fmt.Errorf("insert product failed, err:%w", err)
 	}
 
+	resp = &merchant.AddProductResp{
+		Pid: lastId,
+	}
+
+	// TODO: 删除 product_list 的缓存
+	model.ClearProductListCachedKey(s.ctx, redis.RedisClient)
 	return
 }
 

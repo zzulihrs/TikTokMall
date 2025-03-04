@@ -7,6 +7,7 @@ import (
 
 	"github.com/tiktokmall/backend/app/product/biz/dal"
 	"github.com/tiktokmall/backend/app/product/conf"
+	"github.com/tiktokmall/backend/app/product/infra/mq"
 	"github.com/tiktokmall/backend/common/mtl"
 	"github.com/tiktokmall/backend/common/serversuite"
 	"github.com/tiktokmall/backend/rpc_gen/kitex_gen/product/productcatalogservice"
@@ -32,6 +33,8 @@ func main() {
 	p := mtl.InitTracing(ServiceName)
 	defer p.Shutdown(context.Background())
 	dal.Init()
+
+	mq.Init()
 
 	opts := kitexInit()
 

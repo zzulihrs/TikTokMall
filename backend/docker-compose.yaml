@@ -18,7 +18,7 @@ services:
     cpus: 2         # 增加CPU数量
     volumes:
       - "./db/sql/ini:/docker-entrypoint-initdb.d"
-      - "./db/mysql_data:/var:lib/mysql"
+      - "./data/mysql:/var/lib/mysql"
     ports:
       - "3306:3306"
     # 健康检查，避免服务连接 mysql 时，mysql 服务没有启动
@@ -37,6 +37,9 @@ services:
     volumes:
       - ./data/redis:/data
     environment:
+      # 不开启 AOF（Append Only File）持久化
+      # --save 1800 1 意味着在 1800 秒（即 30 分钟）内至少有 1 个键被更改时
+      # Redis 会进行 RDB（Redis Database）快照持久化。
       - REDIS_ARGS=--dir /data --appendonly no --save 1800 1
     restart: unless-stopped
     healthcheck:

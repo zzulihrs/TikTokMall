@@ -13,29 +13,12 @@ const state = {
     max_stock: '',
     min_price: '',
     max_price: '',
-    page: 1,
-    page_size: 10,
   },
   products: [], // 商品列表
   currentPage: 1,
   pageSize: 10,
+  totalCount: 0, // 符合条件的商品总数
   // 详情页
-  aproductDetail: {
-    id: '',
-    name: '',
-    description: "",
-    stock: '',
-    price: '',
-    img_url: '',
-    catetory: [
-      {
-        id: '',
-        name: '',
-        description: '',
-      }
-    ],
-    slider_img: []
-  },
   productDetail: {
     category: [
       {
@@ -68,6 +51,9 @@ const mutations = {
   SET_CATEGORY_FILTER(state, filter) {
     state.categoryFilter = filter;
   },
+  SET_TOTAL_COUNT(state, count) {
+    state.totalCount = count;
+  },
   SET_PRODUCTS(state, products) {
     state.products = products;
   },
@@ -85,6 +71,15 @@ const mutations = {
 };
 
 const actions = {
+  handleCurrentChange({ commit, dispatch}, page) {
+    commit('SET_CURRENT_PAGE', page);
+    dispatch('ProductList');
+  },
+  handleSizeChange({ commit, dispatch }, size) {
+    commit('SET_PAGE_SIZE', 0);
+    commit('SET_PAGE_SIZE', size);
+    dispatch('ProductList');
+  },
   // 列表
   async ProductList({ commit, state }) {
     const data = Object.entries({
@@ -112,7 +107,8 @@ const actions = {
         ElMessage.error('获取商品列表失败：' + response.data.message);
         return;
       }
-      commit('SET_PRODUCTS', response.data.data);
+      commit('SET_PRODUCTS', response.data.data.items);
+      commit('SET_TOTAL_COUNT', response.data.data.total);
     } catch (error) {
       ElMessage.error('获取商品列表失败：' + error.message);
     }
@@ -173,26 +169,14 @@ const actions = {
       const response = await axios.get('/api/merchant/auth');
       console.log('merchant/auth: ', response)
       if (+response.data.code !== 200) {
-        ElMessage.error('店家权限认证' + response?.data?.message);
+        // ElMessage.error('店家权限认证' + response?.data?.message);
         return;
       }
       commit('SET_MERCHANT_ID', response?.data?.merchant_info?.id)
     } catch (error) {
       commit('SET_MERCHANT_ID', 0)
-      ElMessage.error('店家权限认证' + error.message);
+      // ElMessage.error('店家权限认证' + error.message);
     }
-  },
-  searchProducts({ commit, dispatch }) {
-    commit('SET_CURRENT_PAGE', 1);
-    dispatch('fetchProducts');
-  },
-  handleSizeChange({ commit, dispatch }, newSize) {
-    commit('SET_PAGE_SIZE', newSize);
-    dispatch('fetchProducts');
-  },
-  handleCurrentChange({ commit, dispatch }, newPage) {
-    commit('SET_CURRENT_PAGE', newPage);
-    dispatch('fetchProducts');
   },
   async updateProduct({ state }, product) {
     try {
@@ -228,6 +212,7 @@ const getters = {
   getProductDetail: state => state.productDetail,
   // 店家id
   getMerchantId: state => state.id,
+  gettotalCount: state => state.totalCount
 };
 
 export default {

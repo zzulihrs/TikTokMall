@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"log"
 
 	category "github.com/tiktokmall/backend/app/frontend/hertz_gen/frontend/category"
 	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
@@ -24,7 +25,7 @@ func (h *CategoryService) Run(req *category.CategoryReq) (resp map[string]any, e
 	if err != nil {
 		return nil, err
 	}
-
+	log.Printf("category=%v, items=%v", req.Category, p.Products)
 	return map[string]any{
 		"title": "Category",
 		"items": p.Products,

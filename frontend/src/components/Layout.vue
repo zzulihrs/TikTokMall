@@ -102,9 +102,18 @@ import { useStore } from 'vuex'
 import UserDropdown from './UserDropdown.vue'
 import ChatDialog from './ChatDialog.vue'
 // Verify router availability
-onMounted(() => {
+onMounted(async () => {
   if (!router) {
     console.error('Router is not available')
+  }
+  // 获取购物车数据
+  try {
+    console.log('组件已挂载');
+    await store.dispatch('search/searchProducts', "")
+    if(isAuthenticated.value)
+      await store.dispatch('cart/fetchCart')
+  } catch (err) {
+    ElMessage.error('获取购物车数据失败：' + err.message)
   }
 })
 import { ShoppingCart, Search } from '@element-plus/icons-vue'
@@ -117,17 +126,13 @@ if (!router) {
 }
 const searchQuery = ref('')
 
-onMounted(() => { // 最开始执行的，先获取数据
-  console.log('组件已挂载');
-  store.dispatch('search/searchProducts', "")
-});
 
 const handleSearch = async () => {
   const query = searchQuery.value.trim()
   if (true) { // 空白也可以搜索
     try {
       await store.dispatch('search/searchProducts', query)
-      router.push({ path: '/search', query: { q: query } })
+      await router.push({ path: '/search', query: { q: query } })
     } catch (error) {
       ElMessage.error('搜索失败：' + error.message)
     }
@@ -146,14 +151,14 @@ const isAuthenticated = computed(() => store.getters['auth/isAuthenticated'])
 const handleSelect = async (index) => {
   switch (index) {
     case '1':
-      await router.push('/')
+      await router.push('/home')
       break
     case '2-1':
       await router.push('/category')
       await store.commit("category/Update_Category", "T-Shirt")
       break
     case '2-2':
-      await  router.push('/category')
+      await router.push('/category')
       await store.commit("category/Update_Category", "Sticker")
       break
     case '2-3':
@@ -192,7 +197,7 @@ const goToMerchant = () => {
   const id = computed(() => store.getters['merchant/getMerchantId']).value
   console.log('merchantId:', id)
   if (id > 0) {
-    router.push('merchant')
+    router.push('/merchant/product/list')
   } else {
     ElMessage.warning("你还不是店家")
   }
@@ -211,15 +216,29 @@ const openMerchantDialog = () => {
 // 处理成为商家
 const handleBecomeMerchant = async () => {
   try {
+    // TODO:
+    const id = computed(() => store.getters['merchant/getMerchantId']).value
+    // console.log('merchantId:', id)
+    if (id > 0) {
+      ElMessage.info('您已入驻成为商家，无需再次操作。 ')
+      return 
+    }
     const response = await axios.post('/api/merchant/register', {
       code: merchantForm.code
     })
 
-    ElMessage.success('注册成功，您已成为商家！')
     merchantDialogVisible.value = false
+    merchantForm.code = ''
 
+    // console.log('注册:', response.data)
+    if (+response.data.code == 200) {
+      ElMessage.success('注册成功，您已成为商家！请重新登录')  
+    } else {
+      ElMessage.error('注册失败：' + response.data.message)
+    }
     // 刷新页面或更新状态
-    window.location.reload()
+    // window.location.reload()
+    // ElMessage.success('注册成功，您已成为商家！')
   } catch (error) {
     ElMessage.error('注册失败：' + error.message)
   }

@@ -8,6 +8,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/tiktokmall/backend/app/user/biz/dal"
 	"github.com/tiktokmall/backend/app/user/conf"
+	"github.com/tiktokmall/backend/app/user/infra/mq"
 	"github.com/tiktokmall/backend/common/mtl"
 	"github.com/tiktokmall/backend/common/serversuite"
 	"github.com/tiktokmall/backend/rpc_gen/kitex_gen/user/userservice"
@@ -32,6 +33,9 @@ func main() {
 	p := mtl.InitTracing(ServiceName)
 	defer p.Shutdown(context.Background())
 	dal.Init()
+
+	// 新增消息队列，用于异步删除缓存
+	mq.Init() // 需要提前初始化 redis
 
 	opts := kitexInit()
 

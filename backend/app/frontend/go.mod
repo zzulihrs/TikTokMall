@@ -11,8 +11,9 @@ replace (
 
 require (
 	github.com/aliyun/alibabacloud-oss-go-sdk-v2 v1.2.0
-	github.com/cloudwego/hertz v0.9.5
+	github.com/cloudwego/hertz v0.9.6
 	github.com/cloudwego/kitex v0.12.1
+	github.com/go-pay/gopay v1.5.109
 	github.com/golang/protobuf v1.5.4
 	github.com/hertz-contrib/cors v0.1.0
 	github.com/hertz-contrib/gzip v0.0.3
@@ -28,6 +29,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/kr/pretty v0.3.1
 	github.com/redis/go-redis/v9 v9.7.0
+	github.com/robfig/cron/v3 v3.0.1
 	github.com/tiktokmall/backend/app/agent v0.0.0-20250211064059-c80247252426
 	github.com/tiktokmall/backend/common v0.0.0-00010101000000-000000000000
 	github.com/tiktokmall/backend/rpc_gen v0.0.0-00010101000000-000000000000
@@ -78,6 +80,9 @@ require (
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
 	github.com/go-openapi/swag v0.19.5 // indirect
+	github.com/go-pay/crypto v0.0.1 // indirect
+	github.com/go-pay/xlog v0.0.3 // indirect
+	github.com/go-pay/xtime v0.0.2 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/golang-jwt/jwt/v4 v4.4.1 // indirect
 	github.com/gomodule/redigo v1.8.9 // indirect
@@ -158,10 +163,10 @@ require (
 	golang.org/x/arch v0.12.0 // indirect
 	golang.org/x/exp v0.0.0-20240222234643-814bf88cf225 // indirect
 	golang.org/x/net v0.25.0 // indirect
-	golang.org/x/sync v0.10.0 // indirect
-	golang.org/x/sys v0.29.0 // indirect
-	golang.org/x/term v0.28.0 // indirect
-	golang.org/x/text v0.21.0 // indirect
+	golang.org/x/sync v0.11.0 // indirect
+	golang.org/x/sys v0.30.0 // indirect
+	golang.org/x/term v0.29.0 // indirect
+	golang.org/x/text v0.22.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	google.golang.org/genproto v0.0.0-20240227224415-6ceb2ff114de // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240227224415-6ceb2ff114de // indirect

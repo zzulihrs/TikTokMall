@@ -42,8 +42,14 @@ const fetchCategoryItems = async () => {
 
     // category.value = route?.params?.type // Get category from route params
     // console.log(route?.params?.type);
+    const categoryName = store?.state?.category?.category
+    let response;
+    if (categoryName == 'All') {
 
-    const response = await axios.get(`/api/category/${store?.state?.category?.category}`)
+    } else {
+      response = await axios.get(`/api/category/${store?.state?.category?.category}`)
+    }
+
     categoryItems.value = response?.data?.items || []
   } catch (err) {
     categoryItems.value = null

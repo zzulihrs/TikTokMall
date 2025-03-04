@@ -43,7 +43,10 @@ npm install
 
 2. 启动开发服务器
 ```bash
+# 本地
 npm run serve 
+# 线上
+VUE_ENV=online npm run serve
 ```
 
 3. 构建生产环境

@@ -59,12 +59,20 @@ let Qty = ref(1)
 const loading = ref(true)
 let Id = ref(0)
 
+// 获取 URL 查询参数
+const  getQueryParam = (param) => {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
+
 const fetchProduct = async () => {
   try {
     console.log('fetchProduct');
     axios.defaults.baseURL = '/api';
+    const id = getQueryParam('id');
 
-    const response = await axios.get(`/product?id=${route.params.id}`)
+
+    const response = await axios.get(`/product?id=${id}`)
 
     axios.defaults.baseURL = '/';
 

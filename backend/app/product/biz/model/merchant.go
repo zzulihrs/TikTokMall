@@ -10,7 +10,7 @@ type Merchant struct {
 	Base
 	UserId   int    `json:"user_id" gorm:"unique_index"`
 	Username string `json:"username"`
-	Email    string `json:"email" gorm:"unique" gorm:"uniqueIndex:idx_email(255)"`
+	Email    string `json:"email" gorm:"unique;unique_index"`
 	// 添加反向关联
 	Products []Product `gorm:"foreignKey:merchant_id"`
 }
