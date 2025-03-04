@@ -216,15 +216,29 @@ const openMerchantDialog = () => {
 // 处理成为商家
 const handleBecomeMerchant = async () => {
   try {
+    // TODO:
+    const id = computed(() => store.getters['merchant/getMerchantId']).value
+    // console.log('merchantId:', id)
+    if (id > 0) {
+      ElMessage.info('您已入驻成为商家，无需再次操作。 ')
+      return 
+    }
     const response = await axios.post('/api/merchant/register', {
       code: merchantForm.code
     })
 
-    ElMessage.success('注册成功，您已成为商家！')
     merchantDialogVisible.value = false
+    merchantForm.code = ''
 
+    // console.log('注册:', response.data)
+    if (+response.data.code == 200) {
+      ElMessage.success('注册成功，您已成为商家！请重新登录')  
+    } else {
+      ElMessage.error('注册失败：' + response.data.message)
+    }
     // 刷新页面或更新状态
-    window.location.reload()
+    // window.location.reload()
+    // ElMessage.success('注册成功，您已成为商家！')
   } catch (error) {
     ElMessage.error('注册失败：' + error.message)
   }
