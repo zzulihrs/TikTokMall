@@ -1,5 +1,7 @@
 # TikTokMall
 
+
+
 backend: 后端
 
 脚本启动需要安装 `air`
@@ -23,7 +25,13 @@ npm run serve
 
 
 ## 一、项目概述
-本项目旨在构建一个功能完善的电商购物平台，涵盖用户认证、用户管理、商品管理、购物车、订单处理、支付结算以及 AI 大模型辅助等功能模块，以提供流畅的购物体验和智能化的服务。
+本项目致力于打造一个功能全面、开发与部署流程规范的 AI 智慧电商购物平台，涵盖用户认证、用户管理、商品管理、购物车、订单处理、支付结算（支持银行卡、支付宝）以及LLM智能客服等功能模块，旨在为用户提供流畅的购物体验和智能化的服务。
+
+apifox接口文档：wf1rbhp3a3.apifox.cn
+
+文 档 地 址  ：[项目说明文档](https://rnutm2ali2.feishu.cn/docx/ZHXBdl62Doeql1xLNQ2conUWnTf)
+
+![总体框架图](https://hrs-aliyunoss.oss-cn-beijing.aliyuncs.com/imges/image-20250305211401954.png)
 
 ## 二、各模块完成情况
 
