@@ -11,7 +11,7 @@ import (
 func rootMw() []app.HandlerFunc {
 	// your code...
 	// 给路由添加中间件
-	return []app.HandlerFunc{middleware.Auth()}
+	return []app.HandlerFunc{middleware.Jwt()}
 }
 
 func _checkoutMw() []app.HandlerFunc {
