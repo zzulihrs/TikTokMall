@@ -4,9 +4,11 @@ package main
 
 import (
 	"context"
+	"log"
 	"os"
 	"time"
 
+	"github.com/tiktokmall/backend/app/agent/cmd/einoagent/agent"
 	"github.com/tiktokmall/backend/app/frontend/biz/router"
 	"github.com/tiktokmall/backend/app/frontend/conf"
 	"github.com/tiktokmall/backend/app/frontend/infra/rpc"
