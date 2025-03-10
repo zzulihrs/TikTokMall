@@ -26,8 +26,9 @@ import (
 
 func defaultArkChatModelConfig(ctx context.Context) (*ark.ChatModelConfig, error) {
 	config := &ark.ChatModelConfig{
-		Model:  os.Getenv("ARK_CHAT_MODEL"),
-		APIKey: os.Getenv("ARK_API_KEY"),
+		Model:     os.Getenv("ARK_CHAT_MODEL"),
+		APIKey:    os.Getenv("ARK_API_KEY"),
+		MaxTokens: func(i int) *int { return &i }(2000),
 	}
 	return config, nil
 }
