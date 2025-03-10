@@ -47,6 +47,8 @@
           placeholder="请输入消息..."
           :disabled="loading"
           @keyup.enter="sendMessage"
+          maxlength="50"
+          show-word-limit
         >
           <template #append>
             <el-button :loading="loading" @click="sendMessage">发送</el-button>
