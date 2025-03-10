@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import axios from "axios";
+import store from "@/store";
 
 const routes = [
   {
@@ -96,5 +98,14 @@ const router = createRouter({
     }
   }
 })
+
+// 在 Axios 拦截器中设置全局请求头
+axios.interceptors.request.use(config => {
+  const token = store.state.auth.token; // 获取你的 token
+  if (token) {
+    config.headers.Authorization = `${token}`;
+  }
+  return config;
+});
 
 export default router

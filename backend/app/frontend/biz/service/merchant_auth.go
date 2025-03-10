@@ -68,19 +68,19 @@ func (h *MerchantAuthService) Run(req *merchant.MerchantAuthReq) (resp utils.H, 
 		return nil, err
 	}
 	// 2. 包装店家信息生成 token
-	token := utils.GenerateToken(merchantResp.Id, merchantResp.Username)
-	// 3. 返回 token 和店家信息 response
-	resp = utils.H{
-		"code":    200,
-		"message": "OK",
-		"token":   token,
-		"merchant_info": utils.H{
-			"id":       merchantResp.Id,
-			"username": merchantResp.Username,
-			"email":    merchantResp.Email,
-			"userId":   frontendUtils.GetUserIdFromCtx(h.Context),
-		},
-	}
+	//token := utils.GenerateJWT(merchantResp.Id, merchantResp.Username)
+	//// 3. 返回 token 和店家信息 response
+	//resp = utils.H{
+	//	"code":    200,
+	//	"message": "OK",
+	//	"token":   token,
+	//	"merchant_info": utils.H{
+	//		"id":       merchantResp.Id,
+	//		"username": merchantResp.Username,
+	//		"email":    merchantResp.Email,
+	//		"userId":   frontendUtils.GetUserIdFromCtx(h.Context),
+	//	},
+	//}
 	return
 }
 

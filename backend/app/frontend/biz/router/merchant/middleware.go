@@ -31,7 +31,7 @@ func _merchantpingMw() []app.HandlerFunc {
 func _productMw() []app.HandlerFunc {
 	// your code...
 	// 保护 merchant/product 下的所有路由
-	return []app.HandlerFunc{middleware.MerchantProduct()}
+	return []app.HandlerFunc{middleware.Jwt(), middleware.MerchantProduct()}
 }
 
 func _merchantaddproductMw() []app.HandlerFunc {

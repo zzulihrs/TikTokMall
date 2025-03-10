@@ -15,8 +15,6 @@ import (
 
 	frontendUtils "github.com/tiktokmall/backend/app/frontend/utils"
 
-	"log"
-
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/app/middlewares/server/recovery"
 	"github.com/cloudwego/hertz/pkg/app/server"
@@ -34,8 +32,6 @@ import (
 	"github.com/hertz-contrib/sessions"
 	"github.com/hertz-contrib/sessions/redis"
 	"github.com/joho/godotenv"
-	"github.com/tiktokmall/backend/app/agent/cmd/einoagent/agent"
-	mw "github.com/tiktokmall/backend/app/frontend/middleware"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
@@ -57,7 +53,7 @@ func main() {
 
 	// user 服务发现
 	rpc.Init()
-	mw.InitJWT()
+	//mw.InitJWT()
 	address := conf.GetConf().Hertz.Address
 
 	// p := provider.NewOpenTelemetryProvider(
